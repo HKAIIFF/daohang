@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HKAIFA - Hong Kong AI Film Academy</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP Suite -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Fonts: Oswald + Space Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        void: '#050505',
+                        concrete: '#1F1F1F',
+                        signal: '#FF3300',
+                        steel: '#EAEAEA',
+                        dim: '#888888',
+                        paper: '#F3F3F3'
+                    },
+                    fontFamily: {
+                        heavy: ['"Oswald"', 'sans-serif'],
+                        mono: ['"Space Mono"', 'monospace'],
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px)",
+                    },
+                    animation: {
+                        'marquee': 'marquee 40s linear infinite',
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* CORE STYLES from aif.show.html */
+        html { scroll-behavior: smooth; }
+        body { 
+            background-color: #EAEAEA; 
+            color: #050505; 
+            overflow-x: hidden; 
+            -webkit-font-smoothing: antialiased;
+        }
+        ::selection { background: #FF3300; color: #000; }
+
+        /* LANGUAGE CONTROL */
+        /* If body is en, hide zh elements */
+        body[data-lang="en"] .lang-zh { display: none !important; }
+        /* If body is zh, hide en elements */
+        body[data-lang="zh"] .lang-en { display: none !important; }
+
+        /* TYPOGRAPHY */
+        .mega-text {
+            font-size: clamp(3rem, 9vw, 10rem);
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            font-weight: 700;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 5rem);
+            line-height: 1;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        .outline-text {
+            color: transparent;
+            -webkit-text-stroke: 1.5px #050505;
+            text-stroke: 1.5px #050505;
+            transition: all 0.3s ease;
+        }
+        
+        .hero-title .outline-text {
+            -webkit-text-stroke: 1.5px #FFFFFF;
+        }
+
+        /* BUTTONS */
+        .brutal-btn {
+            background: #050505;
+            color: #EAEAEA;
+            border: 2px solid #050505;
+            padding: 1rem 2rem;
+            font-family: 'Space Mono', monospace;
+            text-transform: uppercase;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .brutal-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #FF3300;
+            transform: translateX(-101%);
+            transition: transform 0.3s cubic-bezier(0.77, 0, 0.175, 1);
+            z-index: 0;
+        }
+
+        .brutal-btn:hover::before { transform: translateX(0); }
+        .brutal-btn span { position: relative; z-index: 1; }
+        .brutal-btn:hover { color: #000; border-color: #FF3300; }
+        
+        .brutal-btn.white {
+            background: transparent;
+            color: #fff;
+            border-color: #fff;
+        }
+        .brutal-btn.white:hover {
+            color: #000;
+            border-color: #fff;
+        }
+        .brutal-btn.white::before {
+            background: #fff;
+        }
+
+        /* COMPONENTS */
+        .grid-bg { background-size: 40px 40px; background-image: linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px); }
+
+        /* MARQUEE */
+        .marquee-container { overflow: hidden; white-space: nowrap; display: flex; }
+        .marquee-content { display: flex; animation: marquee 40s linear infinite; }
+
+        /* LOADER */
+        #loader {
+            position: fixed; inset: 0; background: #FF3300; z-index: 9999;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+        }
+
+        /* MOBILE MENU */
+        #mobile-menu {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 80px);
+            background: #050505;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 49;
+            overflow-y: auto;
+        }
+        #mobile-menu.active { transform: translateX(0); }
+
+        /* NAV */
+        nav { background: rgba(234, 234, 234, 0.95); backdrop-filter: blur(10px); }
+        
+        /* INFO CARDS */
+        .info-card { transition: all 0.3s ease; border: 2px solid #000; height: 100%; position: relative; }
+        .info-card:hover { transform: translateY(-5px); box-shadow: 10px 10px 0px 0px rgba(0,0,0,1); }
+        .info-card.dark { background: #050505; color: white; }
+        .info-card.dark:hover { box-shadow: 10px 10px 0px 0px #FF3300; }
+        
+        .level-tag {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 4px 8px;
+            text-transform: uppercase;
+            border: 1px solid currentColor;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        .img-zoom-container { overflow: hidden; border-bottom: 2px solid #000; }
+        .img-zoom-container img { transition: transform 0.7s ease; }
+        .info-card:hover .img-zoom-container img { transform: scale(1.1); grayscale: 100%; }
+        
+        .reveal-text { opacity: 0; }
+
+    </style>
+</head>
+<body data-lang="en" class="grid-bg">
+
+    <!-- LOADER -->
+    <div id="loader">
+        <div class="font-heavy text-6xl md:text-9xl font-bold text-black tracking-tighter">HKAIFA</div>
+        <div class="font-mono text-black mt-4 text-xs md:text-base animate-pulse">
+            SYSTEM_INIT_V4.0...
+        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 left-0 w-full z-50 border-b-2 border-black h-20 md:h-24 flex items-center">
+        <div class="w-full max-w-[1920px] mx-auto flex justify-between items-stretch h-full">
+            
+            <!-- Logo -->
+            <a href="#" class="flex flex-col justify-center px-4 md:px-8 border-r-2 border-black hover:bg-black hover:text-white transition-colors cursor-pointer group h-full no-underline text-black">
+                <span class="font-heavy text-3xl md:text-4xl font-bold tracking-tighter leading-none mb-1">HKAIFA</span>
+                <div class="flex flex-col leading-none">
+                    <span class="font-mono text-[10px] md:text-xs tracking-widest font-bold group-hover:text-signal">
+                        <span class="lang-en">Hong Kong AI Film Academy</span>
+                        <span class="lang-zh">香港AI電影學院</span>
+                    </span>
+                </div>
+            </a>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden xl:flex items-stretch h-full">
+                <a href="#about" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider text-black no-underline">
+                    <span class="lang-en">About</span>
+                    <span class="lang-zh">關於我們</span>
+                </a>
+                <a href="#curriculum" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider text-black no-underline">
+                    <span class="lang-en">Curriculum</span>
+                    <span class="lang-zh">課程體系</span>
+                </a>
+                <a href="#partnership" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider text-black no-underline">
+                    <span class="lang-en">Partnership</span>
+                    <span class="lang-zh">合作中心</span>
+                </a>
+                <a href="#certification" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider text-black no-underline">
+                    <span class="lang-en">Certification</span>
+                    <span class="lang-zh">認證體系</span>
+                </a>
+                <a href="#services" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider text-black no-underline">
+                    <span class="lang-en">Services</span>
+                    <span class="lang-zh">支持服務</span>
+                </a>
+                <a href="#apply" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider text-signal no-underline">
+                    <span class="lang-en">Apply</span>
+                    <span class="lang-zh">立即申請</span>
+                </a>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex h-full">
+                <button id="lang-btn" onclick="toggleLanguage()" class="flex items-center px-6 border-l-2 border-black hover:bg-signal hover:text-white transition-colors font-mono text-xs font-bold uppercase h-full bg-transparent text-black">
+                    <span class="lang-en">[ 繁體中文 ]</span>
+                    <span class="lang-zh">[ ENGLISH ]</span>
+                </button>
+                <button onclick="toggleMenu()" class="xl:hidden flex items-center px-6 border-l-2 border-black hover:bg-black hover:text-white transition-colors h-full bg-transparent text-black">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MOBILE MENU OVERLAY -->
+    <div id="mobile-menu">
+        <div class="flex flex-col p-8 gap-6">
+            <a href="#about" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors no-underline">
+                <span class="lang-en">ABOUT US</span>
+                <span class="lang-zh">關於我們</span>
+            </a>
+            <a href="#curriculum" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors no-underline">
+                <span class="lang-en">CURRICULUM</span>
+                <span class="lang-zh">課程體系</span>
+            </a>
+            <a href="#partnership" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors no-underline">
+                <span class="lang-en">PARTNERSHIP</span>
+                <span class="lang-zh">合作中心</span>
+            </a>
+            <a href="#certification" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors no-underline">
+                <span class="lang-en">CERTIFICATION</span>
+                <span class="lang-zh">認證體系</span>
+            </a>
+            <a href="#services" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors no-underline">
+                <span class="lang-en">SERVICES</span>
+                <span class="lang-zh">支持服務</span>
+            </a>
+            <a href="#apply" onclick="toggleMenu()" class="text-signal font-heavy text-4xl hover:text-white transition-colors no-underline">
+                <span class="lang-en">APPLY NOW</span>
+                <span class="lang-zh">立即申請</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- HERO SECTION -->
+    <header class="relative min-h-screen flex items-center pt-24 overflow-hidden bg-black text-white">
+         <!-- Background Image Placeholder (Darker for Brutalism) -->
+        <div class="absolute inset-0 z-0 opacity-40">
+             <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
+             <!-- Using a tech/film abstract image -->
+            <img src="https://images.unsplash.com/photo-1535868463750-c78d9543614f?q=80&w=2676&auto=format&fit=crop" class="w-full h-full object-cover grayscale" alt="HKAIFA Hero">
+        </div>
+
+        <div class="relative z-10 w-full max-w-[1920px] mx-auto px-4 md:px-8">
+            <div class="max-w-6xl">
+                <div class="font-mono text-signal mb-4 flex items-center gap-2 animate-pulse">
+                    <div class="w-2 h-2 bg-signal rounded-full"></div>
+                    <span class="lang-en">/// WORLD'S FIRST AI-NATIVE FILM EDUCATION</span>
+                    <span class="lang-zh">/// 全球首個 AI 原生影視教育機構</span>
+                </div>
+                
+                <h1 class="hero-title font-heavy mega-text mb-6 leading-none">
+                    <!-- FIXED: Removed duplicate 'class' attributes and inline display styles -->
+                    <span class="block lang-en">AI NATIVE</span>
+                    <span class="block outline-text lang-en">FILM</span>
+                    <span class="block text-signal lang-en">EDUCATION</span>
+                    
+                    <span class="block lang-zh">AI原生</span>
+                    <span class="block outline-text lang-zh">影視</span>
+                    <span class="block text-signal lang-zh">教育</span>
+                </h1>
+                
+                <p class="font-mono text-sm md:text-xl max-w-2xl text-gray-300 mb-10 leading-relaxed border-l-4 border-signal pl-6 bg-black/50 backdrop-blur-sm p-4">
+                    <span class="lang-en">HKAIFA bridges the gap between technological innovation and creative expression through its innovative four-tier curriculum structure and blockchain certification system. Join us to cultivate talent in 68 professional fields and address the global shortage of 180,000 AI film professionals.</span>
+                    <span class="lang-zh">HKAIFA透過創新的四層課程架構與區塊鏈認證體系，填補技術創新與創意表達間的關鍵空白。加入我們，培養68個專業方向人才，解決全球18萬AI影視專業人才短缺問題。</span>
+                </p>
+                
+                <div class="flex flex-col md:flex-row gap-4">
+                    <a href="https://www.hkaifa.academy/#/home" class="brutal-btn bg-signal text-black hover:bg-white border-signal hover:border-white">
+                        <span class="lang-en">Start Your Journey</span>
+                        <span class="lang-zh">開始你的旅程</span>
+                    </a>
+                    <a href="#curriculum" class="brutal-btn white">
+                        <span class="lang-en">Explore Courses</span>
+                        <span class="lang-zh">探索課程</span>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Stats Grid overlay -->
+            <div class="hidden md:block absolute right-8 bottom-32 w-80 border-2 border-white bg-black/80 backdrop-blur-md">
+                <div class="grid grid-cols-2 divide-x-2 divide-y-2 divide-white border-b-2 border-white">
+                    <div class="p-4">
+                        <div class="font-heavy text-3xl text-signal">144</div>
+                        <div class="font-mono text-[10px] text-gray-400">COURSES</div>
+                    </div>
+                    <div class="p-4">
+                        <div class="font-heavy text-3xl text-signal">68</div>
+                        <div class="font-mono text-[10px] text-gray-400">CAREER PATHS</div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 divide-x-2 divide-white">
+                    <div class="p-4">
+                        <div class="font-heavy text-3xl text-signal">100</div>
+                        <div class="font-mono text-[10px] text-gray-400">CENTERS (2030)</div>
+                    </div>
+                    <div class="p-4">
+                        <div class="font-heavy text-3xl text-signal">50K+</div>
+                        <div class="font-mono text-[10px] text-gray-400">ANNUAL GOAL</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Marquee -->
+        <div class="absolute bottom-0 w-full bg-signal text-black py-2 font-mono text-xs md:text-sm font-bold border-t-2 border-white z-20">
+            <div class="marquee-container">
+                <div class="marquee-content">
+                    <span class="mx-4">HKAIFA ///</span>
+                    <span class="mx-4"><span class="lang-en">AI Native Director</span><span class="lang-zh">AI原生導演</span></span>
+                    <span class="mx-4">///</span>
+                    <span class="mx-4"><span class="lang-en">AI System Architect</span><span class="lang-zh">AI系統架構師</span></span>
+                    <span class="mx-4">///</span>
+                    <span class="mx-4"><span class="lang-en">Web3 Content Architect</span><span class="lang-zh">Web3內容架構師</span></span>
+                    <span class="mx-4">///</span>
+                    <span class="mx-4"><span class="lang-en">Four-tier Curriculum</span><span class="lang-zh">四層課程架構</span></span>
+                    <span class="mx-4">///</span>
+                    <span class="mx-4"><span class="lang-en">Blockchain Certification</span><span class="lang-zh">區塊鏈認證</span></span>
+                    <span class="mx-4">///</span>
+                    <span class="mx-4">HKAIFA ///</span>
+                    <span class="mx-4"><span class="lang-en">AI Native Director</span><span class="lang-zh">AI原生導演</span></span>
+                    <span class="mx-4">///</span>
+                    <span class="mx-4"><span class="lang-en">AI System Architect</span><span class="lang-zh">AI系統架構師</span></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- SECTION: ABOUT -->
+    <section id="about" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto border-b-2 border-black">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <div class="lg:col-span-4">
+                <span class="font-mono text-signal font-bold tracking-widest uppercase mb-4 block">
+                    <span class="lang-en">// Global Talent Cultivation</span>
+                    <span class="lang-zh">// 全球人才培養</span>
+                </span>
+                <h2 class="section-title text-black">
+                    <span class="lang-en">Revolutionary <br> AI Film Education</span>
+                    <span class="lang-zh">革命性 <br> AI影視教育</span>
+                </h2>
+                <div class="w-20 h-2 bg-black mb-8"></div>
+            </div>
+            
+            <div class="lg:col-span-8">
+                <p class="font-mono text-sm md:text-base leading-relaxed text-gray-700 mb-12 border-l-4 border-black pl-6">
+                    <span class="lang-en">The global AI film market is projected to expand from $6.1 billion in 2024 to an estimated $20 billion by 2028. HKAIFA is committed to addressing the severe shortage of over 180,000 AI film professionals worldwide.</span>
+                    <span class="lang-zh">全球AI影視市場從2024年的61億美元擴展到2028年預估的200億美元，HKAIFA致力於解決全球超過18萬AI影視專業人才的嚴重短缺問題。</span>
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Traditional Card -->
+                    <div class="info-card p-8 bg-white opacity-60 hover:opacity-100">
+                        <div class="font-mono text-xs bg-gray-200 inline-block px-2 py-1 mb-4 uppercase">
+                            <span class="lang-en">Traditional</span>
+                            <span class="lang-zh">傳統教育</span>
+                        </div>
+                        <h3 class="font-heavy text-2xl mb-4 line-through decoration-signal decoration-4 text-gray-400">
+                            <span class="lang-en">Traditional Film Education</span>
+                            <span class="lang-zh">傳統影視教育</span>
+                        </h3>
+                        <ul class="font-mono text-xs space-y-3 text-gray-500 list-disc pl-4">
+                            <li><span class="lang-en">Disconnect between technology and creativity</span><span class="lang-zh">技術與創意脫節</span></li>
+                            <li><span class="lang-en">Slow curriculum updates</span><span class="lang-zh">課程更新緩慢</span></li>
+                            <li><span class="lang-en">Opaque certification system</span><span class="lang-zh">認證體系不透明</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- AI Era Card -->
+                    <div class="info-card p-8 bg-black text-white dark border-signal shadow-[10px_10px_0px_0px_#FF3300]">
+                        <div class="font-mono text-xs bg-signal text-black inline-block px-2 py-1 mb-4 uppercase font-bold">
+                            <span class="lang-en">AI Era</span>
+                            <span class="lang-zh">AI時代</span>
+                        </div>
+                        <h3 class="font-heavy text-2xl mb-4">
+                            <span class="lang-en">AI-native Education</span>
+                            <span class="lang-zh">AI原生教育</span>
+                        </h3>
+                        <ul class="font-mono text-xs space-y-3 text-gray-300 list-disc pl-4">
+                            <li><span class="lang-en">Deep integration of technology and creativity</span><span class="lang-zh">技術與創意深度融合</span></li>
+                            <li><span class="lang-en">Real-time curriculum updates</span><span class="lang-zh">實時課程更新</span></li>
+                            <li><span class="lang-en">Blockchain certification system</span><span class="lang-zh">區塊鏈認證體系</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Icons Grid -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12">
+                    <div class="border-2 border-black p-4 text-center hover:bg-black hover:text-white transition-colors">
+                        <div class="text-3xl mb-2">🚀</div>
+                        <h4 class="font-heavy uppercase mb-2"><span class="lang-en">Innovation</span><span class="lang-zh">創新驅動</span></h4>
+                    </div>
+                    <div class="border-2 border-black p-4 text-center hover:bg-black hover:text-white transition-colors">
+                        <div class="text-3xl mb-2">🎨</div>
+                        <h4 class="font-heavy uppercase mb-2"><span class="lang-en">Art First</span><span class="lang-zh">藝術為本</span></h4>
+                    </div>
+                    <div class="border-2 border-black p-4 text-center hover:bg-black hover:text-white transition-colors">
+                        <div class="text-3xl mb-2">⭐</div>
+                        <h4 class="font-heavy uppercase mb-2"><span class="lang-en">Excellence</span><span class="lang-zh">追求卓越</span></h4>
+                    </div>
+                    <div class="border-2 border-black p-4 text-center hover:bg-black hover:text-white transition-colors">
+                        <div class="text-3xl mb-2">🌐</div>
+                        <h4 class="font-heavy uppercase mb-2"><span class="lang-en">Global</span><span class="lang-zh">國際視野</span></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: CURRICULUM -->
+    <section id="curriculum" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto bg-white border-b-2 border-black">
+        <div class="text-center mb-16">
+            <span class="bg-black text-white px-4 py-2 font-mono font-bold text-sm inline-block mb-6">
+                <span class="lang-en">REVOLUTIONARY MODEL</span>
+                <span class="lang-zh">革命性教育模式</span>
+            </span>
+            <h2 class="section-title outline-text text-black">
+                <span class="lang-en">Four-tier <br> Curriculum</span>
+                <span class="lang-zh">四層 <br> 課程架構</span>
+            </h2>
+        </div>
+
+        <!-- 4 Tiers Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0 border-2 border-black mb-16">
+            <!-- Item 1 -->
+            <div class="info-card p-0 border-0 border-b lg:border-b-0 md:border-r border-black hover:z-10 group">
+                <div class="img-zoom-container h-48 w-full bg-gray-200 relative">
+                    <div class="absolute top-2 left-2 bg-black text-white px-2 py-1 font-mono text-xs z-10">01</div>
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0" alt="Industry">
+                </div>
+                <div class="p-6">
+                    <h3 class="font-heavy text-xl mb-3 group-hover:text-signal transition-colors">
+                        <span class="lang-en">Industry Talent Certification</span>
+                        <span class="lang-zh">行業人才認證</span>
+                    </h3>
+                    <p class="font-mono text-xs text-gray-500">
+                        <span class="lang-en">3 Levels. Complete industry cognitive framework.</span>
+                        <span class="lang-zh">3級遞進。建立完整的行業認知框架。</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="info-card p-0 border-0 border-b lg:border-b-0 lg:border-r border-black hover:z-10 group">
+                <div class="img-zoom-container h-48 w-full bg-gray-200 relative">
+                    <div class="absolute top-2 left-2 bg-black text-white px-2 py-1 font-mono text-xs z-10">02</div>
+                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0" alt="Professional">
+                </div>
+                <div class="p-6">
+                    <h3 class="font-heavy text-xl mb-3 group-hover:text-signal transition-colors">
+                        <span class="lang-en">Professional Talent Certification</span>
+                        <span class="lang-zh">職業人才認證</span>
+                    </h3>
+                    <p class="font-mono text-xs text-gray-500">
+                        <span class="lang-en">68 Paths. Specific domain expertise.</span>
+                        <span class="lang-zh">68個方向。深度培養特定領域技能。</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="info-card p-0 border-0 border-b lg:border-b-0 md:border-r border-black hover:z-10 group">
+                <div class="img-zoom-container h-48 w-full bg-gray-200 relative">
+                    <div class="absolute top-2 left-2 bg-black text-white px-2 py-1 font-mono text-xs z-10">03</div>
+                    <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0" alt="Master">
+                </div>
+                <div class="p-6">
+                    <h3 class="font-heavy text-xl mb-3 group-hover:text-signal transition-colors">
+                        <span class="lang-en">Master Classes</span>
+                        <span class="lang-zh">大師課及項目班</span>
+                    </h3>
+                    <p class="font-mono text-xs text-gray-500">
+                        <span class="lang-en">Top Experts. Practical project experience.</span>
+                        <span class="lang-zh">頂級專家。實戰項目經驗。</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="info-card p-0 border-0 border-black hover:z-10 group">
+                <div class="img-zoom-container h-48 w-full bg-gray-200 relative">
+                    <div class="absolute top-2 left-2 bg-black text-white px-2 py-1 font-mono text-xs z-10">04</div>
+                    <img src="https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0" alt="Joint">
+                </div>
+                <div class="p-6">
+                    <h3 class="font-heavy text-xl mb-3 group-hover:text-signal transition-colors">
+                        <span class="lang-en">Global Recognition</span>
+                        <span class="lang-zh">聯合認證課程</span>
+                    </h3>
+                    <p class="font-mono text-xs text-gray-500">
+                        <span class="lang-en">Joint certification with tech giants.</span>
+                        <span class="lang-zh">與科技企業、知名院校聯合認證。</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popular Tracks -->
+        <h3 class="font-heavy text-2xl mb-8 text-center">
+            <span class="lang-en">POPULAR TRACKS</span>
+            <span class="lang-zh">熱門專業方向</span>
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Track 1 -->
+            <div class="border-2 border-black p-6 hover:bg-black hover:text-white transition-all group">
+                <div class="level-tag text-signal border-signal">
+                    <span class="lang-en">Professional</span>
+                    <span class="lang-zh">專業認證</span>
+                </div>
+                <h3 class="font-heavy text-2xl mb-2">
+                    <span class="lang-en">AI Native Director</span>
+                    <span class="lang-zh">AI原生導演</span>
+                </h3>
+                <div class="font-mono text-xs opacity-60 mb-4">CODE: PTCCC-01</div>
+                <div class="border-t border-current pt-4 font-mono text-xs flex justify-between">
+                    <span>200+ HRS</span>
+                    <span>¥33,800</span>
+                </div>
+            </div>
+
+            <!-- Track 2 -->
+            <div class="border-2 border-black bg-black text-white p-6 shadow-[10px_10px_0px_0px_#FF3300]">
+                <div class="level-tag text-signal border-signal">
+                    <span class="lang-en">Technical</span>
+                    <span class="lang-zh">技術認證</span>
+                </div>
+                <h3 class="font-heavy text-2xl mb-2">
+                    <span class="lang-en">AI System Architect</span>
+                    <span class="lang-zh">AI系統架構師</span>
+                </h3>
+                <div class="font-mono text-xs opacity-60 mb-4">CODE: PTCTI-01</div>
+                <div class="border-t border-white pt-4 font-mono text-xs flex justify-between">
+                    <span>220+ HRS</span>
+                    <span>¥35,800</span>
+                </div>
+            </div>
+
+            <!-- Track 3 -->
+            <div class="border-2 border-black p-6 hover:bg-black hover:text-white transition-all group">
+                <div class="level-tag text-signal border-signal">
+                    <span class="lang-en">Cutting-edge</span>
+                    <span class="lang-zh">前沿認證</span>
+                </div>
+                <h3 class="font-heavy text-2xl mb-2">
+                    <span class="lang-en">Web3 Content Architect</span>
+                    <span class="lang-zh">Web3內容架構師</span>
+                </h3>
+                <div class="font-mono text-xs opacity-60 mb-4">CODE: PTCII-13</div>
+                <div class="border-t border-current pt-4 font-mono text-xs flex justify-between">
+                    <span>300+ HRS</span>
+                    <span>¥108,000</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: PARTNERSHIP -->
+    <section id="partnership" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto bg-steel">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 border-b-2 border-black pb-8">
+            <div>
+                <span class="font-mono text-signal font-bold tracking-widest uppercase mb-4 block">
+                    <span class="lang-en">Expansion Plan</span>
+                    <span class="lang-zh">擴張計劃</span>
+                </span>
+                <h2 class="section-title text-black mb-0">
+                    <span class="lang-en">Global <br> Partnership</span>
+                    <span class="lang-zh">全球 <br> 合作中心</span>
+                </h2>
+            </div>
+            <div class="text-right">
+                <div class="font-heavy text-4xl">100</div>
+                <div class="font-mono text-xs uppercase text-gray-600">
+                    <span class="lang-en">CENTERS BY 2030</span>
+                    <span class="lang-zh">2030年目標</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-0 border-2 border-black bg-white">
+            <!-- Innovation Center -->
+            <div class="border-b lg:border-b-0 lg:border-r border-black p-8 hover:bg-black hover:text-white transition-colors duration-300 group">
+                <span class="font-mono text-xs bg-signal text-white px-2 py-1 mb-6 inline-block">01</span>
+                <h3 class="font-heavy text-3xl mb-2">
+                    <span class="lang-en">Innovation Center</span>
+                    <span class="lang-zh">創新中心</span>
+                </h3>
+                <div class="font-mono text-xs mb-8 text-gray-500 group-hover:text-gray-400">
+                    <span class="lang-en">Large Comprehensive Base</span>
+                    <span class="lang-zh">大型綜合性基地</span>
+                </div>
+                
+                <div class="border-t border-black group-hover:border-white pt-6 space-y-2 font-mono text-xs">
+                    <div class="flex justify-between">
+                        <span>INVESTMENT</span>
+                        <span class="text-signal font-bold">$3M</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>ROI (5Y)</span>
+                        <span class="text-signal font-bold">400-700%</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>PAYBACK</span>
+                        <span class="text-signal font-bold">8-12 MO</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Flagship Center -->
+            <div class="border-b lg:border-b-0 lg:border-r border-black p-8 bg-black text-white transform lg:scale-105 shadow-[0_0_30px_rgba(0,0,0,0.3)] z-10 relative">
+                 <span class="absolute top-0 right-0 bg-signal text-black px-2 py-1 font-mono text-xs font-bold">RECOMMENDED</span>
+                <span class="font-mono text-xs border border-white px-2 py-1 mb-6 inline-block">02</span>
+                <h3 class="font-heavy text-3xl mb-2">
+                    <span class="lang-en">Flagship Center</span>
+                    <span class="lang-zh">旗艦中心</span>
+                </h3>
+                <div class="font-mono text-xs mb-8 text-gray-400">
+                    <span class="lang-en">Regional Education Hub</span>
+                    <span class="lang-zh">區域性教育中心</span>
+                </div>
+                
+                <div class="border-t border-white pt-6 space-y-2 font-mono text-xs">
+                    <div class="flex justify-between">
+                        <span>INVESTMENT</span>
+                        <span class="text-signal font-bold">$1.5M</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>ROI (5Y)</span>
+                        <span class="text-signal font-bold">300-600%</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>PAYBACK</span>
+                        <span class="text-signal font-bold">9-15 MO</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Standard Center -->
+            <div class="p-8 hover:bg-black hover:text-white transition-colors duration-300 group">
+                <span class="font-mono text-xs bg-gray-200 text-black px-2 py-1 mb-6 inline-block">03</span>
+                <h3 class="font-heavy text-3xl mb-2">
+                    <span class="lang-en">Standard Center</span>
+                    <span class="lang-zh">標準中心</span>
+                </h3>
+                <div class="font-mono text-xs mb-8 text-gray-500 group-hover:text-gray-400">
+                    <span class="lang-en">Localized Education Base</span>
+                    <span class="lang-zh">本地化教育基地</span>
+                </div>
+                
+                <div class="border-t border-black group-hover:border-white pt-6 space-y-2 font-mono text-xs">
+                    <div class="flex justify-between">
+                        <span>INVESTMENT</span>
+                        <span class="text-signal font-bold">$800K</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>ROI (5Y)</span>
+                        <span class="text-signal font-bold">250-500%</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>PAYBACK</span>
+                        <span class="text-signal font-bold">10-16 MO</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: CERTIFICATION -->
+    <section id="certification" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto bg-black text-white">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div>
+                <h2 class="section-title text-white mb-6">
+                    <span class="lang-en">Blockchain <br> Certification</span>
+                    <span class="lang-zh">區塊鏈 <br> 認證體系</span>
+                </h2>
+                <p class="font-mono text-sm text-gray-400 max-w-md mb-8">
+                    <span class="lang-en">Using blockchain technology to create tamper-proof, comprehensive, and verifiable education certificates.</span>
+                    <span class="lang-zh">利用區塊鏈技術創建防篡改、全面且可驗證的教育證書。</span>
+                </p>
+                
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="border border-gray-800 p-6 bg-[#111]">
+                        <div class="text-signal text-xl mb-2"><i class="fas fa-link"></i></div>
+                        <h4 class="font-heavy text-lg mb-1">
+                            <span class="lang-en">Tamper-proof</span>
+                            <span class="lang-zh">區塊鏈驗證</span>
+                        </h4>
+                        <p class="font-mono text-xs text-gray-500">
+                            <span class="lang-en">Authenticity ensured.</span>
+                            <span class="lang-zh">確保真實性和防篡改。</span>
+                        </p>
+                    </div>
+                    <div class="border border-gray-800 p-6 bg-[#111]">
+                        <div class="text-signal text-xl mb-2"><i class="fas fa-sync"></i></div>
+                        <h4 class="font-heavy text-lg mb-1">
+                            <span class="lang-en">Dynamic Updates</span>
+                            <span class="lang-zh">動態更新</span>
+                        </h4>
+                        <p class="font-mono text-xs text-gray-500">
+                            <span class="lang-en">Records continuous learning.</span>
+                            <span class="lang-zh">持續記錄技能更新。</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div class="border-2 border-white p-6 relative">
+                    <div class="absolute -top-3 left-6 bg-white text-black px-2 font-bold font-mono text-xs">LEVEL 01</div>
+                    <h4 class="font-heavy text-2xl mb-2">
+                        <span class="lang-en">Industry Certification</span>
+                        <span class="lang-zh">行業人才認證證書</span>
+                    </h4>
+                    <p class="font-mono text-xs text-gray-400 mb-2">Primary / Intermediate / Advanced</p>
+                    <div class="font-mono text-[10px] text-gray-600">ID: HKAIFA-ITC-2025-X</div>
+                </div>
+
+                <div class="border-2 border-signal p-6 relative bg-[#1a0500]">
+                    <div class="absolute -top-3 left-6 bg-signal text-black px-2 font-bold font-mono text-xs">LEVEL 02</div>
+                    <h4 class="font-heavy text-2xl mb-2 text-white">
+                        <span class="lang-en">Professional Certification</span>
+                        <span class="lang-zh">職業人才認證證書</span>
+                    </h4>
+                    <p class="font-mono text-xs text-gray-400 mb-2">68 Professional Directions</p>
+                    <div class="font-mono text-[10px] text-gray-600">ID: HKAIFA-PTC-2025-X</div>
+                </div>
+
+                <div class="border-2 border-white p-6 relative">
+                    <div class="absolute -top-3 left-6 bg-white text-black px-2 font-bold font-mono text-xs">LEVEL 03</div>
+                    <h4 class="font-heavy text-2xl mb-2">
+                        <span class="lang-en">Master Class</span>
+                        <span class="lang-zh">大師班結業證書</span>
+                    </h4>
+                    <p class="font-mono text-xs text-gray-400 mb-2">Permanent Validity</p>
+                    <div class="font-mono text-[10px] text-gray-600">ID: HKAIFA-MC-2025-X</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: SERVICES -->
+    <section id="services" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto bg-white">
+        <h2 class="section-title text-center text-black mb-16">
+            <span class="lang-en">Support System</span>
+            <span class="lang-zh">全面支持服務</span>
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="border-2 border-black p-6 hover:bg-black hover:text-white transition-all group text-center">
+                <i class="fas fa-laptop-code text-4xl mb-6 text-black group-hover:text-signal"></i>
+                <h3 class="font-heavy text-xl mb-4">
+                    <span class="lang-en">Technical</span>
+                    <span class="lang-zh">技術支持</span>
+                </h3>
+                <ul class="font-mono text-xs space-y-2 opacity-70">
+                    <li>24/7 AI Assistant</li>
+                    <li>Industry Mentors</li>
+                </ul>
+            </div>
+            
+            <div class="border-2 border-black p-6 hover:bg-black hover:text-white transition-all group text-center">
+                <i class="fas fa-briefcase text-4xl mb-6 text-black group-hover:text-signal"></i>
+                <h3 class="font-heavy text-xl mb-4">
+                    <span class="lang-en">Employment</span>
+                    <span class="lang-zh">就業服務</span>
+                </h3>
+                <ul class="font-mono text-xs space-y-2 opacity-70">
+                    <li>Resume Optimization</li>
+                    <li>Job Matching</li>
+                </ul>
+            </div>
+            
+            <div class="border-2 border-black p-6 hover:bg-black hover:text-white transition-all group text-center">
+                <i class="fas fa-rocket text-4xl mb-6 text-black group-hover:text-signal"></i>
+                <h3 class="font-heavy text-xl mb-4">
+                    <span class="lang-en">Startup</span>
+                    <span class="lang-zh">創業支持</span>
+                </h3>
+                <ul class="font-mono text-xs space-y-2 opacity-70">
+                    <li>Incubation</li>
+                    <li>Investment Matching</li>
+                </ul>
+            </div>
+            
+            <div class="border-2 border-black p-6 hover:bg-black hover:text-white transition-all group text-center">
+                <i class="fas fa-book text-4xl mb-6 text-black group-hover:text-signal"></i>
+                <h3 class="font-heavy text-xl mb-4">
+                    <span class="lang-en">Resources</span>
+                    <span class="lang-zh">學習資源</span>
+                </h3>
+                <ul class="font-mono text-xs space-y-2 opacity-70">
+                    <li>Online Platform</li>
+                    <li>Global Community</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: APPLY -->
+    <section id="apply" class="py-20 md:py-32 bg-[#EAEAEA] border-t-2 border-black">
+        <div class="max-w-4xl mx-auto text-center px-4">
+            <h2 class="font-heavy text-4xl md:text-7xl mb-6 leading-none">
+                <span class="lang-en">SHAPE THE FUTURE</span>
+                <span class="lang-zh">塑造AI電影的未來</span>
+            </h2>
+            <p class="font-mono text-sm md:text-lg text-gray-600 mb-10">
+                <span class="lang-en">Join HKAIFA and become part of the global revolution.</span>
+                <span class="lang-zh">加入HKAIFA，成為AI影視教育全球革命的一部分。</span>
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-6">
+                <a href="https://www.hkaifa.academy/#/home" class="brutal-btn bg-black text-white hover:bg-signal hover:border-signal">
+                    <span class="lang-en">STUDENT APPLICATION</span>
+                    <span class="lang-zh">學生申請</span>
+                </a>
+                <a href="#partnership-application" class="brutal-btn bg-transparent text-black hover:bg-black hover:text-white">
+                    <span class="lang-en">PARTNERSHIP APPLICATION</span>
+                    <span class="lang-zh">合作申請</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-black text-[#EAEAEA] border-t border-[#222] pt-20 pb-10 px-4 md:px-8">
+        <div class="max-w-[1920px] mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+                <div class="lg:col-span-2">
+                    <h2 class="font-heavy text-5xl md:text-7xl mb-6">HKAIFA</h2>
+                    <p class="font-mono text-sm text-gray-400 max-w-md">
+                        <span class="lang-en">World's first AI-native film education institution, connecting technology and creativity, shaping the future of cinema.</span>
+                        <span class="lang-zh">全球首個AI原生影視教育機構，連接技術與創意，塑造電影的未來。</span>
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-mono text-signal mb-6">
+                        <span class="lang-en">LINKS</span>
+                        <span class="lang-zh">鏈接</span>
+                    </h4>
+                    <ul class="font-mono text-sm space-y-4">
+                        <li><a href="#curriculum" class="hover:text-white text-gray-500">Curriculum</a></li>
+                        <li><a href="#certification" class="hover:text-white text-gray-500">Certification</a></li>
+                        <li><a href="#services" class="hover:text-white text-gray-500">Services</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-mono text-signal mb-6">
+                        <span class="lang-en">CONTACT</span>
+                        <span class="lang-zh">聯繫我們</span>
+                    </h4>
+                    <ul class="font-mono text-sm space-y-4 text-gray-500">
+                        <li>info@hkaifa.academy</li>
+                        <li>Hong Kong, China</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-[#222] pt-8 flex flex-col md:flex-row justify-between items-center font-mono text-xs text-gray-600">
+                <div>© 2025 HKAIFA. ALL RIGHTS RESERVED.</div>
+                <div class="mt-4 md:mt-0">
+                    DESIGNED WITH BRUTALIST AESTHETICS
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        // 1. LOADER
+        window.addEventListener('load', () => {
+            const tl = gsap.timeline();
+            tl.to("#loader", { yPercent: -100, duration: 0.8, ease: "power4.inOut", delay: 0.5 });
+            tl.from("header .hero-title", { y: 100, opacity: 0, duration: 1, ease: "power3.out" }, "-=0.3");
+        });
+
+        // 2. LANGUAGE SWITCHER
+        // Initialize from localStorage or default to 'en' with error handling
+        let currentLang = 'en';
+        try {
+            currentLang = localStorage.getItem('preferredLanguage') || 'en';
+        } catch (e) {
+            console.log("Local storage not available");
+        }
+        document.body.setAttribute('data-lang', currentLang);
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'zh' : 'en';
+            document.body.setAttribute('data-lang', currentLang);
+            try {
+                localStorage.setItem('preferredLanguage', currentLang);
+            } catch (e) {
+                console.log("Local storage not available");
+            }
+        }
+
+        // 3. MOBILE MENU TOGGLE
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('active');
+            
+            // Toggle Body Scroll
+            if (menu.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // 4. PARTNERSHIP ALERT (Preserved from index.html)
+        document.addEventListener('DOMContentLoaded', function() {
+            const applicationButtons = document.querySelectorAll('[href="#partnership-application"]');
+            applicationButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    if (this.getAttribute('href') === '#partnership-application') {
+                        e.preventDefault();
+                        alert('Partnership Application Portal Opening...\n\nThree-tier Partnership Model:\n\n• Innovation Center: $3M investment, 400-700% ROI\n• Flagship Center: $1.5M investment, 300-600% ROI\n• Standard Center: $800K investment, 250-500% ROI\n\nPlease contact us for details: partnership@hkaifa.academy');
+                    }
+                });
+            });
+        });
+
+        // 5. GSAP ANIMATIONS
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Fade in sections
+        gsap.utils.toArray('section').forEach(section => {
+            gsap.from(section, {
+                opacity: 0,
+                y: 50,
+                duration: 1,
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>

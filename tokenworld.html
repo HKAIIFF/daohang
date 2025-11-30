@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIF WORLD | 1001 SCENARIOS</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP Suite -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Fonts: Oswald + Space Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        void: '#050505',
+                        concrete: '#1F1F1F',
+                        signal: '#FF3300',
+                        steel: '#EAEAEA',
+                        dim: '#888888',
+                        paper: '#F3F3F3'
+                    },
+                    fontFamily: {
+                        heavy: ['"Oswald"', 'sans-serif'],
+                        mono: ['"Space Mono"', 'monospace'],
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* CORE STYLES from aif.show.html */
+        html { scroll-behavior: smooth; }
+        body { background-color: #EAEAEA; color: #050505; overflow-x: hidden; }
+        ::selection { background: #FF3300; color: #000; }
+
+        /* --- ROBUST LANGUAGE HANDLING START --- */
+        /* Logic: Only strictly HIDE the language that shouldn't be seen.
+           The visible language will simply respect its original display property (block, inline, flex, etc.)
+           defined by Tailwind classes or defaults.
+        */
+        
+        /* Default State (English Mode): Hide all .lang-zh elements */
+        body:not(.show-zh) .lang-zh { 
+            display: none !important; 
+        }
+
+        /* Chinese Mode (body has .show-zh class): Hide all .lang-en elements */
+        body.show-zh .lang-en { 
+            display: none !important; 
+        }
+        /* --- ROBUST LANGUAGE HANDLING END --- */
+
+        /* TYPOGRAPHY */
+        .mega-text {
+            font-size: clamp(3.5rem, 11vw, 12rem);
+            line-height: 0.85;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            font-weight: 700;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 5rem);
+            line-height: 1;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        .outline-text {
+            color: transparent;
+            -webkit-text-stroke: 1.5px #050505;
+            text-stroke: 1.5px #050505;
+            transition: all 0.3s ease;
+        }
+        
+        .hero-title .outline-text {
+            -webkit-text-stroke: 1.5px #FFFFFF;
+        }
+
+        /* BUTTONS */
+        .brutal-btn {
+            background: #050505;
+            color: #EAEAEA;
+            border: 2px solid #050505;
+            padding: 1rem 2rem;
+            font-family: 'Space Mono', monospace;
+            text-transform: uppercase;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .brutal-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #FF3300;
+            transform: translateX(-101%);
+            transition: transform 0.3s cubic-bezier(0.77, 0, 0.175, 1);
+            z-index: 0;
+        }
+
+        .brutal-btn:hover::before { transform: translateX(0); }
+        .brutal-btn span, .brutal-btn i { position: relative; z-index: 1; }
+        .brutal-btn:hover { color: #000; border-color: #FF3300; }
+
+        /* COMPONENTS */
+        .grid-bg { background-size: 40px 40px; background-image: linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px); }
+
+        /* ACCORDION */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+        }
+        .accordion-item.active .accordion-content {
+            max-height: 2000px;
+        }
+        .accordion-icon { transition: transform 0.3s; }
+        .accordion-item.active .accordion-icon { transform: rotate(180deg); }
+
+        /* MARQUEE */
+        .marquee-container { overflow: hidden; white-space: nowrap; display: flex; }
+        .marquee-content { display: flex; animation: marquee 40s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* LOADER */
+        #loader {
+            position: fixed; inset: 0; background: #FF3300; z-index: 9999;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+        }
+
+        /* MOBILE MENU */
+        #mobile-menu {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 80px);
+            background: #050505;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 49;
+            overflow-y: auto;
+        }
+        #mobile-menu.active { transform: translateX(0); }
+
+        /* NAV */
+        nav { background: rgba(234, 234, 234, 0.95); backdrop-filter: blur(10px); }
+        
+        /* CATEGORY CARDS */
+        .cat-card { transition: all 0.3s ease; border: 2px solid #000; height: 100%; background: white; }
+        .cat-card:hover { transform: translateY(-5px); box-shadow: 10px 10px 0px 0px #FF3300; background: #000; color: white; }
+        .cat-card:hover .text-gray-600 { color: #aaa; }
+        .cat-card:hover .text-accent { color: #FF3300; }
+        
+        /* Stats Card */
+        .stats-box { border: 2px solid black; padding: 2rem; text-align: center; background: white; transition: all 0.3s; }
+        .stats-box:hover { background: #000; color: white; }
+        .stats-box:hover .text-signal { color: white; }
+    </style>
+</head>
+<body class="grid-bg">
+
+    <!-- LOADER -->
+    <div id="loader">
+        <div class="font-heavy text-6xl md:text-9xl font-bold text-black tracking-tighter">LOADING</div>
+        <div class="font-mono text-black mt-4 text-xs md:text-base animate-pulse">
+            AIF_WORLD_INIT_V1.0...
+        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 left-0 w-full z-50 border-b-2 border-black h-20 md:h-24 flex items-center">
+        <div class="w-full max-w-[1920px] mx-auto flex justify-between items-stretch h-full">
+            
+            <!-- Logo -->
+            <div class="flex flex-col justify-center px-4 md:px-8 border-r-2 border-black hover:bg-black hover:text-white transition-colors cursor-pointer group h-full" onclick="window.location.href='index.html'">
+                <span class="font-heavy text-3xl md:text-4xl font-bold tracking-tighter leading-none mb-1">AIF</span>
+                <div class="flex flex-col leading-none">
+                    <span class="font-mono text-[10px] md:text-xs tracking-widest font-bold group-hover:text-signal lang-en">APPLICATION SCENARIOS</span>
+                    <span class="font-mono text-[10px] md:text-xs tracking-widest font-bold group-hover:text-signal lang-zh">應用場景世界</span>
+                </div>
+            </div>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden xl:flex items-stretch h-full">
+                <a href="index.html" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span class="lang-en">Home</span><span class="lang-zh">首頁</span>
+                </a>
+                <a href="token.html" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span class="lang-en">Token</span><span class="lang-zh">代幣</span>
+                </a>
+                <a href="ipedia.html" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span class="lang-en">IPedia</span><span class="lang-zh">IP百科</span>
+                </a>
+                <a href="world.html" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider text-signal bg-black/5">
+                    <span class="lang-en">World</span><span class="lang-zh">世界</span>
+                </a>
+                <a href="genesis.html" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span class="lang-en">Genesis</span><span class="lang-zh">創世</span>
+                </a>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex h-full">
+                <a href="http://token.aif.market" class="hidden md:flex items-center px-6 border-l-2 border-black bg-signal text-black hover:bg-black hover:text-signal transition-colors font-mono text-xs font-bold uppercase h-full">
+                    <i class="fas fa-coins mr-2"></i>
+                    <span class="lang-en">Get Token</span><span class="lang-zh">獲取代幣</span>
+                </a>
+                <button id="lang-btn" onclick="toggleLanguage()" class="flex items-center px-6 border-l-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs font-bold uppercase h-full">
+                    [ 繁體中文 ]
+                </button>
+                <button onclick="toggleMenu()" class="xl:hidden flex items-center px-6 border-l-2 border-black hover:bg-black hover:text-white transition-colors h-full">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MOBILE MENU OVERLAY -->
+    <div id="mobile-menu">
+        <div class="flex flex-col p-8 gap-6">
+            <a href="index.html" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span class="lang-en">HOME</span><span class="lang-zh">首頁</span></a>
+            <a href="token.html" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span class="lang-en">TOKEN</span><span class="lang-zh">代幣</span></a>
+            <a href="ipedia.html" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span class="lang-en">IPEDIA</span><span class="lang-zh">IP百科</span></a>
+            <a href="world.html" class="text-signal font-heavy text-4xl hover:text-white transition-colors"><span class="lang-en">WORLD</span><span class="lang-zh">應用世界</span></a>
+            <a href="genesis.html" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span class="lang-en">GENESIS</span><span class="lang-zh">創世</span></a>
+            
+            <div class="h-px bg-gray-800 my-4"></div>
+            
+            <a href="#categories" onclick="toggleMenu()" class="text-white font-mono text-xl"><span class="lang-en">CATEGORIES</span><span class="lang-zh">場景分類</span></a>
+            <a href="#scenarios" onclick="toggleMenu()" class="text-white font-mono text-xl"><span class="lang-en">ALL SCENARIOS</span><span class="lang-zh">全部場景</span></a>
+            <a href="#ecosystem" onclick="toggleMenu()" class="text-white font-mono text-xl"><span class="lang-en">ECOSYSTEM</span><span class="lang-zh">生態系統</span></a>
+            <a href="#partners" onclick="toggleMenu()" class="text-white font-mono text-xl"><span class="lang-en">PARTNERS</span><span class="lang-zh">合作夥伴</span></a>
+            
+            <a href="http://token.aif.market" class="brutal-btn w-full mt-4 bg-signal text-black border-signal">
+                <span class="lang-en">GET AIF TOKEN</span><span class="lang-zh">獲取 AIF 代幣</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- HERO SECTION -->
+    <header class="relative min-h-screen flex items-center pt-24 overflow-hidden bg-black text-white">
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0 opacity-40">
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
+            <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" class="w-full h-full object-cover filter grayscale contrast-125" alt="AIF World Background">
+        </div>
+        
+        <div class="relative z-10 w-full max-w-[1920px] mx-auto px-4 md:px-8">
+            <div class="max-w-7xl">
+                <div class="font-mono text-signal mb-4 flex items-center gap-2 animate-pulse">
+                    <div class="w-2 h-2 bg-signal rounded-full"></div>
+                    <span class="lang-en">/// MODEL_ID: AIF-WORLD // STATUS: ACTIVE</span>
+                    <span class="lang-zh">/// 模型ID: AIF-WORLD // 狀態: 活躍</span>
+                </div>
+                
+                <!-- HERO TITLE (Language Specific Blocks) -->
+                <h1 class="hero-title font-heavy mega-text mb-6 leading-none">
+                    <!-- EN VERSION -->
+                    <span class="block lang-en">EXPLORE</span>
+                    <!-- ZH VERSION -->
+                    <span class="block lang-zh">探索</span>
+                    
+                    <!-- SHARED -->
+                    <span class="block outline-text text-signal">1001+</span>
+                    
+                    <!-- EN VERSION -->
+                    <span class="block text-signal lang-en">SCENARIOS</span>
+                    <!-- ZH VERSION -->
+                    <span class="block text-signal lang-zh">應用場景</span>
+                </h1>
+                
+                <p class="font-mono text-sm md:text-xl max-w-2xl text-gray-300 mb-10 leading-relaxed border-l-4 border-signal pl-6 bg-black/50 backdrop-blur-sm p-4">
+                    <span class="lang-en">
+                        AIF WORLD is a comprehensive platform showcasing AIF token application scenarios, covering eight core areas including creative finance, AI labor settlement, digital soul value carriers, and future value trading media.
+                    </span>
+                    <span class="lang-zh">
+                        AIF WORLD 是AIF代幣應用場景的完整展示平台，涵蓋了創意金融、AI勞動力結算、數字靈魂價值載體、未來價值交易媒介等八大核心領域，全面展示AIF在AI時代的無限應用潛力。
+                    </span>
+                </p>
+
+                <div class="flex flex-col md:flex-row gap-4">
+                    <a href="#scenarios" class="brutal-btn bg-signal text-black hover:bg-white border-signal hover:border-white">
+                        <span class="lang-en">EXPLORE ALL</span><span class="lang-zh">探索全部場景</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                    <a href="http://token.aif.market" class="brutal-btn bg-transparent text-white border-white hover:bg-white hover:text-black">
+                        <i class="fas fa-coins mr-2"></i>
+                        <span class="lang-en">GET AIF TOKEN</span><span class="lang-zh">獲取 AIF 代幣</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Ticker -->
+        <div class="absolute bottom-0 w-full bg-signal text-black py-2 font-mono text-xs md:text-sm font-bold border-t-2 border-white z-20">
+            <div class="marquee-container">
+                <div class="marquee-content">
+                    <span class="mx-4">AIF WORLD ///</span>
+                    <span class="mx-4 lang-en">1000+ SCENARIOS</span><span class="mx-4 lang-zh">1000+ 場景</span>
+                    <span class="mx-4">///</span>
+                    <span class="mx-4 lang-en">8 CORE CATEGORIES</span><span class="mx-4 lang-zh">8大核心分類</span>
+                    <span class="mx-4">///</span>
+                    <span class="mx-4 lang-en">50+ INDUSTRIES</span><span class="mx-4 lang-zh">50+ 跨行業領域</span>
+                    <span class="mx-4">///</span>
+                    <span class="mx-4 lang-en">INFINITE POTENTIAL</span><span class="mx-4 lang-zh">無限潛力</span>
+                    <span class="mx-4">///</span>
+                    <span class="mx-4">HASH: 0x71A9B3...F7E</span>
+                    <span class="mx-4">///</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- STATS SECTION -->
+    <section class="border-b-2 border-black bg-white">
+        <div class="grid grid-cols-2 md:grid-cols-4 divide-x-2 divide-black">
+            <div class="p-8 text-center hover:bg-black hover:text-white transition-all group">
+                <i class="fas fa-layer-group text-3xl mb-2 text-signal"></i>
+                <div class="font-heavy text-4xl mb-1">8</div>
+                <div class="font-mono text-xs text-gray-500 group-hover:text-gray-400">
+                    <span class="lang-en">CORE CATEGORIES</span><span class="lang-zh">核心分類</span>
+                </div>
+            </div>
+            <div class="p-8 text-center hover:bg-black hover:text-white transition-all group">
+                <i class="fas fa-cubes text-3xl mb-2 text-signal"></i>
+                <div class="font-heavy text-4xl mb-1">1000+</div>
+                <div class="font-mono text-xs text-gray-500 group-hover:text-gray-400">
+                    <span class="lang-en">SCENARIOS</span><span class="lang-zh">應用場景</span>
+                </div>
+            </div>
+            <div class="p-8 text-center hover:bg-black hover:text-white transition-all group">
+                <i class="fas fa-industry text-3xl mb-2 text-signal"></i>
+                <div class="font-heavy text-4xl mb-1">50+</div>
+                <div class="font-mono text-xs text-gray-500 group-hover:text-gray-400">
+                    <span class="lang-en">INDUSTRIES</span><span class="lang-zh">跨行業領域</span>
+                </div>
+            </div>
+            <div class="p-8 text-center hover:bg-black hover:text-white transition-all group">
+                <i class="fas fa-infinity text-3xl mb-2 text-signal"></i>
+                <div class="font-heavy text-4xl mb-1">∞</div>
+                <div class="font-mono text-xs text-gray-500 group-hover:text-gray-400">
+                    <span class="lang-en">POTENTIAL</span><span class="lang-zh">創新潛力</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CATEGORIES SECTION -->
+    <section id="categories" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto">
+        <div class="text-center mb-16">
+            <span class="bg-black text-white px-4 py-2 font-mono font-bold text-sm inline-block mb-6" data-lang-en="AIF APPLICATION" data-lang-zh="AIF 應用">AIF APPLICATION</span>
+            <h2 class="section-title mb-6">
+                <span class="lang-en">SCENARIO CATEGORIES</span><span class="lang-zh">應用場景分類</span>
+            </h2>
+            <p class="font-mono text-sm md:text-lg text-gray-600 max-w-3xl mx-auto">
+                <span class="lang-en">Eight core application areas of AIF tokens in the AI era, covering multiple dimensions including creative finance, AI labor settlement, and digital soul value carriers.</span>
+                <span class="lang-zh">AIF代幣在AI時代的八大核心應用領域，覆蓋創意金融、AI勞動力結算、數字靈魂價值載體等多個維度。</span>
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Category 1 -->
+            <a href="创意金融底层资产.html" class="block">
+                <div class="cat-card p-8 flex flex-col justify-between">
+                    <div>
+                        <i class="fas fa-piggy-bank text-4xl text-signal mb-6"></i>
+                        <h3 class="font-heavy text-2xl mb-4">
+                            <span class="lang-en">Creative Finance Underlying Assets</span><span class="lang-zh">創意金融底層資產</span>
+                        </h3>
+                        <p class="font-mono text-xs text-gray-600 mb-6">
+                            <span class="lang-en">AIF serves as credit collateral, liquidity medium, and risk pricing tool, providing financial infrastructure for the creative economy.</span>
+                            <span class="lang-zh">AIF作為信用抵押品、流動性媒介和風險定價工具，為創意經濟提供金融基礎設施。</span>
+                        </p>
+                    </div>
+                    <div class="font-mono font-bold text-signal text-sm border-t border-gray-200 pt-4">
+                        <span class="lang-en">150+ Scenarios</span><span class="lang-zh">150+ 場景</span> <i class="fas fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Category 2 -->
+            <a href="AI劳动力结算工资.html" class="block">
+                <div class="cat-card p-8 flex flex-col justify-between">
+                    <div>
+                        <i class="fas fa-robot text-4xl text-signal mb-6"></i>
+                        <h3 class="font-heavy text-2xl mb-4">
+                            <span class="lang-en">AI Labor Settlement Wages</span><span class="lang-zh">AI勞動力結算工資</span>
+                        </h3>
+                        <p class="font-mono text-xs text-gray-600 mb-6">
+                            <span class="lang-en">AIF serves as M2M payment currency and "hourly wage" for AI agents, supporting the basic settlement unit of AI economic collaboration.</span>
+                            <span class="lang-zh">AIF作為M2M支付貨幣和AI代理人的"時薪"，支撐AI經濟協作的基礎結算單位。</span>
+                        </p>
+                    </div>
+                    <div class="font-mono font-bold text-signal text-sm border-t border-gray-200 pt-4">
+                        <span class="lang-en">120+ Scenarios</span><span class="lang-zh">120+ 場景</span> <i class="fas fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Category 3 -->
+            <a href="数字灵魂价值载体.html" class="block">
+                <div class="cat-card p-8 flex flex-col justify-between">
+                    <div>
+                        <i class="fas fa-ghost text-4xl text-signal mb-6"></i>
+                        <h3 class="font-heavy text-2xl mb-4">
+                            <span class="lang-en">Digital Soul Value Carrier</span><span class="lang-zh">數字靈魂價值載體</span>
+                        </h3>
+                        <p class="font-mono text-xs text-gray-600 mb-6">
+                            <span class="lang-en">AIF serves as the "activation code" for digital identity and the "inheritance medium" for digital heritage, carrying the value of digital life.</span>
+                            <span class="lang-zh">AIF作為數字身份的"激活碼"和數字遺產的"繼承媒介"，承載數字生命的價值。</span>
+                        </p>
+                    </div>
+                    <div class="font-mono font-bold text-signal text-sm border-t border-gray-200 pt-4">
+                        <span class="lang-en">100+ Scenarios</span><span class="lang-zh">100+ 場景</span> <i class="fas fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Category 4 -->
+            <a href="未來價值交易媒介.html" class="block">
+                <div class="cat-card p-8 flex flex-col justify-between">
+                    <div>
+                        <i class="fas fa-exchange-alt text-4xl text-signal mb-6"></i>
+                        <h3 class="font-heavy text-2xl mb-4">
+                            <span class="lang-en">Future Value Trading Media</span><span class="lang-zh">未來價值交易媒介</span>
+                        </h3>
+                        <p class="font-mono text-xs text-gray-600 mb-6">
+                            <span class="lang-en">AIF serves as a financial tool for pricing, trading, and hedging "future", creating financial derivatives for future returns.</span>
+                            <span class="lang-zh">AIF作為對"未來"進行定價、交易和對沖的金融工具，開創未來收益的金融衍生品。</span>
+                        </p>
+                    </div>
+                    <div class="font-mono font-bold text-signal text-sm border-t border-gray-200 pt-4">
+                        <span class="lang-en">130+ Scenarios</span><span class="lang-zh">130+ 場景</span> <i class="fas fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Category 5 -->
+            <a href="AI专业服务结算媒介.html" class="block">
+                <div class="cat-card p-8 flex flex-col justify-between">
+                    <div>
+                        <i class="fas fa-user-md text-4xl text-signal mb-6"></i>
+                        <h3 class="font-heavy text-2xl mb-4">
+                            <span class="lang-en">AI Professional Service Settlement</span><span class="lang-zh">AI專業服務結算媒介</span>
+                        </h3>
+                        <p class="font-mono text-xs text-gray-600 mb-6">
+                            <span class="lang-en">AIF serves as the standard compensation for paying AI expert services, transforming professional services from elite consulting to scalable AI services.</span>
+                            <span class="lang-zh">AIF作為支付AI專家服務的標準薪酬，將專業服務從精英咨詢變為高效可擴展的AI服務。</span>
+                        </p>
+                    </div>
+                    <div class="font-mono font-bold text-signal text-sm border-t border-gray-200 pt-4">
+                        <span class="lang-en">140+ Scenarios</span><span class="lang-zh">140+ 場景</span> <i class="fas fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Category 6 -->
+            <a href="實體資產數字靈魂.html" class="block">
+                <div class="cat-card p-8 flex flex-col justify-between">
+                    <div>
+                        <i class="fas fa-car text-4xl text-signal mb-6"></i>
+                        <h3 class="font-heavy text-2xl mb-4">
+                            <span class="lang-en">Physical Asset Digital Soul</span><span class="lang-zh">實體資產數字靈魂</span>
+                        </h3>
+                        <p class="font-mono text-xs text-gray-600 mb-6">
+                            <span class="lang-en">AIF serves as a "value anchor" connecting the physical world and the AI digital world, injecting AI soul into physical assets.</span>
+                            <span class="lang-zh">AIF作為連接物理世界與AI數字世界的"價值錨定器"，為實體資產注入AI靈魂。</span>
+                        </p>
+                    </div>
+                    <div class="font-mono font-bold text-signal text-sm border-t border-gray-200 pt-4">
+                        <span class="lang-en">110+ Scenarios</span><span class="lang-zh">110+ 場景</span> <i class="fas fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Category 7 -->
+            <a href="未來價值金融衍生品.html" class="block">
+                <div class="cat-card p-8 flex flex-col justify-between">
+                    <div>
+                        <i class="fas fa-chart-line text-4xl text-signal mb-6"></i>
+                        <h3 class="font-heavy text-2xl mb-4">
+                            <span class="lang-en">Future Value Financial Derivatives</span><span class="lang-zh">未來價值金融衍生品</span>
+                        </h3>
+                        <p class="font-mono text-xs text-gray-600 mb-6">
+                            <span class="lang-en">AIF serves as a financial tool for pricing, hedging, and speculating on "future uncertainty", creating a new paradigm for creative finance.</span>
+                            <span class="lang-zh">AIF作為對"未來不確定性"進行定價、對沖和投機的金融工具，開創創意金融新範式。</span>
+                        </p>
+                    </div>
+                    <div class="font-mono font-bold text-signal text-sm border-t border-gray-200 pt-4">
+                        <span class="lang-en">120+ Scenarios</span><span class="lang-zh">120+ 場景</span> <i class="fas fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Category 8 -->
+            <a href="去中心化治理核心.html" class="block">
+                <div class="cat-card p-8 flex flex-col justify-between">
+                    <div>
+                        <i class="fas fa-network-wired text-4xl text-signal mb-6"></i>
+                        <h3 class="font-heavy text-2xl mb-4">
+                            <span class="lang-en">Decentralized Governance Core</span><span class="lang-zh">去中心化治理核心</span>
+                        </h3>
+                        <p class="font-mono text-xs text-gray-600 mb-6">
+                            <span class="lang-en">AIF serves as power, fuel, and ecological constitution, supporting the decentralized governance system of the entire AIF ecosystem.</span>
+                            <span class="lang-zh">AIF作為權力、燃料和生態憲法，支撐整個AIF生態的去中心化治理體系。</span>
+                        </p>
+                    </div>
+                    <div class="font-mono font-bold text-signal text-sm border-t border-gray-200 pt-4">
+                        <span class="lang-en">130+ Scenarios</span><span class="lang-zh">130+ 場景</span> <i class="fas fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- DETAILED SCENARIOS SECTION (Accordions) -->
+    <section id="scenarios" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto bg-white border-t-2 border-black">
+        <div class="text-center mb-16">
+            <h2 class="section-title text-black">
+                <span class="lang-en">ALL SCENARIOS</span><span class="lang-zh">全部應用場景</span>
+            </h2>
+            <p class="font-mono text-sm md:text-lg text-gray-600 max-w-3xl mx-auto">
+                <span class="lang-en">The following are 1000+ AIF application scenarios compiled from two PDF files, displayed in detail according to eight categories.</span>
+                <span class="lang-zh">以下是從兩個PDF文件中整理出的1000+ AIF應用場景，按八大分類詳細展示。</span>
+            </p>
+        </div>
+
+        <div class="max-w-6xl mx-auto space-y-4">
+            <!-- Group 1: Creative Finance -->
+            <div class="accordion-item border-2 border-black bg-paper">
+                <button class="w-full p-6 md:p-8 flex justify-between items-center text-left hover:bg-black hover:text-white transition-colors group" onclick="toggleAccordion(this)">
+                    <div class="flex items-center gap-6">
+                        <span class="font-heavy text-4xl md:text-5xl text-signal w-20">01</span>
+                        <div>
+                            <h3 class="font-heavy text-2xl md:text-3xl">
+                                <span class="lang-en">CREATIVE FINANCE ASSETS</span><span class="lang-zh">創意金融底層資產</span>
+                            </h3>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon text-2xl group-hover:text-signal"></i>
+                </button>
+                <div class="accordion-content">
+                    <div class="p-6 md:p-8 border-t-2 border-black grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 bg-white text-black">
+                        
+                        <!-- Scenario 1 -->
+                        <div class="border border-gray-200 p-6 hover:border-black transition-all">
+                            <div class="text-signal text-sm font-bold mb-2">SCENARIO 1</div>
+                            <h4 class="font-heavy text-xl mb-3">
+                                <span class="lang-en">"Liability Mortgage" for AI Legal Services</span>
+                                <span class="lang-zh">AI法律服務的「責任抵押」</span>
+                            </h4>
+                            <p class="text-sm font-mono text-gray-600 mb-4">
+                                <span class="lang-en">A global top law firm launches an "AI Legal Agent Being" on BeingOS.</span>
+                                <span class="lang-zh">全球頂級律所在BeingOS上推出「AI法律代理人Being」。</span>
+                            </p>
+                            <div class="bg-gray-100 p-4 text-xs font-mono">
+                                <strong class="block text-black mb-1">AIF MECHANISM:</strong>
+                                <span class="lang-en">Stake 100M AIF as "Malpractice Insurance". If AI errors cause infringement, smart contract deducts AIF.</span>
+                                <span class="lang-zh">質押1億AIF作為「AI瀆職保險金」。一旦AI出現疏忽導致侵權，智能合約自動扣除AIF賠付。</span>
+                            </div>
+                        </div>
+
+                        <!-- Scenario 2 -->
+                        <div class="border border-gray-200 p-6 hover:border-black transition-all">
+                            <div class="text-signal text-sm font-bold mb-2">SCENARIO 2</div>
+                            <h4 class="font-heavy text-xl mb-3">
+                                <span class="lang-en">"AI Soul" Casting Fee</span>
+                                <span class="lang-zh">實體資產的「AI靈魂」鑄造費</span>
+                            </h4>
+                            <p class="text-sm font-mono text-gray-600 mb-4">
+                                <span class="lang-en">Every car produced will be equipped with a bound "AI Car Soul Being".</span>
+                                <span class="lang-zh">每輛出廠的汽車都將配備一個綁定的「AI汽車靈魂Being」。</span>
+                            </p>
+                            <div class="bg-gray-100 p-4 text-xs font-mono">
+                                <strong class="block text-black mb-1">AIF MECHANISM:</strong>
+                                <span class="lang-en">Pay 100 AIF per car as "Casting Fee" & "Maintenance Fee".</span>
+                                <span class="lang-zh">為每輛車支付100 AIF作為「鑄造費」和「終身算力維護費」。</span>
+                            </div>
+                        </div>
+
+                         <!-- Scenario 3 -->
+                         <div class="border border-gray-200 p-6 hover:border-black transition-all">
+                            <div class="text-signal text-sm font-bold mb-2">SCENARIO 3</div>
+                            <h4 class="font-heavy text-xl mb-3">
+                                <span class="lang-en">"IPO" for AI Models</span>
+                                <span class="lang-zh">AI模型的「IPO」融資</span>
+                            </h4>
+                            <p class="text-sm font-mono text-gray-600 mb-4">
+                                <span class="lang-en">An AI lab trains a revolutionary model and needs funding.</span>
+                                <span class="lang-zh">頂尖AI實驗室訓練出革命性模型，需要資金將其商業化。</span>
+                            </p>
+                            <div class="bg-gray-100 p-4 text-xs font-mono">
+                                <strong class="block text-black mb-1">AIF MECHANISM:</strong>
+                                <span class="lang-en">Initial Token Offering for the model. Investors use AIF to buy "ModelToken".</span>
+                                <span class="lang-zh">在AIF.Market進行「首次代幣發行」。投資者使用AIF購買「收益權代幣」。</span>
+                            </div>
+                        </div>
+
+                         <!-- More Link -->
+                         <a href="创意金融底层资产.html" class="border-2 border-dashed border-gray-300 p-6 flex flex-col items-center justify-center hover:border-signal hover:text-signal transition-all">
+                            <i class="fas fa-plus text-3xl mb-2"></i>
+                            <span class="font-heavy text-lg lang-en">VIEW 150+ SCENARIOS</span>
+                            <span class="font-heavy text-lg lang-zh">查看 150+ 場景</span>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 2: AI Labor -->
+            <div class="accordion-item border-2 border-black bg-paper">
+                <button class="w-full p-6 md:p-8 flex justify-between items-center text-left hover:bg-black hover:text-white transition-colors group" onclick="toggleAccordion(this)">
+                    <div class="flex items-center gap-6">
+                        <span class="font-heavy text-4xl md:text-5xl text-signal w-20">02</span>
+                        <div>
+                            <h3 class="font-heavy text-2xl md:text-3xl">
+                                <span class="lang-en">AI LABOR SETTLEMENT</span><span class="lang-zh">AI勞動力結算工資</span>
+                            </h3>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon text-2xl group-hover:text-signal"></i>
+                </button>
+                <div class="accordion-content">
+                    <div class="p-6 md:p-8 border-t-2 border-black grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 bg-white text-black">
+                        <!-- Scenario 7 -->
+                        <div class="border border-gray-200 p-6 hover:border-black transition-all">
+                            <div class="text-signal text-sm font-bold mb-2">SCENARIO 7</div>
+                            <h4 class="font-heavy text-xl mb-3">
+                                <span class="lang-en">Autonomous Settlement Between Agents</span>
+                                <span class="lang-zh">AI代理人之間的自主結算</span>
+                            </h4>
+                            <div class="bg-gray-100 p-4 text-xs font-mono">
+                                <strong class="block text-black mb-1">AIF MECHANISM:</strong>
+                                <span class="lang-en">BeingMe pays 1 AIF to Historian Being, 2 AIF to Writer Being. Automated wage settlement.</span>
+                                <span class="lang-zh">BeingMe支付1 AIF給歷史學家Being，2 AIF給寫作大師Being。全自動工資結算。</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Scenario 8 -->
+                        <div class="border border-gray-200 p-6 hover:border-black transition-all">
+                            <div class="text-signal text-sm font-bold mb-2">SCENARIO 8</div>
+                            <h4 class="font-heavy text-xl mb-3">
+                                <span class="lang-en">Pay "AI Employee" Monthly Salary</span>
+                                <span class="lang-zh">支付「AI數字員工」月薪</span>
+                            </h4>
+                            <div class="bg-gray-100 p-4 text-xs font-mono">
+                                <strong class="block text-black mb-1">AIF MECHANISM:</strong>
+                                <span class="lang-en">Company pays 100,000 AIF monthly to 10 AI Financial Analysts instead of buying SaaS.</span>
+                                <span class="lang-zh">公司每月向10個AI財務分析師支付100,000 AIF，替代SaaS授權費。</span>
+                            </div>
+                        </div>
+
+                         <!-- More Link -->
+                         <a href="AI劳动力结算工资.html" class="border-2 border-dashed border-gray-300 p-6 flex flex-col items-center justify-center hover:border-signal hover:text-signal transition-all">
+                            <i class="fas fa-plus text-3xl mb-2"></i>
+                            <span class="font-heavy text-lg lang-en">VIEW 120+ SCENARIOS</span>
+                            <span class="font-heavy text-lg lang-zh">查看 120+ 場景</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 3: Digital Soul -->
+            <div class="accordion-item border-2 border-black bg-paper">
+                <button class="w-full p-6 md:p-8 flex justify-between items-center text-left hover:bg-black hover:text-white transition-colors group" onclick="toggleAccordion(this)">
+                    <div class="flex items-center gap-6">
+                        <span class="font-heavy text-4xl md:text-5xl text-signal w-20">03</span>
+                        <div>
+                            <h3 class="font-heavy text-2xl md:text-3xl">
+                                <span class="lang-en">DIGITAL SOUL CARRIER</span><span class="lang-zh">數字靈魂價值載體</span>
+                            </h3>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon text-2xl group-hover:text-signal"></i>
+                </button>
+                <div class="accordion-content">
+                    <div class="p-6 md:p-8 border-t-2 border-black grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 bg-white text-black">
+                         <!-- Scenario 13 -->
+                         <div class="border border-gray-200 p-6 hover:border-black transition-all">
+                            <div class="text-signal text-sm font-bold mb-2">SCENARIO 13</div>
+                            <h4 class="font-heavy text-xl mb-3">
+                                <span class="lang-en">"Digital Immortality" Maintenance</span>
+                                <span class="lang-zh">「數字永生」的維護費</span>
+                            </h4>
+                            <div class="bg-gray-100 p-4 text-xs font-mono">
+                                <strong class="block text-black mb-1">AIF MECHANISM:</strong>
+                                <span class="lang-en">Trust contract automatically pays 100 AIF/year as "computing life support" after user death.</span>
+                                <span class="lang-zh">信託合約在用戶去世後，每年自動支付100 AIF作為「算力維生費」。</span>
+                            </div>
+                        </div>
+
+                        <!-- More Link -->
+                        <a href="数字灵魂价值载体.html" class="border-2 border-dashed border-gray-300 p-6 flex flex-col items-center justify-center hover:border-signal hover:text-signal transition-all">
+                            <i class="fas fa-plus text-3xl mb-2"></i>
+                            <span class="font-heavy text-lg lang-en">VIEW 100+ SCENARIOS</span>
+                            <span class="font-heavy text-lg lang-zh">查看 100+ 場景</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 4: Future Value -->
+            <div class="accordion-item border-2 border-black bg-paper">
+                <button class="w-full p-6 md:p-8 flex justify-between items-center text-left hover:bg-black hover:text-white transition-colors group" onclick="toggleAccordion(this)">
+                    <div class="flex items-center gap-6">
+                        <span class="font-heavy text-4xl md:text-5xl text-signal w-20">04</span>
+                        <div>
+                            <h3 class="font-heavy text-2xl md:text-3xl">
+                                <span class="lang-en">FUTURE VALUE TRADING</span><span class="lang-zh">未來價值交易媒介</span>
+                            </h3>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon text-2xl group-hover:text-signal"></i>
+                </button>
+                <div class="accordion-content">
+                    <div class="p-6 md:p-8 border-t-2 border-black grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 bg-white text-black">
+                        <!-- Scenario 18 -->
+                        <div class="border border-gray-200 p-6 hover:border-black transition-all">
+                            <div class="text-signal text-sm font-bold mb-2">SCENARIO 18</div>
+                            <h4 class="font-heavy text-xl mb-3">
+                                <span class="lang-en">"Future Box Office" Futures</span>
+                                <span class="lang-zh">「未來票房」的期貨交易</span>
+                            </h4>
+                            <div class="bg-gray-100 p-4 text-xs font-mono">
+                                <strong class="block text-black mb-1">AIF MECHANISM:</strong>
+                                <span class="lang-en">Buy FilmToken pegged to 1 AIF for delivery in 6 months at 0.8 AIF price.</span>
+                                <span class="lang-zh">以0.8 AIF的價格，買入6個月後交付的、錨定1 AIF的FilmToken。</span>
+                            </div>
+                        </div>
+                        
+                         <!-- More Link -->
+                         <a href="未來價值交易媒介.html" class="border-2 border-dashed border-gray-300 p-6 flex flex-col items-center justify-center hover:border-signal hover:text-signal transition-all">
+                            <i class="fas fa-plus text-3xl mb-2"></i>
+                            <span class="font-heavy text-lg lang-en">VIEW 130+ SCENARIOS</span>
+                            <span class="font-heavy text-lg lang-zh">查看 130+ 場景</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 5: Professional Services -->
+            <div class="accordion-item border-2 border-black bg-paper">
+                <button class="w-full p-6 md:p-8 flex justify-between items-center text-left hover:bg-black hover:text-white transition-colors group" onclick="toggleAccordion(this)">
+                    <div class="flex items-center gap-6">
+                        <span class="font-heavy text-4xl md:text-5xl text-signal w-20">05</span>
+                        <div>
+                            <h3 class="font-heavy text-2xl md:text-3xl">
+                                <span class="lang-en">AI PRO SERVICES</span><span class="lang-zh">AI專業服務結算媒介</span>
+                            </h3>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon text-2xl group-hover:text-signal"></i>
+                </button>
+                <div class="accordion-content">
+                    <div class="p-6 md:p-8 border-t-2 border-black grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 bg-white text-black">
+                         <!-- Scenario 21 -->
+                         <div class="border border-gray-200 p-6 hover:border-black transition-all">
+                            <div class="text-signal text-sm font-bold mb-2">SCENARIO 21</div>
+                            <h4 class="font-heavy text-xl mb-3">
+                                <span class="lang-en">AIF Payment for "AI Legal Advisor"</span>
+                                <span class="lang-zh">AIF支付「AI法律顧問」</span>
+                            </h4>
+                            <div class="bg-gray-100 p-4 text-xs font-mono">
+                                <strong class="block text-black mb-1">AIF MECHANISM:</strong>
+                                <span class="lang-en">Pay 50,000 AIF to "AI Legal Agent Being" for instant audit of 5000 contracts.</span>
+                                <span class="lang-zh">支付50,000 AIF給「AI法律代理人Being」，1小時內完成5000份合約審核。</span>
+                            </div>
+                        </div>
+
+                         <!-- More Link -->
+                         <a href="AI专业服务结算媒介.html" class="border-2 border-dashed border-gray-300 p-6 flex flex-col items-center justify-center hover:border-signal hover:text-signal transition-all">
+                            <i class="fas fa-plus text-3xl mb-2"></i>
+                            <span class="font-heavy text-lg lang-en">VIEW 140+ SCENARIOS</span>
+                            <span class="font-heavy text-lg lang-zh">查看 140+ 場景</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 6: Physical Assets -->
+            <div class="accordion-item border-2 border-black bg-paper">
+                <button class="w-full p-6 md:p-8 flex justify-between items-center text-left hover:bg-black hover:text-white transition-colors group" onclick="toggleAccordion(this)">
+                    <div class="flex items-center gap-6">
+                        <span class="font-heavy text-4xl md:text-5xl text-signal w-20">06</span>
+                        <div>
+                            <h3 class="font-heavy text-2xl md:text-3xl">
+                                <span class="lang-en">PHYSICAL ASSETS</span><span class="lang-zh">實體資產數字靈魂</span>
+                            </h3>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon text-2xl group-hover:text-signal"></i>
+                </button>
+                <div class="accordion-content">
+                    <div class="p-6 md:p-8 border-t-2 border-black grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 bg-white text-black">
+                         <!-- Scenario 28 -->
+                         <div class="border border-gray-200 p-6 hover:border-black transition-all">
+                            <div class="text-signal text-sm font-bold mb-2">SCENARIO 28</div>
+                            <h4 class="font-heavy text-xl mb-3">
+                                <span class="lang-en">AIF Casting "AI Car Soul"</span>
+                                <span class="lang-zh">AIF鑄造「AI汽車靈魂」</span>
+                            </h4>
+                            <div class="bg-gray-100 p-4 text-xs font-mono">
+                                <strong class="block text-black mb-1">AIF MECHANISM:</strong>
+                                <span class="lang-en">Pay 100 AIF as "AI Soul Casting Fee" for each new car.</span>
+                                <span class="lang-zh">為每輛車支付100 AIF作為「AI靈魂鑄造費」。</span>
+                            </div>
+                        </div>
+                        
+                         <!-- More Link -->
+                         <a href="實體資產數字靈魂.html" class="border-2 border-dashed border-gray-300 p-6 flex flex-col items-center justify-center hover:border-signal hover:text-signal transition-all">
+                            <i class="fas fa-plus text-3xl mb-2"></i>
+                            <span class="font-heavy text-lg lang-en">VIEW 110+ SCENARIOS</span>
+                            <span class="font-heavy text-lg lang-zh">查看 110+ 場景</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+             <!-- Group 7: Derivatives -->
+             <div class="accordion-item border-2 border-black bg-paper">
+                <button class="w-full p-6 md:p-8 flex justify-between items-center text-left hover:bg-black hover:text-white transition-colors group" onclick="toggleAccordion(this)">
+                    <div class="flex items-center gap-6">
+                        <span class="font-heavy text-4xl md:text-5xl text-signal w-20">07</span>
+                        <div>
+                            <h3 class="font-heavy text-2xl md:text-3xl">
+                                <span class="lang-en">FINANCIAL DERIVATIVES</span><span class="lang-zh">未來價值金融衍生品</span>
+                            </h3>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon text-2xl group-hover:text-signal"></i>
+                </button>
+                <div class="accordion-content">
+                    <div class="p-6 md:p-8 border-t-2 border-black grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 bg-white text-black">
+                         <!-- Scenario 34 -->
+                         <div class="border border-gray-200 p-6 hover:border-black transition-all">
+                            <div class="text-signal text-sm font-bold mb-2">SCENARIO 34</div>
+                            <h4 class="font-heavy text-xl mb-3">
+                                <span class="lang-en">AIF Purchase of "Creative Options"</span>
+                                <span class="lang-zh">AIF購買「創意期權」</span>
+                            </h4>
+                            <div class="bg-gray-100 p-4 text-xs font-mono">
+                                <strong class="block text-black mb-1">AIF MECHANISM:</strong>
+                                <span class="lang-en">Sony pays 100,000 AIF for "future work priority investment rights".</span>
+                                <span class="lang-zh">索尼支付100,000 AIF購買一份「未來作品優先投資權」的期權合約。</span>
+                            </div>
+                        </div>
+                        
+                         <!-- More Link -->
+                         <a href="未來價值金融衍生品.html" class="border-2 border-dashed border-gray-300 p-6 flex flex-col items-center justify-center hover:border-signal hover:text-signal transition-all">
+                            <i class="fas fa-plus text-3xl mb-2"></i>
+                            <span class="font-heavy text-lg lang-en">VIEW 120+ SCENARIOS</span>
+                            <span class="font-heavy text-lg lang-zh">查看 120+ 場景</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 8: Governance -->
+            <div class="accordion-item border-2 border-black bg-paper">
+                <button class="w-full p-6 md:p-8 flex justify-between items-center text-left hover:bg-black hover:text-white transition-colors group" onclick="toggleAccordion(this)">
+                    <div class="flex items-center gap-6">
+                        <span class="font-heavy text-4xl md:text-5xl text-signal w-20">08</span>
+                        <div>
+                            <h3 class="font-heavy text-2xl md:text-3xl">
+                                <span class="lang-en">DECENTRALIZED GOVERNANCE</span><span class="lang-zh">去中心化治理核心</span>
+                            </h3>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon text-2xl group-hover:text-signal"></i>
+                </button>
+                <div class="accordion-content">
+                    <div class="p-6 md:p-8 border-t-2 border-black grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 bg-white text-black">
+                         <!-- Scenario 41 -->
+                         <div class="border border-gray-200 p-6 hover:border-black transition-all">
+                            <div class="text-signal text-sm font-bold mb-2">SCENARIO 41</div>
+                            <h4 class="font-heavy text-xl mb-3">
+                                <span class="lang-en">AIF Payment for "Gas Fee"</span>
+                                <span class="lang-zh">AIF支付「Gas Fee」</span>
+                            </h4>
+                            <div class="bg-gray-100 p-4 text-xs font-mono">
+                                <strong class="block text-black mb-1">AIF MECHANISM:</strong>
+                                <span class="lang-en">All operations on "AIF Chain" must use AIF as Gas Fee. 80% burned.</span>
+                                <span class="lang-zh">所有操作（轉賬、交易FilmToken）都必須使用AIF作為Gas Fee。80%銷毀。</span>
+                            </div>
+                        </div>
+                        
+                         <!-- More Link -->
+                         <a href="去中心化治理核心.html" class="border-2 border-dashed border-gray-300 p-6 flex flex-col items-center justify-center hover:border-signal hover:text-signal transition-all">
+                            <i class="fas fa-plus text-3xl mb-2"></i>
+                            <span class="font-heavy text-lg lang-en">VIEW 130+ SCENARIOS</span>
+                            <span class="font-heavy text-lg lang-zh">查看 130+ 場景</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- CTA Bottom -->
+        <div class="text-center mt-20">
+            <div class="border-2 border-black p-12 max-w-4xl mx-auto bg-black text-white">
+                <i class="fas fa-infinity text-5xl text-signal mb-6"></i>
+                <h3 class="font-heavy text-3xl md:text-4xl mb-6">
+                    <span class="lang-en">EXPLORE 1000+ SCENARIOS</span>
+                    <span class="lang-zh">探索 1000+ 應用場景</span>
+                </h3>
+                <p class="font-mono text-gray-300 mb-8 max-w-2xl mx-auto">
+                    <span class="lang-en">The above is just the tip of the iceberg. From digital soul value carriers to future value financial derivatives, AIF is building a new economic infrastructure.</span>
+                    <span class="lang-zh">以上只是AIF應用場景的冰山一角。從數字靈魂價值載體到未來價值金融衍生品，AIF正在構建AI時代全新的經濟基礎設施。</span>
+                </p>
+                <a href="http://token.aif.market" class="brutal-btn bg-signal text-black border-signal hover:bg-white">
+                    <i class="fas fa-coins mr-2"></i>
+                    <span class="lang-en">PARTICIPATE IN THE FUTURE</span>
+                    <span class="lang-zh">參與未來經濟</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ECOSYSTEM SECTION -->
+    <section id="ecosystem" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto bg-[#EAEAEA] border-t-2 border-black">
+        <div class="text-center mb-16">
+            <h2 class="section-title text-black">
+                <span class="lang-en">AIF ECOSYSTEM</span><span class="lang-zh">AIF生態系統</span>
+            </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border-2 border-black bg-white">
+            <!-- HKAIFA -->
+            <div class="p-8 border-b md:border-r border-black hover:bg-black hover:text-white transition-all group h-full">
+                <i class="fas fa-graduation-cap text-4xl text-signal mb-6"></i>
+                <h3 class="font-heavy text-2xl mb-2">HKAIFA</h3>
+                <h4 class="font-mono text-sm text-gray-500 mb-4 group-hover:text-gray-400">
+                    <span class="lang-en">Hong Kong AI Film Academy</span><span class="lang-zh">香港AI電影學院</span>
+                </h4>
+                <p class="font-mono text-xs text-gray-600 group-hover:text-gray-300">
+                    <span class="lang-en">Talent cultivation and skill certification platform.</span><span class="lang-zh">人才培養與技能認證平台。</span>
+                </p>
+            </div>
+            
+            <!-- HKAIIFF -->
+            <div class="p-8 border-b lg:border-r border-black hover:bg-black hover:text-white transition-all group h-full">
+                <i class="fas fa-trophy text-4xl text-signal mb-6"></i>
+                <h3 class="font-heavy text-2xl mb-2">HKAIIFF</h3>
+                <h4 class="font-mono text-sm text-gray-500 mb-4 group-hover:text-gray-400">
+                    <span class="lang-en">AI International Film Festival</span><span class="lang-zh">香港AI國際電影節</span>
+                </h4>
+                <p class="font-mono text-xs text-gray-600 group-hover:text-gray-300">
+                    <span class="lang-en">Content display and value discovery platform.</span><span class="lang-zh">內容展示與價值發現平台。</span>
+                </p>
+            </div>
+
+            <!-- AIF.Market -->
+            <div class="p-8 border-b md:border-r lg:border-r-0 border-black hover:bg-black hover:text-white transition-all group h-full">
+                <i class="fas fa-store text-4xl text-signal mb-6"></i>
+                <h3 class="font-heavy text-2xl mb-2">AIF.Market</h3>
+                <h4 class="font-mono text-sm text-gray-500 mb-4 group-hover:text-gray-400">
+                    <span class="lang-en">Asset Market</span><span class="lang-zh">資產市場</span>
+                </h4>
+                <p class="font-mono text-xs text-gray-600 group-hover:text-gray-300">
+                    <span class="lang-en">The "asset factory" for standardized issuance.</span><span class="lang-zh">生態系統的"資產工廠"。</span>
+                </p>
+            </div>
+
+            <!-- AIF.Exchange -->
+            <div class="p-8 border-b lg:border-b-0 lg:border-r border-black hover:bg-black hover:text-white transition-all group h-full">
+                <i class="fas fa-exchange-alt text-4xl text-signal mb-6"></i>
+                <h3 class="font-heavy text-2xl mb-2">AIF.Exchange</h3>
+                <h4 class="font-mono text-sm text-gray-500 mb-4 group-hover:text-gray-400">
+                    <span class="lang-en">Asset Exchange</span><span class="lang-zh">資產交易所</span>
+                </h4>
+                <p class="font-mono text-xs text-gray-600 group-hover:text-gray-300">
+                    <span class="lang-en">Liquidity engine with AMM mechanism.</span><span class="lang-zh">生態系統的"流動性引擎"。</span>
+                </p>
+            </div>
+
+            <!-- AIF.Center -->
+            <div class="p-8 border-b md:border-b-0 md:border-r border-black hover:bg-black hover:text-white transition-all group h-full">
+                <i class="fas fa-concierge-bell text-4xl text-signal mb-6"></i>
+                <h3 class="font-heavy text-2xl mb-2">AIF.Center</h3>
+                <h4 class="font-mono text-sm text-gray-500 mb-4 group-hover:text-gray-400">
+                    <span class="lang-en">Full-Chain Service</span><span class="lang-zh">全鏈條服務中心</span>
+                </h4>
+                <p class="font-mono text-xs text-gray-600 group-hover:text-gray-300">
+                    <span class="lang-en">One-stop service butler for creators.</span><span class="lang-zh">創作者的"一站式服務管家"。</span>
+                </p>
+            </div>
+
+             <!-- 404.world -->
+             <div class="p-8 hover:bg-black hover:text-white transition-all group h-full">
+                <i class="fas fa-cube text-4xl text-signal mb-6"></i>
+                <h3 class="font-heavy text-2xl mb-2">404.world</h3>
+                <h4 class="font-mono text-sm text-gray-500 mb-4 group-hover:text-gray-400">
+                    <span class="lang-en">Parallel World Platform</span><span class="lang-zh">平行世界平台</span>
+                </h4>
+                <p class="font-mono text-xs text-gray-600 group-hover:text-gray-300">
+                    <span class="lang-en">AI-driven multi-dimensional parallel worlds.</span><span class="lang-zh">構建AI驅動的多維平行世界。</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PARTNERS SECTION -->
+    <section id="partners" class="py-20 bg-black text-white border-t-2 border-white">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <div class="text-center mb-16">
+                <h2 class="section-title text-white mb-6">
+                    <span class="lang-en">OFFICIAL PARTNERS</span><span class="lang-zh">官方授權與合作夥伴</span>
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 font-mono text-sm text-center">
+                
+                <!-- Official -->
+                <div>
+                    <h5 class="text-signal font-bold mb-4 uppercase">
+                        <span class="lang-en">Authorization</span><span class="lang-zh">官方授權</span>
+                    </h5>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>HKAIIFF Association</li>
+                        <li>HKAIFA Academy</li>
+                        <li>AIF Film Market</li>
+                        <li>AIF Foundation</li>
+                    </ul>
+                </div>
+
+                <!-- AI Tech -->
+                <div>
+                    <h5 class="text-signal font-bold mb-4 uppercase">
+                        <span class="lang-en">AI Tech</span><span class="lang-zh">AI技術</span>
+                    </h5>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>OpenAI</li>
+                        <li>Midjourney</li>
+                        <li>Runway ML</li>
+                        <li>Stable Diffusion</li>
+                        <li>NVIDIA</li>
+                    </ul>
+                </div>
+
+                <!-- Blockchain -->
+                <div>
+                    <h5 class="text-signal font-bold mb-4 uppercase">
+                        <span class="lang-en">Blockchain</span><span class="lang-zh">區塊鏈</span>
+                    </h5>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Ethereum</li>
+                        <li>Polygon</li>
+                        <li>Solana</li>
+                        <li>Chainlink</li>
+                        <li>IPFS</li>
+                    </ul>
+                </div>
+
+                 <!-- Media -->
+                 <div>
+                    <h5 class="text-signal font-bold mb-4 uppercase">
+                        <span class="lang-en">Media</span><span class="lang-zh">媒體與內容</span>
+                    </h5>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Netflix Studios</li>
+                        <li>Sony Pictures</li>
+                        <li>Disney Studios</li>
+                        <li>YouTube Studios</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="contact" class="bg-black text-[#EAEAEA] border-t border-[#222] pt-20 pb-10 px-4 md:px-8">
+        <div class="max-w-[1920px] mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+                <div class="lg:col-span-2">
+                    <h2 class="font-heavy text-5xl md:text-7xl mb-6">AIF<span class="text-signal text-lg align-top ml-2">WORLD</span></h2>
+                    <p class="font-mono text-sm text-gray-400 max-w-md">
+                        <span class="lang-en">Explore 1000+ application scenarios of AIF tokens in the AI era, showcasing the infinite potential of AIF as a creative economy settlement layer.</span>
+                        <span class="lang-zh">探索AIF代幣在AI時代的1000+應用場景，展示AIF作為創意經濟結算層的無限潛力。</span>
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-mono text-signal mb-6">
+                        <span class="lang-en">ECOSYSTEM</span><span class="lang-zh">生態系統</span>
+                    </h4>
+                    <ul class="font-mono text-sm space-y-4">
+                        <li><a href="https://www.hkaifa.academy/#/home" class="hover:text-white">HKAIFA</a></li>
+                        <li><a href="http://www.hkaiiff.org" class="hover:text-white">HKAIIFF</a></li>
+                        <li><a href="http://token.aif.market" class="hover:text-white">AIF.Market</a></li>
+                        <li><a href="http://www.aif.exchange" class="hover:text-white">AIF.Exchange</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-mono text-signal mb-6">
+                        <span class="lang-en">RESOURCES</span><span class="lang-zh">資源中心</span>
+                    </h4>
+                    <ul class="font-mono text-sm space-y-2">
+                        <li><a href="#" class="hover:text-signal transition-colors"><span class="lang-en">Whitepaper</span><span class="lang-zh">白皮書</span></a></li>
+                        <li><a href="#" class="hover:text-signal transition-colors"><span class="lang-en">Tokenomics</span><span class="lang-zh">代幣經濟學</span></a></li>
+                        <li><a href="#" class="hover:text-signal transition-colors"><span class="lang-en">Developers</span><span class="lang-zh">開發者資源</span></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-[#222] pt-8 flex flex-col md:flex-row justify-between items-center font-mono text-xs text-gray-600">
+                <div>
+                    <span class="lang-en">© 2024 AIF WORLD. ALL RIGHTS RESERVED.</span>
+                    <span class="lang-zh">© 2024 AIF WORLD. 保留所有權利。</span>
+                </div>
+                <div class="mt-4 md:mt-0 flex gap-4">
+                    <a href="mailto:info@aif.show" class="hover:text-white">info@aif.show</a>
+                    <span class="text-signal">///</span>
+                    <span class="lang-en">HONG KONG CENTRAL IFC</span><span class="lang-zh">香港中環國際金融中心</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        // 1. LOADER
+        window.addEventListener('load', () => {
+            const tl = gsap.timeline();
+            tl.to("#loader", { yPercent: -100, duration: 0.8, ease: "power4.inOut", delay: 0.5 });
+            tl.from("header .hero-title", { y: 100, opacity: 0, duration: 1, ease: "power3.out" }, "-=0.3");
+        });
+
+        // 2. LANGUAGE SWITCHER
+        // Default to English ('en')
+        let currentLang = 'en';
+        
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'zh' : 'en';
+            updateLanguageUI();
+        }
+
+        function updateLanguageUI() {
+            const body = document.body;
+            const btn = document.getElementById('lang-btn');
+            
+            // Toggle body class
+            if (currentLang === 'zh') {
+                body.classList.add('show-zh');
+                if(btn) btn.innerText = '[ ENGLISH ]';
+            } else {
+                body.classList.remove('show-zh');
+                if(btn) btn.innerText = '[ 繁體中文 ]';
+            }
+        }
+
+        // Initialize Language
+        document.addEventListener('DOMContentLoaded', () => {
+            updateLanguageUI();
+        });
+
+        // 3. MOBILE MENU TOGGLE
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('active');
+            
+            // Toggle Body Scroll
+            if (menu.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // 4. ACCORDION LOGIC
+        function toggleAccordion(button) {
+            const item = button.parentElement;
+            const content = button.nextElementSibling;
+            
+            // Close others (Optional, usually better UX)
+            // document.querySelectorAll('.accordion-item').forEach(otherItem => {
+            //     if(otherItem !== item) {
+            //         otherItem.classList.remove('active');
+            //         otherItem.querySelector('.accordion-content').style.maxHeight = null;
+            //     }
+            // });
+            
+            item.classList.toggle('active');
+            if (item.classList.contains('active')) {
+                content.style.maxHeight = content.scrollHeight + "px";
+            } else {
+                content.style.maxHeight = null;
+            }
+        }
+
+        // 5. GSAP ANIMATIONS
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Fade in sections
+        gsap.utils.toArray('section').forEach(section => {
+            gsap.from(section, {
+                opacity: 0,
+                y: 50,
+                duration: 1,
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>

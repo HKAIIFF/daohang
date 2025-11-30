@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404.world | AI-NATIVE STREAMING PLATFORM</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP Suite -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Fonts: Oswald + Space Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        void: '#050505',
+                        concrete: '#1F1F1F',
+                        signal: '#FF3300', // The signature orange
+                        steel: '#EAEAEA',
+                        dim: '#888888',
+                        paper: '#F3F3F3'
+                    },
+                    fontFamily: {
+                        heavy: ['"Oswald"', 'sans-serif'],
+                        mono: ['"Space Mono"', 'monospace'],
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* CORE STYLES */
+        html { scroll-behavior: smooth; }
+        body { background-color: #EAEAEA; color: #050505; overflow-x: hidden; }
+        ::selection { background: #FF3300; color: #000; }
+
+        /* TYPOGRAPHY */
+        .mega-text {
+            font-size: clamp(3.5rem, 11vw, 14rem);
+            line-height: 0.85;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            font-weight: 700;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 5rem);
+            line-height: 1;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        .outline-text {
+            color: transparent;
+            -webkit-text-stroke: 1.5px #050505;
+            text-stroke: 1.5px #050505;
+            transition: all 0.3s ease;
+        }
+        
+        .hero-title .outline-text {
+            -webkit-text-stroke: 1.5px #FFFFFF;
+        }
+
+        /* BUTTONS */
+        .brutal-btn {
+            background: #050505;
+            color: #EAEAEA;
+            border: 2px solid #050505;
+            padding: 1rem 2rem;
+            font-family: 'Space Mono', monospace;
+            text-transform: uppercase;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .brutal-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #FF3300;
+            transform: translateX(-101%);
+            transition: transform 0.3s cubic-bezier(0.77, 0, 0.175, 1);
+            z-index: 0;
+        }
+
+        .brutal-btn:hover::before { transform: translateX(0); }
+        .brutal-btn span, .brutal-btn i { position: relative; z-index: 1; }
+        .brutal-btn:hover { color: #000; border-color: #FF3300; }
+
+        /* COMPONENTS */
+        .section-divider { height: 2px; background: #050505; width: 100%; }
+        .grid-bg { background-size: 40px 40px; background-image: linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px); }
+
+        /* ACCORDION */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+        }
+        .accordion-item.active .accordion-content {
+            max-height: 2000px;
+        }
+        .accordion-icon { transition: transform 0.3s; }
+        .accordion-item.active .accordion-icon { transform: rotate(180deg); }
+
+        /* MARQUEE */
+        .marquee-container { overflow: hidden; white-space: nowrap; display: flex; }
+        .marquee-content { display: flex; animation: marquee 40s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* LOADER */
+        #loader {
+            position: fixed; inset: 0; background: #FF3300; z-index: 9999;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+        }
+
+        /* MOBILE MENU */
+        #mobile-menu {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 80px);
+            background: #050505;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 49;
+            overflow-y: auto;
+        }
+        #mobile-menu.active { transform: translateX(0); }
+
+        /* NAV */
+        nav { background: rgba(234, 234, 234, 0.95); backdrop-filter: blur(10px); }
+        
+        /* INFO CARDS */
+        .info-card { transition: all 0.3s ease; border: 2px solid #000; height: 100%; }
+        .info-card:hover { transform: translateY(-5px); box-shadow: 10px 10px 0px 0px rgba(0,0,0,1); }
+        .info-card.dark { background: #050505; color: white; border-color: #050505; }
+        .info-card.dark:hover { box-shadow: 10px 10px 0px 0px #FF3300; }
+        .info-card.signal-border { border-color: #FF3300; }
+        
+        /* TIMELINE STEPS (Protocol Style) */
+        .step-line { position: absolute; left: 20px; top: 40px; bottom: -40px; width: 2px; background: #000; z-index: 0; }
+        .step-item:last-child .step-line { display: none; }
+        
+        /* UTILS */
+        .text-void { color: #050505; }
+        .bg-void { background-color: #050505; }
+    </style>
+</head>
+<body class="grid-bg">
+
+    <!-- LOADER -->
+    <div id="loader">
+        <div class="font-heavy text-6xl md:text-9xl font-bold text-black tracking-tighter">404.WORLD</div>
+        <div class="font-mono text-black mt-4 text-xs md:text-base animate-pulse">
+            LOADING_INFINITE_POSSIBILITIES...
+        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 left-0 w-full z-50 border-b-2 border-black h-20 md:h-24 flex items-center">
+        <div class="w-full max-w-[1920px] mx-auto flex justify-between items-stretch h-full">
+            
+            <!-- Logo -->
+            <div class="flex flex-col justify-center px-4 md:px-8 border-r-2 border-black hover:bg-black hover:text-white transition-colors cursor-pointer group h-full" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+                <span class="font-heavy text-3xl md:text-4xl font-bold tracking-tighter leading-none mb-1">404.WORLD</span>
+                <div class="flex flex-col leading-none">
+                    <span class="font-mono text-[10px] md:text-xs tracking-widest font-bold group-hover:text-signal" data-lang-en="AI-NATIVE PLATFORM" data-lang-zh="AI原生平台">AI-NATIVE PLATFORM</span>
+                </div>
+            </div>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden xl:flex items-stretch h-full">
+                <a href="#vision" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span data-lang-en="VISION" data-lang-zh="願景">VISION</span>
+                </a>
+                <a href="#features" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span data-lang-en="FEATURES" data-lang-zh="核心功能">FEATURES</span>
+                </a>
+                <a href="#technology" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span data-lang-en="TECHNOLOGY" data-lang-zh="技術架構">TECHNOLOGY</span>
+                </a>
+                <a href="#business" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span data-lang-en="BUSINESS" data-lang-zh="商業模式">BUSINESS</span>
+                </a>
+                <a href="#ecosystem" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span data-lang-en="ECOSYSTEM" data-lang-zh="生態系統">ECOSYSTEM</span>
+                </a>
+                <a href="#roadmap" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span data-lang-en="ROADMAP" data-lang-zh="發展路線">ROADMAP</span>
+                </a>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex h-full">
+                <button id="lang-btn" onclick="switchLang()" class="flex items-center px-6 border-l-2 border-black hover:bg-signal hover:text-white transition-colors font-mono text-xs font-bold uppercase h-full">
+                    [ 繁體中文 ]
+                </button>
+                <button onclick="toggleMenu()" class="xl:hidden flex items-center px-6 border-l-2 border-black hover:bg-black hover:text-white transition-colors h-full">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MOBILE MENU OVERLAY -->
+    <div id="mobile-menu">
+        <div class="flex flex-col p-8 gap-6">
+            <a href="#vision" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span data-lang-en="VISION" data-lang-zh="願景">VISION</span></a>
+            <a href="#features" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span data-lang-en="FEATURES" data-lang-zh="核心功能">FEATURES</span></a>
+            <a href="#technology" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span data-lang-en="TECHNOLOGY" data-lang-zh="技術架構">TECHNOLOGY</span></a>
+            <a href="#business" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span data-lang-en="BUSINESS" data-lang-zh="商業模式">BUSINESS</span></a>
+            <a href="#ecosystem" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span data-lang-en="ECOSYSTEM" data-lang-zh="生態系統">ECOSYSTEM</span></a>
+            <a href="#roadmap" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span data-lang-en="ROADMAP" data-lang-zh="發展路線">ROADMAP</span></a>
+            <div class="h-px bg-gray-800 my-4"></div>
+            <a href="#demo" onclick="toggleMenu()" class="text-signal font-mono text-xl"><span data-lang-en="JOIN BETA" data-lang-zh="加入測試">JOIN BETA</span></a>
+        </div>
+    </div>
+
+    <!-- HERO SECTION -->
+    <header class="relative min-h-screen flex items-center pt-24 overflow-hidden bg-black text-white">
+        <!-- Background Abstract -->
+        <div class="absolute inset-0 z-0 opacity-40">
+             <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
+             <!-- Using a dark tech-noise placeholder for the brutalist aesthetic -->
+            <div class="w-full h-full bg-[url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center grayscale contrast-125"></div>
+        </div>
+        
+        <div class="relative z-10 w-full max-w-[1920px] mx-auto px-4 md:px-8">
+            <div class="max-w-7xl">
+                <div class="font-mono text-signal mb-4 flex items-center gap-2 animate-pulse">
+                    <div class="w-2 h-2 bg-signal rounded-full"></div>
+                    <span data-lang-en="/// SYSTEM STATUS: INFINITE" data-lang-zh="/// 系統狀態：無限">/// SYSTEM STATUS: INFINITE</span>
+                </div>
+                <h1 class="hero-title font-heavy mega-text mb-6 leading-none">
+                    <span class="block text-signal">404</span>
+                    <span class="block outline-text" data-lang-en="INFINITE" data-lang-zh="無限">INFINITE</span>
+                    <span class="block" data-lang-en="POSSIBILITIES" data-lang-zh="可能">POSSIBILITIES</span>
+                </h1>
+                <p class="font-mono text-sm md:text-xl max-w-2xl text-gray-300 mb-10 leading-relaxed border-l-4 border-signal pl-6 bg-black/50 backdrop-blur-sm p-4">
+                    <span data-lang-en="World's First AI-Native Interactive Streaming Platform. Revolutionary platform transforming 'Not Found' into 'Discover Infinite Possibilities'." 
+                          data-lang-zh="全球首個AI原生互動流媒體平台。將「未找到」轉變為「發現無限可能」的革命性平台。">
+                        World's First AI-Native Interactive Streaming Platform. Revolutionary platform transforming "Not Found" into "Discover Infinite Possibilities".
+                    </span>
+                </p>
+                <div class="flex flex-col md:flex-row gap-4">
+                    <a href="#demo" class="brutal-btn bg-signal text-black hover:bg-white border-signal hover:border-white">
+                        <i class="fas fa-play mr-2"></i>
+                        <span data-lang-en="EXPERIENCE DEMO" data-lang-zh="體驗演示">EXPERIENCE DEMO</span>
+                    </a>
+                    <a href="#demo" class="brutal-btn bg-transparent text-white border-white hover:bg-white hover:text-black">
+                        <i class="fas fa-rocket mr-2"></i>
+                        <span data-lang-en="JOIN WAITLIST" data-lang-zh="加入等候名單">JOIN WAITLIST</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Ticker -->
+        <div class="absolute bottom-0 w-full bg-signal text-black py-2 font-mono text-xs md:text-sm font-bold border-t-2 border-white z-20">
+            <div class="marquee-container">
+                <div class="marquee-content">
+                    <span class="mx-4">404.WORLD ///</span>
+                    <span class="mx-4" data-lang-en="MULTI-DIMENSIONAL" data-lang-zh="多維平行世界">MULTI-DIMENSIONAL</span>
+                    <span class="mx-4">///</span>
+                    <span class="mx-4" data-lang-en="AI-NATIVE CONTENT" data-lang-zh="AI原生內容">AI-NATIVE CONTENT</span>
+                    <span class="mx-4">///</span>
+                    <span class="mx-4" data-lang-en="AIUGC ECOSYSTEM" data-lang-zh="AIUGC生態">AIUGC ECOSYSTEM</span>
+                    <span class="mx-4">///</span>
+                    <span class="mx-4" data-lang-en="INFINITE POSSIBILITIES" data-lang-zh="無限可能">INFINITE POSSIBILITIES</span>
+                    <span class="mx-4">///</span>
+                    <span class="mx-4">404.WORLD ///</span>
+                    <span class="mx-4" data-lang-en="MULTI-DIMENSIONAL" data-lang-zh="多維平行世界">MULTI-DIMENSIONAL</span>
+                    <span class="mx-4">///</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- SECTION 1: VISION -->
+    <section id="vision" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto bg-[#EAEAEA]">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <div class="lg:col-span-5">
+                <span class="font-mono text-signal font-bold tracking-widest uppercase mb-4 block" data-lang-en="STRATEGIC VISION" data-lang-zh="戰略願景">STRATEGIC VISION</span>
+                <h2 class="section-title mb-6">
+                    <span data-lang-en="REDEFINING<br>DIGITAL REALITY" data-lang-zh="重新定義<br>數字娛樂">REDEFINING<br>DIGITAL REALITY</span>
+                </h2>
+                <div class="w-20 h-2 bg-black mb-8"></div>
+                <p class="font-mono text-sm md:text-base leading-relaxed text-gray-700 mb-6">
+                    <span data-lang-en="404.world transcends the limitations of single reality, creating countless parallel worlds, transforming traditional 'Not Found' into 'Discover Infinite Possibilities'."
+                          data-lang-zh="404.world超越了單一現實的限制，創建無數平行世界，將傳統的「未找到」轉變為「發現無限可能」。">
+                        404.world transcends the limitations of single reality, creating countless parallel worlds...
+                    </span>
+                </p>
+                <div class="bg-black text-white p-6 mt-8 border-l-4 border-signal">
+                    <div class="text-3xl font-bold text-signal mb-2">34.7%</div>
+                    <div class="text-sm font-mono text-gray-400" data-lang-en="Interactive Content CAGR" data-lang-zh="互動內容年複合增長率">Interactive Content CAGR</div>
+                </div>
+            </div>
+            
+            <div class="lg:col-span-7 grid grid-cols-1 gap-6">
+                <div class="info-card bg-white p-8">
+                    <div class="text-signal text-4xl mb-4"><i class="fas fa-chart-line"></i></div>
+                    <h3 class="font-heavy text-xl mb-2" data-lang-en="MARKET OPPORTUNITY" data-lang-zh="市場機遇">MARKET OPPORTUNITY</h3>
+                    <ul class="font-mono text-sm text-gray-600 space-y-2 mt-4">
+                        <li class="flex items-start"><span class="text-signal mr-2">></span> <span data-lang-en="Interactive Film Gap: Lack of real-time generation" data-lang-zh="互動電影缺口：缺乏實時生成">Gap: Lack of real-time generation</span></li>
+                        <li class="flex items-start"><span class="text-signal mr-2">></span> <span data-lang-en="AI Content Growth: To exceed $120B by 2028" data-lang-zh="AI內容爆發：2028年超1200億美元">Growth: $120B by 2028</span></li>
+                    </ul>
+                </div>
+                <div class="info-card bg-black text-white p-8 dark">
+                    <div class="text-signal text-4xl mb-4"><i class="fas fa-crown"></i></div>
+                    <h3 class="font-heavy text-xl mb-2" data-lang-en="COMPETITIVE ADVANTAGE" data-lang-zh="競爭優勢">COMPETITIVE ADVANTAGE</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 font-mono text-xs text-gray-400">
+                        <div class="border border-gray-800 p-3">
+                            <strong class="block text-white mb-1">VS STREAMING</strong>
+                            <span data-lang-en="Superior Interaction" data-lang-zh="交互技術領先">Superior Interaction</span>
+                        </div>
+                        <div class="border border-gray-800 p-3">
+                            <strong class="block text-white mb-1">VS GAMING</strong>
+                            <span data-lang-en="Cinematic Storytelling" data-lang-zh="影視級敘事">Cinematic Storytelling</span>
+                        </div>
+                        <div class="border border-gray-800 p-3">
+                            <strong class="block text-white mb-1">VS VR</strong>
+                            <span data-lang-en="Mass Ecosystem" data-lang-zh="內容生態成熟">Mass Ecosystem</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: CORE FEATURES -->
+    <section id="features" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto bg-white border-y-2 border-black">
+        <div class="text-center mb-16">
+            <span class="bg-black text-white px-4 py-2 font-mono font-bold text-sm inline-block mb-6" data-lang-en="INNOVATION MATRIX" data-lang-zh="創新矩陣">INNOVATION MATRIX</span>
+            <h2 class="font-heavy text-4xl md:text-7xl mb-6 leading-none" data-lang-en="CORE<br>FEATURES" data-lang-zh="核心<br>功能">CORE<br>FEATURES</h2>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Feature 1 -->
+            <div class="border-2 border-black p-8 hover:bg-black hover:text-white transition-all group">
+                <div class="font-mono text-xs border border-black group-hover:border-white inline-block px-2 py-1 mb-4">MY WORLD</div>
+                <h3 class="font-heavy text-3xl mb-4" data-lang-en="PERSONAL UNIVERSE" data-lang-zh="個人平行世界">PERSONAL UNIVERSE</h3>
+                <p class="font-mono text-sm text-gray-600 group-hover:text-gray-300 mb-6" data-lang-en="Real-time personalized storytelling based on your authorized data. The story evolves with your choices." data-lang-zh="基於用戶授權數據的實時個性化故事生成。故事隨你的互動實時演變。">Real-time personalized storytelling...</p>
+                <div class="text-signal text-xl"><i class="fas fa-user-astronaut"></i></div>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="border-2 border-black p-8 bg-black text-white transform lg:-translate-y-4 shadow-2xl">
+                <div class="font-mono text-xs border border-white inline-block px-2 py-1 mb-4">SHARED WORLD</div>
+                <h3 class="font-heavy text-3xl mb-4" data-lang-en="SHARED EXPLORATION" data-lang-zh="共享世界探索">SHARED EXPLORATION</h3>
+                <p class="font-mono text-sm text-gray-300 mb-6" data-lang-en="Explore parallel worlds created by others. Choose passive viewing or active participation to influence their narratives." data-lang-zh="探索其他用戶創造的平行世界。選擇被動觀看或主動參與，影響他人的敘事走向。">Explore parallel worlds created by others...</p>
+                <div class="text-signal text-xl"><i class="fas fa-globe-americas"></i></div>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="border-2 border-black p-8 hover:bg-black hover:text-white transition-all group">
+                <div class="font-mono text-xs border border-black group-hover:border-white inline-block px-2 py-1 mb-4">ECOSYSTEM</div>
+                <h3 class="font-heavy text-3xl mb-4" data-lang-en="AIUGC ECONOMY" data-lang-zh="AIUGC 生態">AIUGC ECONOMY</h3>
+                <p class="font-mono text-sm text-gray-600 group-hover:text-gray-300 mb-6" data-lang-en="Collaborative creation model. Fair value distribution via AIF token based on creativity and participation." data-lang-zh="協作創作模式。通過AIF代幣經濟，基於創造力和參與度進行公平的價值分配。">Collaborative creation model...</p>
+                <div class="text-signal text-xl"><i class="fas fa-coins"></i></div>
+            </div>
+        </div>
+
+        <!-- Extra Feature Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border-t-2 border-black mt-16">
+            <div class="p-8 border-b md:border-b-0 md:border-r border-black flex items-center gap-4">
+                <i class="fas fa-magic text-3xl text-signal"></i>
+                <div>
+                    <h4 class="font-bold font-heavy" data-lang-en="Real-Time Engine" data-lang-zh="實時交互引擎">Real-Time Engine</h4>
+                    <p class="text-xs font-mono text-gray-500">RIE Framework</p>
+                </div>
+            </div>
+            <div class="p-8 border-b md:border-b-0 lg:border-r border-black flex items-center gap-4">
+                <i class="fas fa-shield-alt text-3xl text-signal"></i>
+                <div>
+                    <h4 class="font-bold font-heavy" data-lang-en="Privacy Computing" data-lang-zh="隱私計算">Privacy Computing</h4>
+                    <p class="text-xs font-mono text-gray-500">Edge-side Security</p>
+                </div>
+            </div>
+            <div class="p-8 flex items-center gap-4">
+                <i class="fas fa-cubes text-3xl text-signal"></i>
+                <div>
+                    <h4 class="font-bold font-heavy" data-lang-en="Multi-Device" data-lang-zh="多端無縫體驗">Multi-Device</h4>
+                    <p class="text-xs font-mono text-gray-500">Mobile / VR / AR</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: TECHNOLOGY (RIE PROTOCOL) -->
+    <section id="technology" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto bg-steel">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-16">
+            <div class="lg:col-span-1">
+                <span class="font-mono text-signal font-bold tracking-widest uppercase mb-4 block" data-lang-en="ENGINE ARCHITECTURE" data-lang-zh="引擎架構">ENGINE ARCHITECTURE</span>
+                <h2 class="section-title text-black" data-lang-en="RIE SYSTEM" data-lang-zh="RIE 系統">RIE SYSTEM</h2>
+                <p class="font-mono text-sm leading-relaxed mb-6" data-lang-en="Revolutionary Real-Time Interaction Engine (RIE) powers the infinite parallel worlds." data-lang-zh="革命性的實時交互引擎 (RIE) 支撐著無限的平行世界。">
+                    Revolutionary Real-Time Interaction Engine (RIE) powers the infinite parallel worlds.
+                </p>
+            </div>
+
+            <div class="lg:col-span-3 relative pl-8 md:pl-0">
+                <!-- Step 1 -->
+                <div class="step-item relative pl-12 pb-16">
+                    <div class="step-line"></div>
+                    <div class="absolute left-0 top-0 w-10 h-10 bg-black text-white flex items-center justify-center font-heavy text-xl border-2 border-white shadow-lg z-10">01</div>
+                    <div class="bg-white p-8 border-2 border-transparent hover:border-black transition-all shadow-sm">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-heavy text-2xl" data-lang-en="DATA FUSION" data-lang-zh="數據融合層">DATA FUSION</h3>
+                            <span class="bg-gray-200 text-xs font-mono px-2 py-1">INPUT</span>
+                        </div>
+                        <p class="font-mono text-sm text-gray-600" data-lang-en="Securely processes user-authorized personal data with privacy computing technology." data-lang-zh="安全處理用戶授權的個人數據，結合隱私計算技術。">Securely processes user-authorized personal data...</p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="step-item relative pl-12 pb-16">
+                    <div class="step-line"></div>
+                    <div class="absolute left-0 top-0 w-10 h-10 bg-black text-white flex items-center justify-center font-heavy text-xl border-2 border-white shadow-lg z-10">02</div>
+                    <div class="bg-white p-8 border-2 border-transparent hover:border-black transition-all shadow-sm">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-heavy text-2xl" data-lang-en="SEMANTIC ANALYSIS" data-lang-zh="語義分析引擎">SEMANTIC ANALYSIS</h3>
+                            <span class="bg-gray-200 text-xs font-mono px-2 py-1">PROCESS</span>
+                        </div>
+                        <p class="font-mono text-sm text-gray-600" data-lang-en="Extracts emotional tendencies, interests, and relationship networks from data." data-lang-zh="從數據中提取情感傾向、興趣偏好和社交關係網絡。">Extracts emotional tendencies...</p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="step-item relative pl-12 pb-16">
+                    <div class="step-line"></div>
+                    <div class="absolute left-0 top-0 w-10 h-10 bg-signal text-white flex items-center justify-center font-heavy text-xl border-2 border-white shadow-lg z-10">03</div>
+                    <div class="bg-black text-white p-8 border-2 border-signal shadow-[10px_10px_0px_0px_#FF3300]">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-heavy text-2xl" data-lang-en="CONTENT GENERATION" data-lang-zh="內容生成網絡">CONTENT GENERATION</h3>
+                            <span class="bg-white text-black text-xs font-mono px-2 py-1 animate-pulse">CORE</span>
+                        </div>
+                        <p class="font-mono text-sm text-gray-300" data-lang-en="Real-time generation of new plots using GPT & Diffusion models. <100ms Latency." data-lang-zh="使用 GPT 和 Diffusion 模型實時生成新劇情。延遲低於 100ms。">Real-time generation using GPT & Diffusion...</p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="step-item relative pl-12">
+                    <div class="absolute left-0 top-0 w-10 h-10 bg-black text-white flex items-center justify-center font-heavy text-xl border-2 border-white shadow-lg z-10">04</div>
+                    <div class="bg-white p-8 border-2 border-transparent hover:border-black transition-all shadow-sm">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-heavy text-2xl" data-lang-en="MULTIMODAL OUTPUT" data-lang-zh="多模態輸出">MULTIMODAL OUTPUT</h3>
+                            <span class="bg-gray-200 text-xs font-mono px-2 py-1">RENDER</span>
+                        </div>
+                        <p class="font-mono text-sm text-gray-600" data-lang-en="Adapts generated content for 2D, 3D, VR, AR and holographic displays." data-lang-zh="適配 2D, 3D, VR, AR 和全息顯示的生成內容。">Adapts generated content for 2D, 3D, VR...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tech Stack Bar -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 max-w-7xl mx-auto text-center font-mono text-xs">
+            <div class="bg-concrete text-white p-4">LLM Models</div>
+            <div class="bg-concrete text-white p-4">Diffusion Models</div>
+            <div class="bg-concrete text-white p-4">Edge Computing</div>
+            <div class="bg-concrete text-white p-4">Neural Rendering</div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: BUSINESS MODEL -->
+    <section id="business" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto bg-black text-white">
+        <h2 class="section-title text-center mb-16 text-white" data-lang-en="SUBSCRIPTION PLANS" data-lang-zh="訂閱模式">SUBSCRIPTION PLANS</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+            
+            <!-- Basic -->
+            <div class="info-card p-8 bg-[#111] border-2 border-gray-800 flex flex-col justify-between h-full">
+                <div>
+                    <h3 class="font-heavy text-2xl mb-2 text-white" data-lang-en="BASIC" data-lang-zh="基礎會員">BASIC</h3>
+                    <div class="font-mono text-2xl font-bold mb-6 text-white">$9.99<span class="text-sm font-normal text-gray-500">/MO</span></div>
+                    <ul class="font-mono text-xs space-y-3 mb-8 text-gray-400">
+                        <li class="flex items-start"><i class="fas fa-check text-gray-600 mt-1 mr-2"></i> Standard Content</li>
+                        <li class="flex items-start"><i class="fas fa-check text-gray-600 mt-1 mr-2"></i> Basic Interaction</li>
+                        <li class="flex items-start"><i class="fas fa-check text-gray-600 mt-1 mr-2"></i> Basic Mining</li>
+                    </ul>
+                </div>
+                <button class="brutal-btn w-full bg-transparent border-gray-600 text-white hover:bg-white hover:text-black hover:border-white">SELECT</button>
+            </div>
+
+            <!-- 404+ (Highlighted) -->
+            <div class="info-card p-8 bg-[#0a0a0a] border-2 border-signal flex flex-col justify-between h-full transform md:scale-105 z-10 relative shadow-[0_0_20px_rgba(255,51,0,0.15)]">
+                <div class="absolute top-0 right-0 bg-signal text-black font-bold px-3 py-1 font-mono text-xs">RECOMMENDED</div>
+                <div>
+                    <h3 class="font-heavy text-3xl mb-2 text-white">404+</h3>
+                    <div class="font-mono text-3xl font-bold mb-6 text-signal">$15.99<span class="text-sm font-normal text-gray-500 text-white">/MO</span></div>
+                    <ul class="font-mono text-xs space-y-3 mb-8 text-gray-300">
+                        <li class="flex items-start"><i class="fas fa-check text-signal mt-1 mr-2"></i> All Content Unlimited</li>
+                        <li class="flex items-start"><i class="fas fa-check text-signal mt-1 mr-2"></i> Full Interaction</li>
+                        <li class="flex items-start"><i class="fas fa-check text-signal mt-1 mr-2"></i> Unlimited Creation</li>
+                        <li class="flex items-start"><i class="fas fa-check text-signal mt-1 mr-2"></i> +50% Mining Rewards</li>
+                    </ul>
+                </div>
+                <button class="brutal-btn w-full bg-signal border-signal text-black hover:bg-white">SELECT 404+</button>
+            </div>
+
+            <!-- Creator -->
+            <div class="info-card p-8 bg-[#111] border-2 border-purple-900 flex flex-col justify-between h-full">
+                <div>
+                    <h3 class="font-heavy text-2xl mb-2 text-white" data-lang-en="CREATOR" data-lang-zh="創作者會員">CREATOR</h3>
+                    <div class="font-mono text-2xl font-bold mb-6 text-white">$24.99<span class="text-sm font-normal text-gray-500">/MO</span></div>
+                    <ul class="font-mono text-xs space-y-3 mb-8 text-gray-400">
+                        <li class="flex items-start"><i class="fas fa-check text-purple-600 mt-1 mr-2"></i> All 404+ Benefits</li>
+                        <li class="flex items-start"><i class="fas fa-check text-purple-600 mt-1 mr-2"></i> Advanced Tools</li>
+                        <li class="flex items-start"><i class="fas fa-check text-purple-600 mt-1 mr-2"></i> Creator Mining</li>
+                        <li class="flex items-start"><i class="fas fa-check text-purple-600 mt-1 mr-2"></i> Analytics</li>
+                    </ul>
+                </div>
+                <button class="brutal-btn w-full bg-transparent border-purple-900 text-white hover:bg-purple-600 hover:border-purple-600">SELECT</button>
+            </div>
+
+            <!-- Family -->
+            <div class="info-card p-8 bg-[#111] border-2 border-yellow-700 flex flex-col justify-between h-full">
+                <div>
+                    <h3 class="font-heavy text-2xl mb-2 text-white" data-lang-en="FAMILY" data-lang-zh="家庭計劃">FAMILY</h3>
+                    <div class="font-mono text-2xl font-bold mb-6 text-white">$29.99<span class="text-sm font-normal text-gray-500">/MO</span></div>
+                    <ul class="font-mono text-xs space-y-3 mb-8 text-gray-400">
+                        <li class="flex items-start"><i class="fas fa-check text-yellow-600 mt-1 mr-2"></i> 6 Sub-Accounts</li>
+                        <li class="flex items-start"><i class="fas fa-check text-yellow-600 mt-1 mr-2"></i> 404+ Benefits</li>
+                        <li class="flex items-start"><i class="fas fa-check text-yellow-600 mt-1 mr-2"></i> Parental Control</li>
+                    </ul>
+                </div>
+                <button class="brutal-btn w-full bg-transparent border-yellow-700 text-white hover:bg-yellow-600 hover:border-yellow-600">SELECT</button>
+            </div>
+        </div>
+
+        <!-- Token Economy Bar -->
+        <div class="max-w-7xl mx-auto mt-16 border border-gray-800 p-8 bg-[#0a0a0a]">
+            <h3 class="font-heavy text-2xl text-center mb-8 text-signal" data-lang-en="AIF TOKEN ECONOMY" data-lang-zh="AIF 代幣經濟">AIF TOKEN ECONOMY</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h4 class="font-bold text-white mb-4 border-b border-gray-800 pb-2">EARN</h4>
+                    <ul class="font-mono text-sm text-gray-400 space-y-2">
+                        <li class="flex justify-between"><span>Watch-to-Earn</span> <span class="text-signal">Viewing rewards</span></li>
+                        <li class="flex justify-between"><span>Create-to-Earn</span> <span class="text-signal">Popularity rewards</span></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4 border-b border-gray-800 pb-2">DISTRIBUTION</h4>
+                    <ul class="font-mono text-sm text-gray-400 space-y-2">
+                        <li class="flex justify-between"><span>Creators</span> <span class="text-white">60%</span></li>
+                        <li class="flex justify-between"><span>Users</span> <span class="text-white">25%</span></li>
+                        <li class="flex justify-between"><span>Platform</span> <span class="text-white">10%</span></li>
+                        <li class="flex justify-between"><span>Visitors</span> <span class="text-white">5%</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: ECOSYSTEM & IP -->
+    <section id="ecosystem" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto bg-white">
+        <div class="text-center mb-16">
+            <span class="font-mono text-signal font-bold tracking-widest uppercase mb-4 block" data-lang-en="HKAIIFF INTEGRATION" data-lang-zh="HKAIIFF 生態整合">HKAIIFF INTEGRATION</span>
+            <h2 class="section-title outline-text text-black" data-lang-en="ECOSYSTEM" data-lang-zh="生態系統">ECOSYSTEM</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-0 border-2 border-black">
+            <!-- Center 1 -->
+            <div class="group border-b md:border-b-0 md:border-r border-black p-8 hover:bg-black hover:text-white transition-all duration-300">
+                <div class="font-heavy text-6xl text-gray-200 group-hover:text-gray-800 mb-6">01</div>
+                <h3 class="font-heavy text-2xl mb-4" data-lang-en="FILM MARKET" data-lang-zh="香港AI電影市場">FILM MARKET</h3>
+                <p class="font-mono text-xs mb-4 text-gray-500 group-hover:text-gray-400" data-lang-en="Content Creator Joining & Verification, IP Rights Management." data-lang-zh="內容創作者入駐驗證，IP版權管理。">Content Creator Joining...</p>
+            </div>
+            <!-- Center 2 -->
+            <div class="group border-b md:border-b-0 md:border-r border-black p-8 hover:bg-black hover:text-white transition-all duration-300 bg-paper hover:bg-black">
+                <div class="font-heavy text-6xl text-gray-200 group-hover:text-gray-800 mb-6">02</div>
+                <h3 class="font-heavy text-2xl mb-4" data-lang-en="SUBMISSION CENTER" data-lang-zh="提交中心">SUBMISSION CENTER</h3>
+                <p class="font-mono text-xs mb-4 text-gray-500 group-hover:text-gray-400" data-lang-en="Content Review, Festival Selection, Awards Integration." data-lang-zh="內容審核，電影節選拔，獎項整合。">Content Review...</p>
+            </div>
+            <!-- Center 3 -->
+            <div class="group p-8 hover:bg-black hover:text-white transition-all duration-300">
+                <div class="font-heavy text-6xl text-gray-200 group-hover:text-gray-800 mb-6">03</div>
+                <h3 class="font-heavy text-2xl mb-4" data-lang-en="DISTRIBUTION" data-lang-zh="跨平台發行">DISTRIBUTION</h3>
+                <p class="font-mono text-xs mb-4 text-gray-500 group-hover:text-gray-400" data-lang-en="Multi-Device Optimization, Synchronized World Access." data-lang-zh="多設備內容優化，同步世界訪問。">Multi-Device Optimization...</p>
+            </div>
+        </div>
+
+        <!-- IP Showcase (Accordion Style) -->
+        <div class="mt-16 space-y-4 max-w-5xl mx-auto">
+             <div class="accordion-item border border-black bg-paper">
+                <button class="w-full p-6 flex justify-between items-center text-left" onclick="toggleAccordion(this)">
+                    <div class="flex items-center gap-6">
+                        <span class="font-heavy text-2xl md:text-3xl text-signal w-12"><i class="fas fa-handshake"></i></span>
+                        <div>
+                            <h3 class="font-heavy text-xl" data-lang-en="IP COOPERATION STRATEGY" data-lang-zh="IP 合作策略">IP COOPERATION STRATEGY</h3>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon text-xl"></i>
+                </button>
+                <div class="accordion-content">
+                    <div class="p-6 border-t border-black bg-white">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 font-mono text-sm">
+                            <div>
+                                <strong class="block mb-2">MODELS</strong>
+                                <ul class="list-disc pl-4 space-y-1">
+                                    <li>Licensing (60-70% Revenue to IP)</li>
+                                    <li>Joint Development</li>
+                                    <li>Extended Universe</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <strong class="block mb-2">VALUE</strong>
+                                <ul class="list-disc pl-4 space-y-1">
+                                    <li>Long-Tail Activation</li>
+                                    <li>Fan Co-creation</li>
+                                    <li>Data-Driven Development</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6: ROADMAP -->
+    <section id="roadmap" class="py-20 md:py-32 bg-[#EAEAEA] border-t border-black">
+        <div class="max-w-[1920px] mx-auto px-4 md:px-8">
+            <h2 class="font-heavy text-4xl md:text-8xl text-[#222] text-center mb-16 leading-none select-none" data-lang-en="DEVELOPMENT<br>ROADMAP" data-lang-zh="發展<br>路線圖">
+                DEVELOPMENT<br>ROADMAP
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- PHASE 1 -->
+                <div class="border-t-2 border-signal pt-6">
+                    <h3 class="font-heavy text-2xl mb-2 text-signal" data-lang-en="PHASE 1" data-lang-zh="第一階段">PHASE 1</h3>
+                    <p class="font-mono text-xs text-gray-500 mb-2">2025 Q4 - 2026 Q2</p>
+                    <p class="font-mono text-sm text-gray-600 mb-4 font-bold" data-lang-en="Technology Validation" data-lang-zh="技術驗證">Technology Validation</p>
+                    <ul class="space-y-2 font-mono text-xs text-gray-500">
+                        <li>> RIE Prototype</li>
+                        <li>> Privacy Framework</li>
+                        <li>> MVP Release</li>
+                    </ul>
+                </div>
+
+                <!-- PHASE 2 -->
+                <div class="border-t-2 border-gray-400 pt-6">
+                    <h3 class="font-heavy text-2xl mb-2" data-lang-en="PHASE 2" data-lang-zh="第二階段">PHASE 2</h3>
+                    <p class="font-mono text-xs text-gray-500 mb-2">2026 Q3 - 2026 Q4</p>
+                    <p class="font-mono text-sm text-gray-600 mb-4 font-bold" data-lang-en="Beta Testing" data-lang-zh="Beta 測試">Beta Testing</p>
+                    <ul class="space-y-2 font-mono text-xs text-gray-500">
+                        <li>> "My World" System</li>
+                        <li>> Public Beta Launch</li>
+                        <li>> Mobile App</li>
+                    </ul>
+                </div>
+
+                <!-- PHASE 3 -->
+                <div class="border-t-2 border-gray-400 pt-6 opacity-80">
+                    <h3 class="font-heavy text-2xl mb-2" data-lang-en="PHASE 3" data-lang-zh="第三階段">PHASE 3</h3>
+                    <p class="font-mono text-xs text-gray-500 mb-2">2027 Q1 - 2027 Q4</p>
+                    <p class="font-mono text-sm text-gray-600 mb-4 font-bold" data-lang-en="Official Launch" data-lang-zh="正式發布">Official Launch</p>
+                    <ul class="space-y-2 font-mono text-xs text-gray-500">
+                        <li>> Token Economy</li>
+                        <li>> Global Marketing</li>
+                        <li>> AR/VR Integration</li>
+                    </ul>
+                </div>
+
+                <!-- PHASE 4 -->
+                <div class="border-t-2 border-gray-400 pt-6 opacity-60">
+                    <h3 class="font-heavy text-2xl mb-2" data-lang-en="PHASE 4" data-lang-zh="第四階段">PHASE 4</h3>
+                    <p class="font-mono text-xs text-gray-500 mb-2">2028+</p>
+                    <p class="font-mono text-sm text-gray-600 mb-4 font-bold" data-lang-en="Ecosystem Expansion" data-lang-zh="生態擴展">Ecosystem Expansion</p>
+                    <ul class="space-y-2 font-mono text-xs text-gray-500">
+                        <li>> Metaverse Foundation</li>
+                        <li>> Digital Twin</li>
+                        <li>> Neural Interface</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Milestones -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 border-t border-gray-300 pt-8">
+                <div class="text-center">
+                    <div class="font-heavy text-3xl text-signal">2026</div>
+                    <div class="font-mono text-xs text-gray-500">MVP Release</div>
+                </div>
+                <div class="text-center">
+                    <div class="font-heavy text-3xl">10K+</div>
+                    <div class="font-mono text-xs text-gray-500">Beta Users</div>
+                </div>
+                <div class="text-center">
+                    <div class="font-heavy text-3xl">1M+</div>
+                    <div class="font-mono text-xs text-gray-500">Reg. Users</div>
+                </div>
+                <div class="text-center">
+                    <div class="font-heavy text-3xl">∞</div>
+                    <div class="font-mono text-xs text-gray-500">Possibilities</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DEMO CTA -->
+    <section id="demo" class="py-20 bg-black text-white text-center">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="font-heavy text-5xl md:text-7xl mb-8" data-lang-en="EXPERIENCE 404" data-lang-zh="體驗 404">EXPERIENCE 404</h2>
+            <p class="font-mono text-gray-400 mb-10 max-w-2xl mx-auto" data-lang-en="Immediately participate in revolutionary AI-native interactive entertainment experience. Become a pioneer explorer of parallel worlds." data-lang-zh="立即參與革命性的AI原生互動娛樂體驗。成為平行世界的先驅探索者。">
+                Immediately participate in revolutionary AI-native interactive entertainment experience.
+            </p>
+            <div class="flex flex-col md:flex-row justify-center gap-6">
+                <div class="border border-white p-8 w-full md:w-1/2 hover:border-signal transition-colors group">
+                    <h3 class="font-heavy text-2xl mb-4 group-hover:text-signal" data-lang-en="INTERACTIVE DEMO" data-lang-zh="交互演示">INTERACTIVE DEMO</h3>
+                    <p class="font-mono text-xs text-gray-500 mb-6">Real-time story generation.</p>
+                    <button class="brutal-btn w-full bg-white text-black border-white"><span data-lang-en="START DEMO" data-lang-zh="開始演示">START DEMO</span></button>
+                </div>
+                <div class="border border-signal bg-[#111] p-8 w-full md:w-1/2 relative shadow-[0_0_30px_rgba(255,51,0,0.1)]">
+                    <div class="absolute top-0 right-0 bg-signal text-black font-bold px-2 py-1 font-mono text-[10px]">PRIORITY</div>
+                    <h3 class="font-heavy text-2xl mb-4 text-signal" data-lang-en="EARLY ACCESS" data-lang-zh="早期體驗">EARLY ACCESS</h3>
+                    <p class="font-mono text-xs text-gray-500 mb-6">Join Beta testing program.</p>
+                    <button class="brutal-btn w-full bg-signal text-black border-signal"><span data-lang-en="JOIN WAITLIST" data-lang-zh="加入名單">JOIN WAITLIST</span></button>
+                    <div class="mt-4 text-[10px] font-mono text-gray-500 flex justify-between">
+                        <span>Waitlist:</span>
+                        <span class="text-signal">2,847</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-black text-[#EAEAEA] border-t border-[#222] pt-20 pb-10 px-4 md:px-8">
+        <div class="max-w-[1920px] mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+                <div class="lg:col-span-2">
+                    <h2 class="font-heavy text-5xl md:text-7xl mb-6">404.WORLD</h2>
+                    <p class="font-mono text-sm text-gray-400 max-w-md">
+                        <span data-lang-en="Revolutionary platform transforming 'Not Found' into 'Discover Infinite Possibilities', creating infinite universes of personalized interactive narratives."
+                              data-lang-zh="將「未找到」轉變為「發現無限可能」的革命性平台，創造無限的個性化互動敘事宇宙。">
+                            Revolutionary platform transforming "Not Found" into "Discover Infinite Possibilities".
+                        </span>
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-mono text-signal mb-6" data-lang-en="PLATFORM" data-lang-zh="平台">PLATFORM</h4>
+                    <ul class="font-mono text-sm space-y-4">
+                        <li><a href="#features" class="hover:text-white text-gray-500">Features</a></li>
+                        <li><a href="#technology" class="hover:text-white text-gray-500">Technology</a></li>
+                        <li><a href="#business" class="hover:text-white text-gray-500">Pricing</a></li>
+                        <li><a href="#" class="hover:text-white text-gray-500">API Docs</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-mono text-signal mb-6" data-lang-en="COMMUNITY" data-lang-zh="社區">COMMUNITY</h4>
+                    <ul class="font-mono text-sm space-y-4">
+                        <li><a href="#" class="hover:text-white text-gray-500">Creator Center</a></li>
+                        <li><a href="#" class="hover:text-white text-gray-500">Feedback</a></li>
+                        <li><a href="#" class="hover:text-white text-gray-500">Discord</a></li>
+                        <li><a href="#" class="hover:text-white text-gray-500">Twitter</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-[#222] pt-8 flex flex-col md:flex-row justify-between items-center font-mono text-xs text-gray-600">
+                <div>© 2024 404.WORLD. ALL RIGHTS RESERVED | POWERED BY HKAIIFF.</div>
+                <div class="mt-4 md:mt-0 flex gap-4">
+                    <a href="#" class="hover:text-white">PRIVACY</a>
+                    <a href="#" class="hover:text-white">TERMS</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        // 1. LOADER
+        window.addEventListener('load', () => {
+            const tl = gsap.timeline();
+            tl.to("#loader", { yPercent: -100, duration: 0.8, ease: "power4.inOut", delay: 0.5 });
+            tl.from("header .hero-title", { y: 100, opacity: 0, duration: 1, ease: "power3.out" }, "-=0.3");
+        });
+
+        // 2. LANGUAGE SWITCHER
+        let currentLang = 'en';
+        function switchLang() {
+            currentLang = currentLang === 'en' ? 'zh' : 'en';
+            const btn = document.getElementById('lang-btn');
+            
+            // Update Button Text
+            if(btn) btn.innerText = currentLang === 'en' ? '[ 繁體中文 ]' : '[ ENGLISH ]';
+            
+            // Update Content
+            document.querySelectorAll('[data-lang-en][data-lang-zh]').forEach(el => {
+                const text = currentLang === 'en' ? el.getAttribute('data-lang-en') : el.getAttribute('data-lang-zh');
+                // Simple fade effect
+                el.style.opacity = '0';
+                setTimeout(() => {
+                    el.innerHTML = text;
+                    el.style.opacity = '1';
+                }, 200);
+            });
+        }
+
+        // 3. MOBILE MENU TOGGLE
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('active');
+            
+            // Toggle Body Scroll
+            if (menu.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // 4. ACCORDION LOGIC
+        function toggleAccordion(button) {
+            const item = button.parentElement;
+            const content = button.nextElementSibling;
+            
+            item.classList.toggle('active');
+            if (item.classList.contains('active')) {
+                content.style.maxHeight = content.scrollHeight + "px";
+            } else {
+                content.style.maxHeight = null;
+            }
+        }
+
+        // 5. GSAP ANIMATIONS
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Fade in sections
+        gsap.utils.toArray('section').forEach(section => {
+            gsap.from(section, {
+                opacity: 0,
+                y: 50,
+                duration: 1,
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        });
+
+        // 6. BUTTON HANDLERS (From index2.html logic)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Demo/Beta buttons
+            const demoButtons = document.querySelectorAll('a[href="#demo"], button');
+            demoButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    if(this.getAttribute('href') === '#demo' || this.textContent.includes('DEMO') || this.textContent.includes('WAITLIST') || this.textContent.includes('SELECT')) {
+                        // Keep default anchor behavior if just scrolling, but alert if specific action
+                        if(!this.getAttribute('href')) {
+                            e.preventDefault();
+                            alert('Feature coming soon in Beta!');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

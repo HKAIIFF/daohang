@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HKAIIFF ECOSYSTEM PORTAL | 生態導航</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        signal: '#FF3300',
+                    },
+                    fontFamily: {
+                        heavy: ['"Oswald"', 'sans-serif'],
+                        mono: ['"Space Mono"', 'monospace'],
+                        zh: ['"Noto Sans TC"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* CORE STYLES */
+        html { scroll-behavior: smooth; }
+        body { background-color: #EAEAEA; color: #050505; overflow-x: hidden; }
+
+        /* GRID BACKGROUND */
+        .grid-bg {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
+        }
+
+        /* LANGUAGE HANDLING */
+        .lang-en { display: block; }
+        .lang-zh { display: none; }
+        
+        body.zh-mode .lang-en { display: none !important; }
+        body.zh-mode .lang-zh { display: block !important; }
+        
+        /* Font Adjustments */
+        body.zh-mode .font-heavy { font-family: 'Noto Sans TC', sans-serif !important; font-weight: 900; letter-spacing: 0.05em; }
+        body.zh-mode .font-mono { font-family: 'Noto Sans TC', sans-serif !important; }
+
+        /* TYPOGRAPHY */
+        .mega-text {
+            font-size: clamp(3rem, 10vw, 12rem);
+            line-height: 0.85;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            font-weight: 700;
+        }
+
+        .outline-text {
+            color: transparent;
+            -webkit-text-stroke: 1.5px #050505;
+            text-stroke: 1.5px #050505;
+        }
+
+        /* NAVIGATION CARD STYLES */
+        .nav-card {
+            border: 2px solid #050505;
+            background: #FFFFFF;
+            position: relative;
+            overflow: hidden;
+            display: block;
+            transition: all 0.3s ease;
+            height: 100%;
+            min-height: 320px;
+        }
+
+        /* The sliding black background */
+        .nav-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #050505;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+            z-index: 0;
+        }
+
+        .nav-card:hover::before {
+            transform: translateY(0);
+        }
+        
+        .nav-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 8px 8px 0px 0px #FF3300;
+        }
+
+        /* Text Color Transitions on Hover */
+        .nav-card:hover .text-transition { color: #FFFFFF !important; }
+        .nav-card:hover .sub-text-transition { color: #CCCCCC !important; }
+        .nav-card:hover .icon-transition { color: #FF3300 !important; transform: scale(1.1); }
+        .nav-card:hover .border-transition { border-color: #FFFFFF !important; }
+
+        /* LANGUAGE BUTTON */
+        .lang-btn {
+            position: fixed; top: 20px; right: 20px; z-index: 100;
+            background: #050505; color: #fff;
+            border: 2px solid #050505;
+            padding: 10px 20px;
+            font-family: 'Space Mono', monospace;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .lang-btn:hover { background: #FF3300; border-color: #FF3300; color: #000; }
+
+        .category-label {
+            position: absolute; top: 0; right: 0;
+            background: #050505; color: #fff;
+            font-family: 'Space Mono', monospace; 
+            font-size: 0.7rem; font-weight: bold;
+            padding: 4px 8px;
+            z-index: 20;
+        }
+        .nav-card:hover .category-label { background: #FF3300; color: #000; }
+
+        /* MARQUEE */
+        .marquee-container { overflow: hidden; white-space: nowrap; display: flex; }
+        .marquee-content { display: flex; animation: marquee 30s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* LOADER */
+        #loader {
+            position: fixed; inset: 0; background: #FF3300; z-index: 9999;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+        }
+    </style>
+</head>
+<body class="grid-bg min-h-screen flex flex-col">
+
+    <!-- LOADER -->
+    <div id="loader">
+        <div class="font-heavy text-6xl md:text-9xl font-bold text-black tracking-tighter">HKAIIFF</div>
+        <div class="font-mono text-black mt-4 text-xs md:text-base animate-pulse">
+            LOADING ECOSYSTEM...
+        </div>
+    </div>
+
+    <!-- LANGUAGE SWITCHER -->
+    <button onclick="toggleLanguage()" class="lang-btn">
+        <span class="lang-en">EN / 繁</span>
+        <span class="lang-zh">繁 / EN</span>
+    </button>
+
+    <!-- HEADER -->
+    <header class="pt-20 pb-10 px-4 md:px-8 border-b-2 border-black bg-white">
+        <div class="max-w-[1920px] mx-auto">
+            <div class="font-mono text-signal mb-2 flex items-center gap-2 font-bold tracking-widest">
+                <div class="w-3 h-3 bg-signal rounded-full animate-ping"></div>
+                <span class="lang-en">ECOSYSTEM NAVIGATION</span>
+                <span class="lang-zh">生態系統導航</span>
+            </div>
+            <h1 class="mega-text leading-none">
+                <span class="block text-black">HKAIIFF</span>
+                <span class="block outline-text">ECOSYSTEM</span>
+            </h1>
+        </div>
+    </header>
+
+    <!-- MAIN GRID -->
+    <main class="flex-grow p-4 md:p-8 max-w-[1920px] mx-auto w-full">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+            <!-- 1. HKAIIFF (Festival) -->
+            <a href="hkaiiff.html" class="nav-card group">
+                <div class="category-label">CORE • 核心</div>
+                <div class="relative z-10 flex flex-col h-full justify-between p-8">
+                    <div class="mb-4">
+                        <i class="fas fa-trophy text-5xl mb-6 text-black icon-transition transition-transform duration-300 transform group-hover:scale-110 block"></i>
+                        <h3 class="font-heavy text-4xl mb-2 text-black text-transition leading-none">HKAIIFF</h3>
+                        <div class="font-mono text-xs font-bold text-gray-400 mb-4 sub-text-transition tracking-widest">FILM FESTIVAL</div>
+                        <p class="font-mono text-sm text-gray-700 sub-text-transition leading-relaxed font-bold">
+                            <span class="lang-en">The World's First AI-Native International Film Festival.</span>
+                            <span class="lang-zh">全球首個 AI 原生國際電影節。</span>
+                        </p>
+                    </div>
+                    <div class="flex justify-between items-center border-t-2 border-black border-transition pt-4 mt-auto">
+                        <span class="font-mono text-xs font-bold text-black text-transition">ENTER</span>
+                        <i class="fas fa-arrow-right text-black text-transition transform -rotate-45 group-hover:rotate-0 transition-transform"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 2. HKAIFM (Market) -->
+            <a href="hkaifm.html" class="nav-card group">
+                <div class="category-label">INFRA • 基建</div>
+                <div class="relative z-10 flex flex-col h-full justify-between p-8">
+                    <div class="mb-4">
+                        <i class="fas fa-globe text-5xl mb-6 text-black icon-transition transition-transform duration-300 transform group-hover:scale-110 block"></i>
+                        <h3 class="font-heavy text-4xl mb-2 text-black text-transition leading-none">HKAIFM</h3>
+                        <div class="font-mono text-xs font-bold text-gray-400 mb-4 sub-text-transition tracking-widest">FILM MARKET</div>
+                        <p class="font-mono text-sm text-gray-700 sub-text-transition leading-relaxed font-bold">
+                            <span class="lang-en">Global Infrastructure for Creative Value Economy.</span>
+                            <span class="lang-zh">創意價值經濟的全球基礎設施。</span>
+                        </p>
+                    </div>
+                    <div class="flex justify-between items-center border-t-2 border-black border-transition pt-4 mt-auto">
+                        <span class="font-mono text-xs font-bold text-black text-transition">ENTER</span>
+                        <i class="fas fa-arrow-right text-black text-transition transform -rotate-45 group-hover:rotate-0 transition-transform"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 3. HKAIFA (Academy) -->
+            <a href="hkaifa.html" class="nav-card group">
+                <div class="category-label">EDU • 教育</div>
+                <div class="relative z-10 flex flex-col h-full justify-between p-8">
+                    <div class="mb-4">
+                        <i class="fas fa-graduation-cap text-5xl mb-6 text-black icon-transition transition-transform duration-300 transform group-hover:scale-110 block"></i>
+                        <h3 class="font-heavy text-4xl mb-2 text-black text-transition leading-none">HKAIFA</h3>
+                        <div class="font-mono text-xs font-bold text-gray-400 mb-4 sub-text-transition tracking-widest">AI FILM ACADEMY</div>
+                        <p class="font-mono text-sm text-gray-700 sub-text-transition leading-relaxed font-bold">
+                            <span class="lang-en">World's First AI-Native Film Education Institution.</span>
+                            <span class="lang-zh">全球首個 AI 原生影視教育機構。</span>
+                        </p>
+                    </div>
+                    <div class="flex justify-between items-center border-t-2 border-black border-transition pt-4 mt-auto">
+                        <span class="font-mono text-xs font-bold text-black text-transition">ENTER</span>
+                        <i class="fas fa-arrow-right text-black text-transition transform -rotate-45 group-hover:rotate-0 transition-transform"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 4. AIF.CENTER (Submission) -->
+            <a href="center.html" class="nav-card group">
+                <div class="category-label">HUB • 樞紐</div>
+                <div class="relative z-10 flex flex-col h-full justify-between p-8">
+                    <div class="mb-4">
+                        <i class="fas fa-upload text-5xl mb-6 text-black icon-transition transition-transform duration-300 transform group-hover:scale-110 block"></i>
+                        <h3 class="font-heavy text-4xl mb-2 text-black text-transition leading-none">AIF.CENTER</h3>
+                        <div class="font-mono text-xs font-bold text-gray-400 mb-4 sub-text-transition tracking-widest">SUBMISSION HUB</div>
+                        <p class="font-mono text-sm text-gray-700 sub-text-transition leading-relaxed font-bold">
+                            <span class="lang-en">Global Submission and Distribution Network.</span>
+                            <span class="lang-zh">全球徵片與分發網絡中心。</span>
+                        </p>
+                    </div>
+                    <div class="flex justify-between items-center border-t-2 border-black border-transition pt-4 mt-auto">
+                        <span class="font-mono text-xs font-bold text-black text-transition">ENTER</span>
+                        <i class="fas fa-arrow-right text-black text-transition transform -rotate-45 group-hover:rotate-0 transition-transform"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 5. AIF.SHOW (Roadshow) -->
+            <a href="aif.show.html" class="nav-card group">
+                <div class="category-label">BIZ • 商務</div>
+                <div class="relative z-10 flex flex-col h-full justify-between p-8">
+                    <div class="mb-4">
+                        <i class="fas fa-microphone-alt text-5xl mb-6 text-black icon-transition transition-transform duration-300 transform group-hover:scale-110 block"></i>
+                        <h3 class="font-heavy text-4xl mb-2 text-black text-transition leading-none">AIF.SHOW</h3>
+                        <div class="font-mono text-xs font-bold text-gray-400 mb-4 sub-text-transition tracking-widest">ROADSHOW CENTER</div>
+                        <p class="font-mono text-sm text-gray-700 sub-text-transition leading-relaxed font-bold">
+                            <span class="lang-en">Value Verification Engine & Physical Roadshow.</span>
+                            <span class="lang-zh">價值驗證引擎與物理路演中心。</span>
+                        </p>
+                    </div>
+                    <div class="flex justify-between items-center border-t-2 border-black border-transition pt-4 mt-auto">
+                        <span class="font-mono text-xs font-bold text-black text-transition">ENTER</span>
+                        <i class="fas fa-arrow-right text-black text-transition transform -rotate-45 group-hover:rotate-0 transition-transform"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 6. 404.WORLD (Platform) -->
+            <a href="404world.html" class="nav-card group">
+                <div class="category-label">TECH • 平台</div>
+                <div class="relative z-10 flex flex-col h-full justify-between p-8">
+                    <div class="mb-4">
+                        <i class="fas fa-vr-cardboard text-5xl mb-6 text-black icon-transition transition-transform duration-300 transform group-hover:scale-110 block"></i>
+                        <h3 class="font-heavy text-4xl mb-2 text-black text-transition leading-none">404.WORLD</h3>
+                        <div class="font-mono text-xs font-bold text-gray-400 mb-4 sub-text-transition tracking-widest">INTERACTIVE STREAMING</div>
+                        <p class="font-mono text-sm text-gray-700 sub-text-transition leading-relaxed font-bold">
+                            <span class="lang-en">AI-Native Interactive Streaming Platform.</span>
+                            <span class="lang-zh">AI 原生互動流媒體平台。</span>
+                        </p>
+                    </div>
+                    <div class="flex justify-between items-center border-t-2 border-black border-transition pt-4 mt-auto">
+                        <span class="font-mono text-xs font-bold text-black text-transition">ENTER</span>
+                        <i class="fas fa-arrow-right text-black text-transition transform -rotate-45 group-hover:rotate-0 transition-transform"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 7. EXCHANGE -->
+            <a href="exchange.html" class="nav-card group">
+                <div class="category-label">FINANCE • 金融</div>
+                <div class="relative z-10 flex flex-col h-full justify-between p-8">
+                    <div class="mb-4">
+                        <i class="fas fa-chart-line text-5xl mb-6 text-black icon-transition transition-transform duration-300 transform group-hover:scale-110 block"></i>
+                        <h3 class="font-heavy text-4xl mb-2 text-black text-transition leading-none">EXCHANGE</h3>
+                        <div class="font-mono text-xs font-bold text-gray-400 mb-4 sub-text-transition tracking-widest">DIGITAL ASSETS</div>
+                        <p class="font-mono text-sm text-gray-700 sub-text-transition leading-relaxed font-bold">
+                            <span class="lang-en">Global Digital Asset Trading Platform.</span>
+                            <span class="lang-zh">全球數字資產交易平台。</span>
+                        </p>
+                    </div>
+                    <div class="flex justify-between items-center border-t-2 border-black border-transition pt-4 mt-auto">
+                        <span class="font-mono text-xs font-bold text-black text-transition">ENTER</span>
+                        <i class="fas fa-arrow-right text-black text-transition transform -rotate-45 group-hover:rotate-0 transition-transform"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 8. BRAND CENTER -->
+            <a href="brand.html" class="nav-card group">
+                <div class="category-label">CORP • 品牌</div>
+                <div class="relative z-10 flex flex-col h-full justify-between p-8">
+                    <div class="mb-4">
+                        <i class="fas fa-flag text-5xl mb-6 text-black icon-transition transition-transform duration-300 transform group-hover:scale-110 block"></i>
+                        <h3 class="font-heavy text-4xl mb-2 text-black text-transition leading-none">BRAND</h3>
+                        <div class="font-mono text-xs font-bold text-gray-400 mb-4 sub-text-transition tracking-widest">BRAND CENTER</div>
+                        <p class="font-mono text-sm text-gray-700 sub-text-transition leading-relaxed font-bold">
+                            <span class="lang-en">Official Brand Assets and Guidelines.</span>
+                            <span class="lang-zh">官方品牌資產與指導中心。</span>
+                        </p>
+                    </div>
+                    <div class="flex justify-between items-center border-t-2 border-black border-transition pt-4 mt-auto">
+                        <span class="font-mono text-xs font-bold text-black text-transition">ENTER</span>
+                        <i class="fas fa-arrow-right text-black text-transition transform -rotate-45 group-hover:rotate-0 transition-transform"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 9. AIF GOLD (Token) -->
+            <a href="yonghu.html" class="nav-card group">
+                <div class="category-label">TOKEN • 代幣</div>
+                <div class="relative z-10 flex flex-col h-full justify-between p-8">
+                    <div class="mb-4">
+                        <i class="fas fa-coins text-5xl mb-6 text-black icon-transition transition-transform duration-300 transform group-hover:scale-110 block"></i>
+                        <h3 class="font-heavy text-4xl mb-2 text-black text-transition leading-none">AIF GOLD</h3>
+                        <div class="font-mono text-xs font-bold text-gray-400 mb-4 sub-text-transition tracking-widest">TOKEN ECONOMY</div>
+                        <p class="font-mono text-sm text-gray-700 sub-text-transition leading-relaxed font-bold">
+                            <span class="lang-en">Gold Reserve of AI Economy.</span>
+                            <span class="lang-zh">AI 創意經濟的黃金儲備。</span>
+                        </p>
+                    </div>
+                    <div class="flex justify-between items-center border-t-2 border-black border-transition pt-4 mt-auto">
+                        <span class="font-mono text-xs font-bold text-black text-transition">ENTER</span>
+                        <i class="fas fa-arrow-right text-black text-transition transform -rotate-45 group-hover:rotate-0 transition-transform"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 10. AIF CARD -->
+            <a href="cards.html" class="nav-card group">
+                <div class="category-label">PAY • 支付</div>
+                <div class="relative z-10 flex flex-col h-full justify-between p-8">
+                    <div class="mb-4">
+                        <i class="fas fa-credit-card text-5xl mb-6 text-black icon-transition transition-transform duration-300 transform group-hover:scale-110 block"></i>
+                        <h3 class="font-heavy text-4xl mb-2 text-black text-transition leading-none">AIF CARD</h3>
+                        <div class="font-mono text-xs font-bold text-gray-400 mb-4 sub-text-transition tracking-widest">CREATIVITY CREDIT</div>
+                        <p class="font-mono text-sm text-gray-700 sub-text-transition leading-relaxed font-bold">
+                            <span class="lang-en">Creativity is Your Credit Limit.</span>
+                            <span class="lang-zh">創造力即您的信用額度。</span>
+                        </p>
+                    </div>
+                    <div class="flex justify-between items-center border-t-2 border-black border-transition pt-4 mt-auto">
+                        <span class="font-mono text-xs font-bold text-black text-transition">ENTER</span>
+                        <i class="fas fa-arrow-right text-black text-transition transform -rotate-45 group-hover:rotate-0 transition-transform"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 11. AIF TOKEN (New) -->
+            <a href="token.html" class="nav-card group">
+                <div class="category-label">ASSET • 資產</div>
+                <div class="relative z-10 flex flex-col h-full justify-between p-8">
+                    <div class="mb-4">
+                        <i class="fas fa-circle-notch text-5xl mb-6 text-black icon-transition transition-transform duration-300 transform group-hover:scale-110 block"></i>
+                        <h3 class="font-heavy text-4xl mb-2 text-black text-transition leading-none">AIF TOKEN</h3>
+                        <div class="font-mono text-xs font-bold text-gray-400 mb-4 sub-text-transition tracking-widest">UTILITY TOKEN</div>
+                        <p class="font-mono text-sm text-gray-700 sub-text-transition leading-relaxed font-bold">
+                            <span class="lang-en">The Core Value Unit of the Ecosystem.</span>
+                            <span class="lang-zh">生態系統的核心價值單元。</span>
+                        </p>
+                    </div>
+                    <div class="flex justify-between items-center border-t-2 border-black border-transition pt-4 mt-auto">
+                        <span class="font-mono text-xs font-bold text-black text-transition">ENTER</span>
+                        <i class="fas fa-arrow-right text-black text-transition transform -rotate-45 group-hover:rotate-0 transition-transform"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 12. AIF WORLD (New) -->
+            <a href="tokenworld.html" class="nav-card group">
+                <div class="category-label">SCENE • 場景</div>
+                <div class="relative z-10 flex flex-col h-full justify-between p-8">
+                    <div class="mb-4">
+                        <i class="fas fa-th text-5xl mb-6 text-black icon-transition transition-transform duration-300 transform group-hover:scale-110 block"></i>
+                        <h3 class="font-heavy text-4xl mb-2 text-black text-transition leading-none">AIF WORLD</h3>
+                        <div class="font-mono text-xs font-bold text-gray-400 mb-4 sub-text-transition tracking-widest">APPLICATION SCENARIOS</div>
+                        <p class="font-mono text-sm text-gray-700 sub-text-transition leading-relaxed font-bold">
+                            <span class="lang-en">1001 Application Scenarios for AIF.</span>
+                            <span class="lang-zh">AIF的一千零一種應用場景。</span>
+                        </p>
+                    </div>
+                    <div class="flex justify-between items-center border-t-2 border-black border-transition pt-4 mt-auto">
+                        <span class="font-mono text-xs font-bold text-black text-transition">ENTER</span>
+                        <i class="fas fa-arrow-right text-black text-transition transform -rotate-45 group-hover:rotate-0 transition-transform"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 13. AIF GIFTS (New) -->
+            <a href="gift.html" class="nav-card group">
+                <div class="category-label">EARN • 獎勵</div>
+                <div class="relative z-10 flex flex-col h-full justify-between p-8">
+                    <div class="mb-4">
+                        <i class="fas fa-gift text-5xl mb-6 text-black icon-transition transition-transform duration-300 transform group-hover:scale-110 block"></i>
+                        <h3 class="font-heavy text-4xl mb-2 text-black text-transition leading-none">AIF GIFTS</h3>
+                        <div class="font-mono text-xs font-bold text-gray-400 mb-4 sub-text-transition tracking-widest">REWARDS CENTER</div>
+                        <p class="font-mono text-sm text-gray-700 sub-text-transition leading-relaxed font-bold">
+                            <span class="lang-en">Learn to Earn Airdrops & Rewards.</span>
+                            <span class="lang-zh">學習賺取空投與獎勵。</span>
+                        </p>
+                    </div>
+                    <div class="flex justify-between items-center border-t-2 border-black border-transition pt-4 mt-auto">
+                        <span class="font-mono text-xs font-bold text-black text-transition">ENTER</span>
+                        <i class="fas fa-arrow-right text-black text-transition transform -rotate-45 group-hover:rotate-0 transition-transform"></i>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+    </main>
+
+    <!-- FOOTER MARQUEE -->
+    <div class="bg-signal text-black py-3 font-mono text-sm font-bold border-t-2 border-black z-20">
+        <div class="marquee-container">
+            <div class="marquee-content">
+                <span class="mx-6">HKAIIFF ECOSYSTEM ///</span>
+                <span class="mx-6"><span class="lang-en">EST. 2025</span><span class="lang-zh">始於 2025</span></span>
+                <span class="mx-6">///</span>
+                <span class="mx-6"><span class="lang-en">AI NATIVE CINEMA</span><span class="lang-zh">AI 原生電影</span></span>
+                <span class="mx-6">///</span>
+                <span class="mx-6"><span class="lang-en">DECENTRALIZED FUTURE</span><span class="lang-zh">去中心化未來</span></span>
+                <span class="mx-6">///</span>
+                <span class="mx-6">HKAIIFF ECOSYSTEM ///</span>
+                <span class="mx-6"><span class="lang-en">EST. 2025</span><span class="lang-zh">始於 2025</span></span>
+                <span class="mx-6">///</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        // 1. LOADER
+        window.addEventListener('load', () => {
+            // GSAP is optional, fallback to simple CSS if needed, but included in head
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.transition = 'transform 0.8s ease-in-out';
+                loader.style.transform = 'translateY(-100%)';
+            }, 500);
+        });
+
+        // 2. LANGUAGE SWITCHER
+        function toggleLanguage() {
+            document.body.classList.toggle('zh-mode');
+        }
+    </script>
+</body>
+</html>

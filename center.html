@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIF.Center | GLOBAL SUBMISSION HUB</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP Suite -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Fonts: Oswald + Space Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        void: '#050505',
+                        concrete: '#1F1F1F',
+                        signal: '#FF3300',
+                        steel: '#EAEAEA',
+                        dim: '#888888',
+                        paper: '#F3F3F3'
+                    },
+                    fontFamily: {
+                        heavy: ['"Oswald"', 'sans-serif'],
+                        mono: ['"Space Mono"', 'monospace'],
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* CORE STYLES */
+        html { scroll-behavior: smooth; }
+        body { background-color: #EAEAEA; color: #050505; overflow-x: hidden; }
+        ::selection { background: #FF3300; color: #000; }
+
+        /* TYPOGRAPHY */
+        .mega-text {
+            font-size: clamp(3rem, 8vw, 10rem);
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            font-weight: 700;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 5rem);
+            line-height: 1;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        .outline-text {
+            color: transparent;
+            -webkit-text-stroke: 1.5px #050505;
+            text-stroke: 1.5px #050505;
+            transition: all 0.3s ease;
+        }
+        
+        .hero-title .outline-text {
+            -webkit-text-stroke: 1.5px #FFFFFF;
+        }
+
+        /* BUTTONS */
+        .brutal-btn {
+            background: #050505;
+            color: #EAEAEA;
+            border: 2px solid #050505;
+            padding: 1rem 2rem;
+            font-family: 'Space Mono', monospace;
+            text-transform: uppercase;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .brutal-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #FF3300;
+            transform: translateX(-101%);
+            transition: transform 0.3s cubic-bezier(0.77, 0, 0.175, 1);
+            z-index: 0;
+        }
+
+        .brutal-btn:hover::before { transform: translateX(0); }
+        .brutal-btn span, .brutal-btn i { position: relative; z-index: 1; }
+        .brutal-btn:hover { color: #000; border-color: #FF3300; }
+        
+        .brutal-btn-secondary {
+            background: transparent;
+            color: #050505;
+            border: 2px solid #050505;
+        }
+        .brutal-btn-secondary:hover {
+            color: #EAEAEA;
+            background: #050505;
+        }
+
+        /* COMPONENTS */
+        .grid-bg { background-size: 40px 40px; background-image: linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px); }
+
+        /* LOADER */
+        #loader {
+            position: fixed; inset: 0; background: #FF3300; z-index: 9999;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+        }
+
+        /* MOBILE MENU */
+        #mobile-menu {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 80px);
+            background: #050505;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 49;
+            overflow-y: auto;
+        }
+        #mobile-menu.active { transform: translateX(0); }
+
+        /* NAV */
+        nav { background: rgba(234, 234, 234, 0.95); backdrop-filter: blur(10px); }
+        
+        /* CARDS */
+        .info-card { 
+            transition: all 0.3s ease; 
+            border: 2px solid #000; 
+            height: 100%; 
+            background: #fff;
+            padding: 2rem;
+            position: relative;
+        }
+        .info-card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 10px 10px 0px 0px rgba(0,0,0,1); 
+        }
+        
+        .dark-card {
+            background: #050505;
+            color: #fff;
+            border: 2px solid #050505;
+        }
+        .dark-card:hover {
+             box-shadow: 10px 10px 0px 0px #FF3300;
+        }
+        
+        .stat-card {
+            border: 1px solid #000;
+            padding: 1.5rem;
+            text-align: center;
+            background: #fff;
+            transition: all 0.3s;
+        }
+        .stat-card:hover {
+            background: #000;
+            color: #fff;
+        }
+        .stat-card:hover .stat-number {
+            color: #FF3300;
+        }
+        
+        /* FORM INPUTS */
+        .brutal-input {
+            width: 100%;
+            background: #EAEAEA;
+            border: 2px solid #000;
+            padding: 1rem;
+            font-family: 'Space Mono', monospace;
+            color: #000;
+            outline: none;
+            transition: all 0.3s;
+        }
+        .brutal-input:focus {
+            background: #fff;
+            box-shadow: 5px 5px 0px 0px #FF3300;
+        }
+        
+        /* MARQUEE */
+        .marquee-container { overflow: hidden; white-space: nowrap; display: flex; }
+        .marquee-content { display: flex; animation: marquee 30s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* UTILS */
+        .text-shadow { text-shadow: 2px 2px 0px #FF3300; }
+    </style>
+</head>
+<body class="grid-bg">
+
+    <!-- LOADER -->
+    <div id="loader">
+        <div class="font-heavy text-6xl md:text-9xl font-bold text-black tracking-tighter">AIF.CENTER</div>
+        <div class="font-mono text-black mt-4 text-xs md:text-base animate-pulse">
+            INITIALIZING_SUBMISSION_PROTOCOL...
+        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 left-0 w-full z-50 border-b-2 border-black h-20 md:h-24 flex items-center">
+        <div class="w-full max-w-[1920px] mx-auto flex justify-between items-stretch h-full">
+            
+            <!-- Logo -->
+            <div class="flex flex-col justify-center px-4 md:px-8 border-r-2 border-black hover:bg-black hover:text-white transition-colors cursor-pointer group h-full" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+                <span class="font-heavy text-3xl md:text-4xl font-bold tracking-tighter leading-none mb-1">AIF.CENTER</span>
+                <div class="flex flex-col leading-none">
+                    <span class="font-mono text-[10px] md:text-xs tracking-widest font-bold group-hover:text-signal" data-lang-en="SUBMISSION CENTER" data-lang-zh="征片中心">SUBMISSION CENTER</span>
+                </div>
+            </div>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden xl:flex items-stretch h-full">
+                <a href="#about" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span data-lang-en="ABOUT" data-lang-zh="關於我們">ABOUT</span>
+                </a>
+                <a href="#services" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span data-lang-en="SERVICES" data-lang-zh="服務產品">SERVICES</span>
+                </a>
+                <a href="#network" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span data-lang-en="NETWORK" data-lang-zh="全球網絡">NETWORK</span>
+                </a>
+                <a href="#ecosystem" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span data-lang-en="ECOSYSTEM" data-lang-zh="生態系統">ECOSYSTEM</span>
+                </a>
+                <a href="#partners" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span data-lang-en="PARTNERS" data-lang-zh="合作夥伴">PARTNERS</span>
+                </a>
+                <a href="#contact" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-signal hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider bg-black text-white">
+                    <span data-lang-en="SUBMIT WORK" data-lang-zh="提交作品">SUBMIT WORK</span>
+                </a>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex h-full">
+                <button id="lang-btn" onclick="switchLang()" class="flex items-center px-6 border-l-2 border-black hover:bg-signal hover:text-white transition-colors font-mono text-xs font-bold uppercase h-full">
+                    [ 繁體中文 ]
+                </button>
+                <button onclick="toggleMenu()" class="xl:hidden flex items-center px-6 border-l-2 border-black hover:bg-black hover:text-white transition-colors h-full">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MOBILE MENU OVERLAY -->
+    <div id="mobile-menu">
+        <div class="flex flex-col p-8 gap-6">
+            <a href="#about" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span data-lang-en="ABOUT US" data-lang-zh="關於我們">ABOUT US</span></a>
+            <a href="#services" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span data-lang-en="SERVICES" data-lang-zh="服務產品">SERVICES</span></a>
+            <a href="#network" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span data-lang-en="GLOBAL NETWORK" data-lang-zh="全球網絡">GLOBAL NETWORK</span></a>
+            <a href="#ecosystem" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span data-lang-en="ECOSYSTEM" data-lang-zh="生態系統">ECOSYSTEM</span></a>
+            <a href="#partners" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span data-lang-en="PARTNERS" data-lang-zh="合作夥伴">PARTNERS</span></a>
+            <div class="h-px bg-gray-800 my-4"></div>
+            <a href="#contact" onclick="toggleMenu()" class="text-signal font-heavy text-4xl"><span data-lang-en="SUBMIT WORK" data-lang-zh="提交作品">SUBMIT WORK</span></a>
+        </div>
+    </div>
+
+    <!-- HERO SECTION -->
+    <header class="relative min-h-screen flex items-center pt-24 overflow-hidden bg-black text-white">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0 z-0 opacity-40">
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
+            <!-- Using a high-tech abstract background suitable for AI/Film -->
+            <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=2574&auto=format&fit=crop" class="w-full h-full object-cover" alt="AI Film">
+        </div>
+        
+        <div class="relative z-10 w-full max-w-[1920px] mx-auto px-4 md:px-8">
+            <div class="max-w-7xl">
+                <div class="font-mono text-signal mb-4 flex items-center gap-2 animate-pulse">
+                    <div class="w-2 h-2 bg-signal rounded-full"></div>
+                    <span data-lang-en="/// SYSTEM STATUS: ONLINE" data-lang-zh="/// 系統狀態：在線">/// SYSTEM STATUS: ONLINE</span>
+                </div>
+                
+                <h1 class="hero-title font-heavy mega-text mb-6 leading-none">
+                    <span class="block" data-lang-en="GLOBAL FIRST" data-lang-zh="全球首創">GLOBAL FIRST</span>
+                    <span class="block text-signal" data-lang-en="AI NATIVE FILM" data-lang-zh="AI原生影視">AI NATIVE FILM</span>
+                    <span class="block outline-text text-[3rem] md:text-[6rem]" data-lang-en="SUBMISSION CENTER" data-lang-zh="征集與分發中心">SUBMISSION CENTER</span>
+                </h1>
+                
+                <p class="font-mono text-sm md:text-xl max-w-3xl text-gray-300 mb-10 leading-relaxed border-l-4 border-signal pl-6 bg-black/50 backdrop-blur-sm p-4">
+                    <span data-lang-en="Building the world's largest AI native film content submission and distribution network, breaking cultural, language, technical and commercial barriers, promoting the globalization of AI native film industry." 
+                          data-lang-zh="構建全球最大的AI原生影視內容征集與分發網絡，打破文化、語言、技術和商業壁壘，推動AI原生影視產業的全球化發展。">
+                        Building the world's largest AI native film content submission and distribution network, breaking cultural, language, technical and commercial barriers, promoting the globalization of AI native film industry.
+                    </span>
+                </p>
+                
+                <div class="flex flex-col md:flex-row gap-4">
+                    <a href="#contact" class="brutal-btn bg-signal text-black hover:bg-white border-signal hover:border-white">
+                        <i class="fas fa-upload mr-2"></i>
+                        <span data-lang-en="SUBMIT YOUR WORK" data-lang-zh="提交您的作品">SUBMIT YOUR WORK</span>
+                    </a>
+                    <a href="#services" class="brutal-btn bg-transparent text-white border-white hover:bg-white hover:text-black">
+                        <i class="fas fa-play mr-2"></i>
+                        <span data-lang-en="EXPLORE PLATFORM" data-lang-zh="探索平台">EXPLORE PLATFORM</span>
+                    </a>
+                </div>
+
+                <!-- Stats Grid in Hero -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 border-t border-gray-800 pt-8">
+                    <div class="text-center md:text-left">
+                        <div class="font-heavy text-4xl text-white">26+</div>
+                        <div class="font-mono text-xs text-dim uppercase" data-lang-en="Global Partners" data-lang-zh="全球合作夥伴">Global Partners</div>
+                    </div>
+                    <div class="text-center md:text-left">
+                        <div class="font-heavy text-4xl text-signal">20K+</div>
+                        <div class="font-mono text-xs text-dim uppercase" data-lang-en="Submission Target" data-lang-zh="作品征集目標">Submission Target</div>
+                    </div>
+                    <div class="text-center md:text-left">
+                        <div class="font-heavy text-4xl text-white">1M+</div>
+                        <div class="font-mono text-xs text-dim uppercase" data-lang-en="Platform Users" data-lang-zh="平台用戶目標">Platform Users</div>
+                    </div>
+                    <div class="text-center md:text-left">
+                        <div class="font-heavy text-4xl text-signal">19.5%</div>
+                        <div class="font-mono text-xs text-dim uppercase" data-lang-en="Market Growth" data-lang-zh="市場年增長率">Market Growth</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- SECTION: ABOUT -->
+    <section id="about" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto bg-white border-b-2 border-black">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <div class="lg:col-span-5">
+                <span class="font-mono text-signal font-bold tracking-widest uppercase mb-4 block" data-lang-en="OUR MISSION" data-lang-zh="我們的使命">OUR MISSION</span>
+                <h2 class="section-title mb-6">
+                    <span data-lang-en="REVOLUTIONIZING<br>THE INDUSTRY" data-lang-zh="革新<br>AI影視產業">REVOLUTIONIZING<br>THE INDUSTRY</span>
+                </h2>
+                <div class="w-20 h-2 bg-black mb-8"></div>
+                <p class="font-mono text-sm md:text-base leading-relaxed text-gray-700 mb-6">
+                    <span data-lang-en="AIF.Center serves as the core hub of the Hong Kong AI International Film Festival ecosystem, dedicated to building a global AI native film content submission and distribution system, creating a two-way value flow platform of 'content entry + distribution exit'."
+                          data-lang-zh="AIF.Center作為香港AI國際電影節生態系統的核心樞紐，致力於構建全球AI原生影視內容的征集與分發體系，打造'內容入口+分發出口'的雙向價值流動平台。">
+                        AIF.Center serves as the core hub of the Hong Kong AI International Film Festival ecosystem.
+                    </span>
+                </p>
+                <div class="info-card dark-card mt-8">
+                    <div class="font-heavy text-xl mb-4 text-signal" data-lang-en="MARKET OPPORTUNITY" data-lang-zh="市場機會">MARKET OPPORTUNITY</div>
+                    <div class="space-y-4 font-mono text-sm">
+                        <div class="flex justify-between border-b border-gray-700 pb-2">
+                            <span data-lang-en="2024 Global AI Video Market" data-lang-zh="2024年全球AI視頻市場">2024 Global AI Video Market</span>
+                            <span class="font-bold text-signal">$610M</span>
+                        </div>
+                        <div class="flex justify-between border-b border-gray-700 pb-2">
+                            <span data-lang-en="2025 Expected Market" data-lang-zh="2025年預計市場">2025 Expected Market</span>
+                            <span class="font-bold text-signal">$38B</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span data-lang-en="China Market Share" data-lang-zh="中國市場佔比">China Market Share</span>
+                            <span class="font-bold text-white">35%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lg:col-span-7">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Core Positioning Cards -->
+                    <div class="info-card">
+                        <i class="fas fa-globe-americas text-4xl mb-4 text-black"></i>
+                        <h3 class="font-heavy text-xl mb-2" data-lang-en="GLOBAL HUB" data-lang-zh="全球征集樞紐">GLOBAL HUB</h3>
+                        <p class="font-mono text-xs text-gray-600" data-lang-en="Connect global creators, build the largest AI native film content library." data-lang-zh="連接全球創作者，建立最大的AI原生影視內容庫。">Connect global creators...</p>
+                    </div>
+                    <div class="info-card bg-paper">
+                        <i class="fas fa-filter text-4xl mb-4 text-signal"></i>
+                        <h3 class="font-heavy text-xl mb-2" data-lang-en="QUALITY FILTER" data-lang-zh="優質內容篩選器">QUALITY FILTER</h3>
+                        <p class="font-mono text-xs text-gray-600" data-lang-en="Strictly select and certify high-quality AI native film content." data-lang-zh="嚴格甄選和認證高品質AI原生影視內容。">Strictly select and certify...</p>
+                    </div>
+                    <div class="info-card bg-paper">
+                        <i class="fas fa-rocket text-4xl mb-4 text-signal"></i>
+                        <h3 class="font-heavy text-xl mb-2" data-lang-en="VALUE ADDED" data-lang-zh="內容增值平台">VALUE ADDED</h3>
+                        <p class="font-mono text-xs text-gray-600" data-lang-en="Technical optimization and localization services maximize quality." data-lang-zh="技術優化和本地化服務最大化品質。">Technical optimization...</p>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-network-wired text-4xl mb-4 text-black"></i>
+                        <h3 class="font-heavy text-xl mb-2" data-lang-en="DISTRIBUTION" data-lang-zh="全球分發網絡">DISTRIBUTION</h3>
+                        <p class="font-mono text-xs text-gray-600" data-lang-en="Efficient global content distribution through multiple channels." data-lang-zh="通過多元渠道高效分發全球內容。">Efficient global content distribution...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: SERVICES -->
+    <section id="services" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto bg-steel">
+        <div class="text-center mb-16">
+            <span class="bg-black text-white px-4 py-2 font-mono font-bold text-sm inline-block mb-6" data-lang-en="PRODUCT SYSTEM" data-lang-zh="產品體系">PRODUCT SYSTEM</span>
+            <h2 class="font-heavy text-4xl md:text-7xl mb-6 leading-none" data-lang-en="COMPREHENSIVE<br>SERVICES" data-lang-zh="全面<br>服務體系">COMPREHENSIVE<br>SERVICES</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Service 1 -->
+            <div class="info-card hover:bg-black hover:text-white group">
+                <i class="fas fa-upload text-4xl mb-6 text-signal"></i>
+                <h3 class="font-heavy text-2xl mb-4" data-lang-en="SUBMISSION SERVICES" data-lang-zh="征片服務">SUBMISSION SERVICES</h3>
+                <ul class="font-mono text-xs space-y-2 mb-6 text-gray-600 group-hover:text-gray-300">
+                    <li>/ Work submission & screening</li>
+                    <li>/ Technical format check</li>
+                    <li>/ Evaluation report generation</li>
+                </ul>
+                <div class="border-t border-gray-300 group-hover:border-gray-700 pt-4 mt-auto">
+                    <div class="font-mono text-xs text-signal font-bold" data-lang-en="REV SHARE: Global 60% | City 50%" data-lang-zh="分成：全球 60% | 城市 50%">REV SHARE: Global 60% | City 50%</div>
+                </div>
+            </div>
+
+            <!-- Service 2 -->
+            <div class="info-card hover:bg-black hover:text-white group bg-paper">
+                <i class="fas fa-coins text-4xl mb-6 text-black group-hover:text-white"></i>
+                <h3 class="font-heavy text-2xl mb-4" data-lang-en="TOKEN SERVICES" data-lang-zh="代幣服務">TOKEN SERVICES</h3>
+                <ul class="font-mono text-xs space-y-2 mb-6 text-gray-600 group-hover:text-gray-300">
+                    <li>/ Token economic model design</li>
+                    <li>/ Compliance solution</li>
+                    <li>/ Issuance process management</li>
+                </ul>
+                <div class="border-t border-gray-300 group-hover:border-gray-700 pt-4 mt-auto">
+                    <div class="font-mono text-xs font-bold" data-lang-en="STARTS FROM 200,000 RMB" data-lang-zh="起步價：20萬人民幣">STARTS FROM 200,000 RMB</div>
+                </div>
+            </div>
+
+            <!-- Service 3 -->
+            <div class="info-card hover:bg-black hover:text-white group">
+                <i class="fas fa-shield-alt text-4xl mb-6 text-signal"></i>
+                <h3 class="font-heavy text-2xl mb-4" data-lang-en="COPYRIGHT AGENCY" data-lang-zh="版權代理">COPYRIGHT AGENCY</h3>
+                <ul class="font-mono text-xs space-y-2 mb-6 text-gray-600 group-hover:text-gray-300">
+                    <li>/ Copyright evaluation & pricing</li>
+                    <li>/ Buyer matching</li>
+                    <li>/ Blockchain registration</li>
+                </ul>
+                <div class="border-t border-gray-300 group-hover:border-gray-700 pt-4 mt-auto">
+                    <div class="font-mono text-xs text-signal font-bold" data-lang-en="REV SHARE: Global 35% | City 25%" data-lang-zh="分成：全球 35% | 城市 25%">REV SHARE: Global 35% | City 25%</div>
+                </div>
+            </div>
+
+            <!-- Service 4 -->
+            <div class="info-card hover:bg-black hover:text-white group bg-paper">
+                <i class="fas fa-share-alt text-4xl mb-6 text-black group-hover:text-white"></i>
+                <h3 class="font-heavy text-2xl mb-4" data-lang-en="DISTRIBUTION" data-lang-zh="發行服務">DISTRIBUTION</h3>
+                <ul class="font-mono text-xs space-y-2 mb-6 text-gray-600 group-hover:text-gray-300">
+                    <li>/ Platform distribution mgmt</li>
+                    <li>/ Revenue tracking</li>
+                    <li>/ Global strategy</li>
+                </ul>
+                <div class="border-t border-gray-300 group-hover:border-gray-700 pt-4 mt-auto">
+                    <div class="font-mono text-xs font-bold" data-lang-en="REV SHARE: Global 10% | City 8%" data-lang-zh="分成：全球 10% | 城市 8%">REV SHARE: Global 10% | City 8%</div>
+                </div>
+            </div>
+
+            <!-- Service 5 -->
+            <div class="info-card hover:bg-black hover:text-white group">
+                <i class="fas fa-certificate text-4xl mb-6 text-signal"></i>
+                <h3 class="font-heavy text-2xl mb-4" data-lang-en="AGENT CERTIFICATION" data-lang-zh="經紀人認證">AGENT CERTIFICATION</h3>
+                <ul class="font-mono text-xs space-y-2 mb-6 text-gray-600 group-hover:text-gray-300">
+                    <li>/ Professional skill cert</li>
+                    <li>/ Industry resource connection</li>
+                    <li>/ Four-level system</li>
+                </ul>
+                <div class="border-t border-gray-300 group-hover:border-gray-700 pt-4 mt-auto">
+                    <div class="font-mono text-xs text-signal font-bold" data-lang-en="GRADED FEES SYSTEM" data-lang-zh="分級收費體系">GRADED FEES SYSTEM</div>
+                </div>
+            </div>
+
+            <!-- Service 6 -->
+            <div class="info-card hover:bg-black hover:text-white group bg-paper">
+                <i class="fas fa-trophy text-4xl mb-6 text-black group-hover:text-white"></i>
+                <h3 class="font-heavy text-2xl mb-4" data-lang-en="EXHIBITION SERVICES" data-lang-zh="參展服務">EXHIBITION SERVICES</h3>
+                <ul class="font-mono text-xs space-y-2 mb-6 text-gray-600 group-hover:text-gray-300">
+                    <li>/ Festival matching</li>
+                    <li>/ Registration materials</li>
+                    <li>/ International screening</li>
+                </ul>
+                <div class="border-t border-gray-300 group-hover:border-gray-700 pt-4 mt-auto">
+                    <div class="font-mono text-xs font-bold" data-lang-en="REV SHARE: Global 35% | City 25%" data-lang-zh="分成：全球 35% | 城市 25%">REV SHARE: Global 35% | City 25%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Certification Standards Box -->
+        <div class="mt-16 border-2 border-black bg-white p-8 md:p-12">
+            <h3 class="font-heavy text-3xl mb-8 border-b-2 border-black pb-4" data-lang-en="AI NATIVE CERTIFICATION STANDARDS" data-lang-zh="AI原生認證標準">AI NATIVE CERTIFICATION STANDARDS</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div>
+                    <h4 class="font-mono font-bold text-signal mb-4" data-lang-en="REQUIREMENTS" data-lang-zh="認證要求">REQUIREMENTS</h4>
+                    <ul class="font-mono text-sm space-y-3">
+                        <li class="flex items-start"><i class="fas fa-check-square mt-1 mr-3 text-black"></i> <span data-lang-en="AI Participation > 40%" data-lang-zh="AI參與度不低於40%">AI Participation > 40%</span></li>
+                        <li class="flex items-start"><i class="fas fa-check-square mt-1 mr-3 text-black"></i> <span data-lang-en="Provide detailed tech documentation" data-lang-zh="提供詳細AI技術文檔">Provide detailed tech documentation</span></li>
+                        <li class="flex items-start"><i class="fas fa-check-square mt-1 mr-3 text-black"></i> <span data-lang-en="Human-AI Collaboration description" data-lang-zh="人機協作方式描述">Human-AI Collaboration description</span></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-mono font-bold text-signal mb-4" data-lang-en="EVALUATION DIMENSIONS" data-lang-zh="評估維度">EVALUATION DIMENSIONS</h4>
+                    <div class="space-y-4 font-mono text-xs">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span data-lang-en="Technical Innovation" data-lang-zh="技術創新">Technical Innovation</span>
+                                <span>30%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 h-2"><div class="bg-black h-2 w-[30%]"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span data-lang-en="Artistic Value" data-lang-zh="藝術價值">Artistic Value</span>
+                                <span>30%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 h-2"><div class="bg-black h-2 w-[30%]"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span data-lang-en="Commercial Potential" data-lang-zh="商業潛力">Commercial Potential</span>
+                                <span>20%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 h-2"><div class="bg-black h-2 w-[20%]"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: GLOBAL NETWORK -->
+    <section id="network" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto bg-white">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-0 border-2 border-black">
+            <div class="p-8 border-b lg:border-b-0 lg:border-r border-black bg-signal text-black">
+                <span class="font-mono font-bold tracking-widest uppercase mb-4 block" data-lang-en="STRUCTURE" data-lang-zh="網絡架構">STRUCTURE</span>
+                <h2 class="font-heavy text-4xl md:text-5xl leading-none" data-lang-en="GLOBAL<br>SUBMISSION<br>NETWORK" data-lang-zh="全球<br>征片<br>網絡">GLOBAL<br>SUBMISSION<br>NETWORK</h2>
+            </div>
+            
+            <!-- HQ -->
+            <div class="p-8 border-b lg:border-b-0 lg:border-r border-black hover:bg-black hover:text-white transition-all group">
+                <i class="fas fa-crown text-3xl mb-4"></i>
+                <h3 class="font-heavy text-2xl mb-2" data-lang-en="HQ CENTER (HK)" data-lang-zh="總部中心 (香港)">HQ CENTER (HK)</h3>
+                <div class="font-mono text-xs font-bold mb-4 opacity-50" data-lang-en="COMMAND CENTER" data-lang-zh="指揮中心">COMMAND CENTER</div>
+                <ul class="font-mono text-xs space-y-2 opacity-80">
+                    <li>Strategy & Decision Making</li>
+                    <li>Tech R&D Center</li>
+                    <li>Global Coordination</li>
+                </ul>
+            </div>
+
+            <!-- Global Center -->
+            <div class="p-8 border-b lg:border-b-0 lg:border-r border-black hover:bg-black hover:text-white transition-all group bg-paper">
+                <i class="fas fa-globe text-3xl mb-4"></i>
+                <h3 class="font-heavy text-2xl mb-2" data-lang-en="GLOBAL CENTER" data-lang-zh="全球中心">GLOBAL CENTER</h3>
+                <div class="font-mono text-xs font-bold mb-4 opacity-50 text-signal" data-lang-en="STRATEGIC PARTNER" data-lang-zh="戰略合作夥伴">STRATEGIC PARTNER</div>
+                <ul class="font-mono text-xs space-y-2 opacity-80">
+                    <li>Global Business Auth</li>
+                    <li>Inv: 1M RMB / 3 Years</li>
+                    <li>Develop City Centers</li>
+                </ul>
+            </div>
+
+            <!-- City Center -->
+            <div class="p-8 hover:bg-black hover:text-white transition-all group">
+                <i class="fas fa-map-marked-alt text-3xl mb-4"></i>
+                <h3 class="font-heavy text-2xl mb-2" data-lang-en="CITY CENTER" data-lang-zh="城市中心">CITY CENTER</h3>
+                <div class="font-mono text-xs font-bold mb-4 opacity-50" data-lang-en="REGIONAL CORE" data-lang-zh="區域核心夥伴">REGIONAL CORE</div>
+                <ul class="font-mono text-xs space-y-2 opacity-80">
+                    <li>Regional Business Auth</li>
+                    <li>Inv: 300K RMB / 3 Years</li>
+                    <li>Develop Prof Centers</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Review Process Timeline -->
+        <div class="mt-16">
+            <h3 class="section-title text-center text-3xl mb-12" data-lang-en="4-LEVEL REVIEW PROCESS" data-lang-zh="四級評審流程">4-LEVEL REVIEW PROCESS</h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="border-t-4 border-black pt-4">
+                    <div class="font-heavy text-4xl text-gray-300 mb-2">01</div>
+                    <h4 class="font-bold text-lg mb-2" data-lang-en="AI PRE-SCREENING" data-lang-zh="AI輔助初篩">AI PRE-SCREENING</h4>
+                    <p class="font-mono text-xs text-gray-600" data-lang-en="Auto detection of specs, basic quality, and violations." data-lang-zh="技術參數自動檢測，基礎質量評估，違規內容篩查。">Auto detection...</p>
+                </div>
+                <div class="border-t-4 border-black pt-4">
+                    <div class="font-heavy text-4xl text-gray-300 mb-2">02</div>
+                    <h4 class="font-bold text-lg mb-2" data-lang-en="PARTNER REVIEW" data-lang-zh="合作夥伴初審">PARTNER REVIEW</h4>
+                    <p class="font-mono text-xs text-gray-600" data-lang-en="Local team review, cultural adaptability assessment." data-lang-zh="本地專業團隊審看，文化適應性評估。">Local team review...</p>
+                </div>
+                <div class="border-t-4 border-signal pt-4">
+                    <div class="font-heavy text-4xl text-signal mb-2">03</div>
+                    <h4 class="font-bold text-lg mb-2" data-lang-en="REGIONAL REVIEW" data-lang-zh="區域中心複審">REGIONAL REVIEW</h4>
+                    <p class="font-mono text-xs text-gray-600" data-lang-en="Expert team scoring, comparison & sorting." data-lang-zh="區域專家團隊評審，多維標準細致評分。">Expert team scoring...</p>
+                </div>
+                <div class="border-t-4 border-black pt-4">
+                    <div class="font-heavy text-4xl text-gray-300 mb-2">04</div>
+                    <h4 class="font-bold text-lg mb-2" data-lang-en="HQ FINAL REVIEW" data-lang-zh="總部終審">HQ FINAL REVIEW</h4>
+                    <p class="font-mono text-xs text-gray-600" data-lang-en="Strategic value consideration, final selection." data-lang-zh="戰略價值考量，最終入選決定。">Final selection...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: ECOSYSTEM -->
+    <section id="ecosystem" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto bg-concrete text-white">
+        <h2 class="section-title text-center text-white mb-16" data-lang-en="INTEGRATED ECOSYSTEM" data-lang-zh="整合式生態系統">INTEGRATED ECOSYSTEM</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+            <div class="border border-gray-700 p-8 text-center hover:border-signal transition-colors">
+                <i class="fas fa-film text-4xl mb-4 text-signal"></i>
+                <h3 class="font-heavy text-xl mb-2">AIF.CENTER</h3>
+                <p class="font-mono text-xs text-gray-400" data-lang-en="Global Submission Hub" data-lang-zh="全球征集樞紐">Global Submission Hub</p>
+            </div>
+            <a href="https://www.hkaiiff.org" target="_blank" class="border border-gray-700 p-8 text-center hover:bg-white hover:text-black transition-colors block">
+                <i class="fas fa-trophy text-4xl mb-4"></i>
+                <h3 class="font-heavy text-xl mb-2">HKAIIFF</h3>
+                <p class="font-mono text-xs" data-lang-en="Film Festival" data-lang-zh="國際電影節">Film Festival</p>
+            </a>
+            <a href="https://www.hkaifa.academy/#/home" target="_blank" class="border border-gray-700 p-8 text-center hover:bg-white hover:text-black transition-colors block">
+                <i class="fas fa-graduation-cap text-4xl mb-4"></i>
+                <h3 class="font-heavy text-xl mb-2">ACADEMY</h3>
+                <p class="font-mono text-xs" data-lang-en="Talent Cultivation" data-lang-zh="人才培養">Talent Cultivation</p>
+            </a>
+            <a href="https://www.aif.market" target="_blank" class="border border-gray-700 p-8 text-center hover:bg-white hover:text-black transition-colors block">
+                <i class="fas fa-store text-4xl mb-4"></i>
+                <h3 class="font-heavy text-xl mb-2">MARKET</h3>
+                <p class="font-mono text-xs" data-lang-en="Trading Platform" data-lang-zh="交易市場">Trading Platform</p>
+            </a>
+        </div>
+
+        <!-- Payment System Box -->
+        <div class="border-2 border-white p-8 md:p-12 bg-void">
+            <h3 class="font-heavy text-2xl mb-8 border-b border-gray-700 pb-4 text-white" data-lang-en="DUAL CURRENCY PAYMENT" data-lang-zh="雙幣並行支付體系">DUAL CURRENCY PAYMENT</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div>
+                    <h4 class="font-mono font-bold text-signal mb-4" data-lang-en="FIAT CURRENCY" data-lang-zh="法幣支付系統">FIAT CURRENCY</h4>
+                    <ul class="font-mono text-sm text-gray-300 space-y-2">
+                        <li>USD, EUR, CNY, JPY, GBP</li>
+                        <li>SWIFT, Bank Direct Transfer</li>
+                        <li>Visa, MasterCard, JCB</li>
+                        <li>PayPal, Stripe, Alipay, WeChat Pay</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-mono font-bold text-signal mb-4" data-lang-en="AIF TOKEN ADVANTAGES" data-lang-zh="AIF代幣優勢">AIF TOKEN ADVANTAGES</h4>
+                    <ul class="font-mono text-sm text-gray-300 space-y-2">
+                        <li><span class="text-white font-bold">5-15%</span> Service Fee Discount</li>
+                        <li>Real-time Blockchain Settlement</li>
+                        <li>Transparent Records</li>
+                        <li>Governance Rights</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: PARTNERS -->
+    <section id="partners" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto bg-white border-b-2 border-black">
+        <div class="text-center mb-16">
+            <h2 class="section-title text-black" data-lang-en="PARTNERSHIP<br>PROGRAM" data-lang-zh="策略性<br>合作夥伴計劃">PARTNERSHIP<br>PROGRAM</h2>
+            <p class="font-mono text-sm max-w-2xl mx-auto text-gray-600" data-lang-en="Join our global ecosystem, become a strategic partner, and open unprecedented opportunities." data-lang-zh="加入我們的全球生態系統，成為策略合作夥伴，在AI電影產業革命中開啟前所未有的機會。">Join our global ecosystem...</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-16">
+            <div class="stat-card">
+                <i class="fas fa-trophy text-3xl mb-4"></i>
+                <h3 class="font-heavy text-lg" data-lang-en="FESTIVALS" data-lang-zh="電影節夥伴">FESTIVALS</h3>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-microchip text-3xl mb-4"></i>
+                <h3 class="font-heavy text-lg" data-lang-en="TECHNOLOGY" data-lang-zh="技術夥伴">TECHNOLOGY</h3>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-broadcast-tower text-3xl mb-4"></i>
+                <h3 class="font-heavy text-lg" data-lang-en="MEDIA" data-lang-zh="媒體夥伴">MEDIA</h3>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-handshake text-3xl mb-4"></i>
+                <h3 class="font-heavy text-lg" data-lang-en="SERVICES" data-lang-zh="服務夥伴">SERVICES</h3>
+            </div>
+        </div>
+
+        <div class="bg-paper p-8 border-2 border-black">
+            <h4 class="font-heavy text-2xl mb-6 text-center" data-lang-en="INVESTMENT RETURN EXPECTATIONS" data-lang-zh="投資回報預期">INVESTMENT RETURN EXPECTATIONS</h4>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="p-4 border border-black bg-white">
+                    <h5 class="font-bold text-signal mb-2">GLOBAL CENTER</h5>
+                    <p class="font-mono text-xs mb-1">Recovery: 18-24 Months</p>
+                    <p class="font-mono text-xs mb-1">Year 1: 10-30M RMB</p>
+                    <p class="font-mono text-xs">Margin: 60-80%</p>
+                </div>
+                <div class="p-4 border border-black bg-white">
+                    <h5 class="font-bold text-black mb-2">CITY CENTER</h5>
+                    <p class="font-mono text-xs mb-1">Recovery: 12-18 Months</p>
+                    <p class="font-mono text-xs mb-1">Year 1: 5-15M RMB</p>
+                    <p class="font-mono text-xs">Margin: 50-70%</p>
+                </div>
+                <div class="p-4 border border-black bg-white">
+                    <h5 class="font-bold text-black mb-2">PROF CENTER</h5>
+                    <p class="font-mono text-xs mb-1">Recovery: 6-12 Months</p>
+                    <p class="font-mono text-xs mb-1">Year 1: 2-8M RMB</p>
+                    <p class="font-mono text-xs">Margin: 40-60%</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT FORM -->
+    <section id="contact" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto bg-black text-white">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+            <div>
+                <h2 class="font-heavy text-5xl md:text-7xl mb-6" data-lang-en="READY TO<br>REVOLUTIONIZE?" data-lang-zh="準備好<br>革新了嗎？">READY TO<br>REVOLUTIONIZE?</h2>
+                <p class="font-mono text-gray-400 mb-8" data-lang-en="Join the global AI film revolution. Contact our experts to learn how AIF.Center can spread your creative vision globally." data-lang-zh="加入全球AI電影革命。聯繫我們的專家，了解AIF.Center如何將您的創意願景傳播到全球。">
+                    Join the global AI film revolution. Contact our experts.
+                </p>
+                
+                <div class="space-y-6 font-mono text-sm">
+                    <div class="border-l-2 border-signal pl-4">
+                        <strong class="block text-white mb-1" data-lang-en="ADDRESS" data-lang-zh="地址">ADDRESS</strong>
+                        <span class="text-gray-400" data-lang-en="Hong Kong Science Park, Sha Tin, Hong Kong" data-lang-zh="香港科學園, 沙田, 香港">Hong Kong Science Park, Sha Tin, HK</span>
+                    </div>
+                    <div class="border-l-2 border-signal pl-4">
+                        <strong class="block text-white mb-1" data-lang-en="EMAIL" data-lang-zh="電郵">EMAIL</strong>
+                        <a href="mailto:info@aif.center" class="text-gray-400 hover:text-signal">info@aif.center</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white text-black p-8 md:p-12 border-2 border-signal shadow-[10px_10px_0px_0px_#FF3300]">
+                <form class="space-y-6">
+                    <div>
+                        <label class="block font-mono font-bold text-xs mb-2 uppercase" data-lang-en="FULL NAME" data-lang-zh="全名">FULL NAME</label>
+                        <input type="text" class="brutal-input" placeholder="JOHN DOE">
+                    </div>
+                    <div>
+                        <label class="block font-mono font-bold text-xs mb-2 uppercase" data-lang-en="EMAIL" data-lang-zh="電子郵箱">EMAIL</label>
+                        <input type="email" class="brutal-input" placeholder="JOHN@EXAMPLE.COM">
+                    </div>
+                    <div>
+                        <label class="block font-mono font-bold text-xs mb-2 uppercase" data-lang-en="PROJECT TYPE" data-lang-zh="項目類型">PROJECT TYPE</label>
+                        <select class="brutal-input">
+                            <option>Film Submission</option>
+                            <option>Partnership</option>
+                            <option>Investment</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-mono font-bold text-xs mb-2 uppercase" data-lang-en="MESSAGE" data-lang-zh="訊息">MESSAGE</label>
+                        <textarea rows="4" class="brutal-input" placeholder="TELL US ABOUT YOUR PROJECT..."></textarea>
+                    </div>
+                    <button type="submit" class="brutal-btn w-full bg-black text-white hover:bg-signal hover:border-black hover:text-black">
+                        <span data-lang-en="SEND TRANSMISSION" data-lang-zh="發送訊息">SEND TRANSMISSION</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-black text-[#EAEAEA] border-t border-[#222] pt-20 pb-10 px-4 md:px-8">
+        <div class="max-w-[1920px] mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+                <div class="lg:col-span-1">
+                    <h2 class="font-heavy text-4xl mb-6">AIF.CENTER</h2>
+                    <p class="font-mono text-sm text-gray-400">
+                        <span data-lang-en="The world's first AI native film submission and distribution comprehensive platform." data-lang-zh="全球首個AI原生影視征集與分發綜合平台。">
+                            The world's first AI native film submission and distribution comprehensive platform.
+                        </span>
+                    </p>
+                    <div class="flex gap-4 mt-6">
+                        <a href="#" class="text-gray-400 hover:text-signal"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-signal"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-signal"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-mono text-signal mb-6" data-lang-en="SERVICES" data-lang-zh="服務">SERVICES</h4>
+                    <ul class="font-mono text-sm space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white">Submission Services</a></li>
+                        <li><a href="#" class="hover:text-white">Token Services</a></li>
+                        <li><a href="#" class="hover:text-white">Copyright Agency</a></li>
+                        <li><a href="#" class="hover:text-white">Distribution</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-mono text-signal mb-6" data-lang-en="ECOSYSTEM" data-lang-zh="生態系統">ECOSYSTEM</h4>
+                    <ul class="font-mono text-sm space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white">AI Film Festival</a></li>
+                        <li><a href="#" class="hover:text-white">AI Film Academy</a></li>
+                        <li><a href="#" class="hover:text-white">AI Film Market</a></li>
+                        <li><a href="#" class="hover:text-white">Creator Community</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-mono text-signal mb-6" data-lang-en="STAY UPDATED" data-lang-zh="保持更新">STAY UPDATED</h4>
+                    <div class="flex gap-2">
+                        <input type="email" placeholder="EMAIL" class="bg-gray-800 border border-gray-700 text-white p-2 text-xs font-mono w-full focus:outline-none focus:border-signal">
+                        <button class="bg-signal text-black px-4 font-bold font-mono text-xs hover:bg-white">SUB</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-[#222] pt-8 flex flex-col md:flex-row justify-between items-center font-mono text-xs text-gray-600">
+                <div data-lang-en="© 2025 Hong Kong AI International Film Festival Association Limited. All rights reserved." data-lang-zh="© 2025 香港人工智能國際電影節協會有限公司。保留所有權利。">© 2025 HKAIIFF. ALL RIGHTS RESERVED.</div>
+                <div class="mt-4 md:mt-0 flex gap-4">
+                    <a href="#" class="hover:text-white">PRIVACY</a>
+                    <a href="#" class="hover:text-white">TERMS</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        // 1. LOADER
+        window.addEventListener('load', () => {
+            const tl = gsap.timeline();
+            tl.to("#loader", { yPercent: -100, duration: 0.8, ease: "power4.inOut", delay: 0.5 });
+            tl.from("header .hero-title", { y: 100, opacity: 0, duration: 1, ease: "power3.out" }, "-=0.3");
+        });
+
+        // 2. LANGUAGE SWITCHER
+        let currentLang = 'en';
+        function switchLang() {
+            currentLang = currentLang === 'en' ? 'zh' : 'en';
+            const btn = document.getElementById('lang-btn');
+            
+            // Update Button Text
+            if(btn) btn.innerText = currentLang === 'en' ? '[ 繁體中文 ]' : '[ ENGLISH ]';
+            
+            // Update Content
+            document.querySelectorAll('[data-lang-en][data-lang-zh]').forEach(el => {
+                const text = currentLang === 'en' ? el.getAttribute('data-lang-en') : el.getAttribute('data-lang-zh');
+                // Simple fade effect
+                el.style.opacity = '0';
+                setTimeout(() => {
+                    el.innerHTML = text;
+                    el.style.opacity = '1';
+                }, 200);
+            });
+            
+            // Update Placeholders
+             document.querySelectorAll('input[placeholder], textarea[placeholder]').forEach(el => {
+                 // Note: Ideally you'd have data attributes for placeholders too, simplified here
+                 if(currentLang === 'zh') {
+                     if(el.placeholder === "JOHN DOE") el.placeholder = "張三";
+                     if(el.placeholder === "TELL US ABOUT YOUR PROJECT...") el.placeholder = "告訴我們您的項目...";
+                 } else {
+                     if(el.placeholder === "張三") el.placeholder = "JOHN DOE";
+                     if(el.placeholder === "告訴我們您的項目...") el.placeholder = "TELL US ABOUT YOUR PROJECT...";
+                 }
+            });
+        }
+
+        // 3. MOBILE MENU TOGGLE
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('active');
+            
+            // Toggle Body Scroll
+            if (menu.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // 4. GSAP ANIMATIONS
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Fade in sections
+        gsap.utils.toArray('section').forEach(section => {
+            gsap.from(section, {
+                opacity: 0,
+                y: 50,
+                duration: 1,
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        });
+        
+        // Stagger list items in network
+        gsap.utils.toArray('.info-card').forEach((card, i) => {
+             gsap.from(card, {
+                opacity: 0,
+                y: 30,
+                duration: 0.8,
+                delay: i * 0.1,
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top 90%"
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
