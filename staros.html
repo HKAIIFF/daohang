@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StarOS | GATEWAY TO THE AI NATIVE ERA</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP Suite -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Fonts: Oswald + Space Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        void: '#050505',
+                        concrete: '#1F1F1F',
+                        signal: '#FF3300', // Matches aif.show red/orange
+                        steel: '#EAEAEA',
+                        dim: '#888888',
+                        paper: '#F3F3F3'
+                    },
+                    fontFamily: {
+                        heavy: ['"Oswald"', 'sans-serif'],
+                        mono: ['"Space Mono"', 'monospace'],
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* CORE STYLES FROM AIF.SHOW */
+        html { scroll-behavior: smooth; }
+        body { background-color: #EAEAEA; color: #050505; overflow-x: hidden; }
+        ::selection { background: #FF3300; color: #000; }
+
+        /* TYPOGRAPHY */
+        .mega-text {
+            font-size: clamp(3.5rem, 11vw, 14rem);
+            line-height: 0.85;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            font-weight: 700;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 5rem);
+            line-height: 1;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        .outline-text {
+            color: transparent;
+            -webkit-text-stroke: 1.5px #050505;
+            text-stroke: 1.5px #050505;
+            transition: all 0.3s ease;
+        }
+        
+        .hero-title .outline-text {
+            -webkit-text-stroke: 1.5px #FFFFFF;
+        }
+
+        /* BUTTONS */
+        .brutal-btn {
+            background: #050505;
+            color: #EAEAEA;
+            border: 2px solid #050505;
+            padding: 1rem 2rem;
+            font-family: 'Space Mono', monospace;
+            text-transform: uppercase;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .brutal-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #FF3300;
+            transform: translateX(-101%);
+            transition: transform 0.3s cubic-bezier(0.77, 0, 0.175, 1);
+            z-index: 0;
+        }
+
+        .brutal-btn:hover::before { transform: translateX(0); }
+        .brutal-btn span { position: relative; z-index: 1; }
+        .brutal-btn:hover { color: #000; border-color: #FF3300; }
+
+        /* COMPONENTS */
+        .section-divider { height: 2px; background: #050505; width: 100%; }
+        .grid-bg { background-size: 40px 40px; background-image: linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px); }
+
+        /* ACCORDION */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+        }
+        .accordion-item.active .accordion-content {
+            max-height: 2000px;
+        }
+        .accordion-icon { transition: transform 0.3s; }
+        .accordion-item.active .accordion-icon { transform: rotate(180deg); }
+
+        /* MARQUEE */
+        .marquee-container { overflow: hidden; white-space: nowrap; display: flex; }
+        .marquee-content { display: flex; animation: marquee 40s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* LOADER */
+        #loader {
+            position: fixed; inset: 0; background: #FF3300; z-index: 9999;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+        }
+
+        /* MOBILE MENU */
+        #mobile-menu {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 80px);
+            background: #050505;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 49;
+            overflow-y: auto;
+        }
+        #mobile-menu.active { transform: translateX(0); }
+
+        /* NAV */
+        nav { background: rgba(234, 234, 234, 0.95); backdrop-filter: blur(10px); }
+        
+        /* INFO CARDS */
+        .info-card { transition: all 0.3s ease; border: 2px solid #000; height: 100%; }
+        .info-card:hover { transform: translateY(-5px); box-shadow: 10px 10px 0px 0px rgba(0,0,0,1); }
+        .info-card.dark:hover { box-shadow: 10px 10px 0px 0px #FF3300; }
+
+        /* TIMELINE STEPS */
+        .step-line { position: absolute; left: 20px; top: 40px; bottom: -40px; width: 2px; background: #000; z-index: 0; }
+        .step-item:last-child .step-line { display: none; }
+    </style>
+</head>
+<body class="grid-bg">
+
+    <!-- LOADER -->
+    <div id="loader">
+        <div class="font-heavy text-6xl md:text-9xl font-bold text-black tracking-tighter">LOADING</div>
+        <div class="font-mono text-black mt-4 text-xs md:text-base animate-pulse">
+            StarOS_SYSTEM_INIT_V3.0...
+        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 left-0 w-full z-50 border-b-2 border-black h-20 md:h-24 flex items-center">
+        <div class="w-full max-w-[1920px] mx-auto flex justify-between items-stretch h-full">
+            
+            <!-- Logo -->
+            <div class="flex flex-col justify-center px-4 md:px-8 border-r-2 border-black hover:bg-black hover:text-white transition-colors cursor-pointer group h-full" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+                <span class="font-heavy text-3xl md:text-4xl font-bold tracking-tighter leading-none mb-1">StarOS</span>
+                <div class="flex flex-col leading-none">
+                    <span class="font-mono text-[10px] md:text-xs tracking-widest font-bold group-hover:text-signal" data-lang-en="DIGITAL HUMAN AGENCY" data-lang-zh="數位人類代理平台">DIGITAL HUMAN AGENCY</span>
+                </div>
+            </div>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden xl:flex items-stretch h-full">
+                <a href="#vision" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span data-lang-en="VISION" data-lang-zh="願景與使命">VISION</span>
+                </a>
+                <a href="#challenges" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span data-lang-en="CHALLENGES" data-lang-zh="AI時代挑戰">CHALLENGES</span>
+                </a>
+                <a href="#solutions" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider text-signal">
+                    <span data-lang-en="SOLUTIONS" data-lang-zh="解決方案">SOLUTIONS</span>
+                </a>
+                <a href="#technology" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span data-lang-en="TECHNOLOGY" data-lang-zh="技術架構">TECHNOLOGY</span>
+                </a>
+                <a href="#ecosystem" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span data-lang-en="ECOSYSTEM" data-lang-zh="生態系統">ECOSYSTEM</span>
+                </a>
+                <a href="#roadmap" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span data-lang-en="ROADMAP" data-lang-zh="發展路線">ROADMAP</span>
+                </a>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex h-full">
+                <button id="lang-btn" onclick="switchLang()" class="flex items-center px-6 border-l-2 border-black hover:bg-signal hover:text-white transition-colors font-mono text-xs font-bold uppercase h-full">
+                    [ 繁體中文 ]
+                </button>
+                <button onclick="toggleMenu()" class="xl:hidden flex items-center px-6 border-l-2 border-black hover:bg-black hover:text-white transition-colors h-full">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MOBILE MENU OVERLAY -->
+    <div id="mobile-menu">
+        <div class="flex flex-col p-8 gap-6">
+            <a href="#vision" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span data-lang-en="VISION & MISSION" data-lang-zh="願景與使命">VISION & MISSION</span></a>
+            <a href="#challenges" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span data-lang-en="CHALLENGES" data-lang-zh="AI時代挑戰">CHALLENGES</span></a>
+            <a href="#solutions" onclick="toggleMenu()" class="text-signal font-heavy text-4xl hover:text-white transition-colors"><span data-lang-en="SOLUTIONS" data-lang-zh="解決方案">SOLUTIONS</span></a>
+            <a href="#technology" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span data-lang-en="TECHNOLOGY" data-lang-zh="技術架構">TECHNOLOGY</span></a>
+            <a href="#ecosystem" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span data-lang-en="ECOSYSTEM" data-lang-zh="生態系統">ECOSYSTEM</span></a>
+            <a href="#roadmap" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span data-lang-en="ROADMAP" data-lang-zh="發展路線">ROADMAP</span></a>
+            <div class="h-px bg-gray-800 my-4"></div>
+            <a href="#contact" onclick="toggleMenu()" class="text-signal font-mono text-xl"><span data-lang-en="CONTACT US" data-lang-zh="聯繫我們">CONTACT US</span></a>
+        </div>
+    </div>
+
+    <!-- HERO SECTION -->
+    <header id="home" class="relative min-h-screen flex items-center pt-24 overflow-hidden bg-black text-white">
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0 opacity-40">
+             <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
+            <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" class="w-full h-full object-cover" alt="StarOS AI" onerror="this.src='https://images.unsplash.com/photo-1531297461136-8200b2a0a71e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'">
+        </div>
+        
+        <div class="relative z-10 w-full max-w-[1920px] mx-auto px-4 md:px-8">
+            <div class="max-w-6xl">
+                <div class="font-mono text-signal mb-4 flex items-center gap-2 animate-pulse">
+                    <div class="w-2 h-2 bg-signal rounded-full"></div>
+                    <span data-lang-en="/// SYSTEM STATUS: AI NATIVE READY" data-lang-zh="/// 系統狀態：AI原生準備就緒">/// SYSTEM STATUS: AI NATIVE READY</span>
+                </div>
+                <h1 class="hero-title font-heavy mega-text mb-6 leading-none">
+                    <span class="block" data-lang-en="STAR" data-lang-zh="明星">STAR</span>
+                    <span class="block outline-text" data-lang-en="VALUE" data-lang-zh="價值">VALUE</span>
+                    <span class="block text-signal" data-lang-en="PORTAL" data-lang-zh="門戶">PORTAL</span>
+                </h1>
+                <p class="font-mono text-sm md:text-xl max-w-2xl text-gray-300 mb-10 leading-relaxed border-l-4 border-signal pl-6 bg-black/50 backdrop-blur-sm p-4">
+                    <span data-lang-en="StarOS is the world's first AI-native platform designed to migrate and activate celebrity value. Helping stars transition to the AI-native future while preserving and enhancing their legacy." 
+                          data-lang-zh="StarOS是全球首個專為遷移和激活明星價值而設計的AI原生平台，幫助明星過渡到未來的AI原生世界，同時保存和增強他們的遺產。">
+                        StarOS is the world's first AI-native platform designed to migrate and activate celebrity value.
+                    </span>
+                </p>
+                <div class="flex flex-col md:flex-row gap-4">
+                    <a href="#vision" class="brutal-btn bg-signal text-black hover:bg-white border-signal hover:border-white">
+                        <span data-lang-en="EXPLORE FUTURE" data-lang-zh="探索未來">EXPLORE FUTURE</span>
+                    </a>
+                    <a href="#whitepaper" class="brutal-btn bg-transparent text-white border-white hover:bg-white hover:text-black">
+                        <span data-lang-en="DOWNLOAD WHITEPAPER" data-lang-zh="下載白皮書">DOWNLOAD WHITEPAPER</span>
+                    </a>
+                </div>
+                
+                <!-- Stats Grid (from Index.html) -->
+                <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 border-t border-gray-800 pt-8">
+                    <div>
+                        <div class="font-heavy text-3xl text-signal">∞</div>
+                        <div class="font-mono text-xs text-gray-400" data-lang-en="AI WORK HOURS" data-lang-zh="AI工作時數">AI WORK HOURS</div>
+                    </div>
+                    <div>
+                        <div class="font-heavy text-3xl text-white">0</div>
+                        <div class="font-mono text-xs text-gray-400" data-lang-en="RISK LEVEL" data-lang-zh="風險等級">RISK LEVEL</div>
+                    </div>
+                    <div>
+                        <div class="font-heavy text-3xl text-white">90%</div>
+                        <div class="font-mono text-xs text-gray-400" data-lang-en="COST REDUCTION" data-lang-zh="成本降低">COST REDUCTION</div>
+                    </div>
+                    <div>
+                        <div class="font-heavy text-3xl text-signal">100%</div>
+                        <div class="font-mono text-xs text-gray-400" data-lang-en="CREATIVE FREEDOM" data-lang-zh="創意自由">CREATIVE FREEDOM</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Ticker -->
+        <div class="absolute bottom-0 w-full bg-signal text-black py-2 font-mono text-xs md:text-sm font-bold border-t-2 border-white z-20">
+            <div class="marquee-container">
+                <div class="marquee-content">
+                    <span class="mx-4">StarOS ///</span>
+                    <span class="mx-4" data-lang-en="DIGITAL IMMORTALITY" data-lang-zh="數位永生">DIGITAL IMMORTALITY</span>
+                    <span class="mx-4">///</span>
+                    <span class="mx-4" data-lang-en="AI NATIVE ERA" data-lang-zh="AI原生時代">AI NATIVE ERA</span>
+                    <span class="mx-4">///</span>
+                    <span class="mx-4" data-lang-en="VALUE MIGRATION" data-lang-zh="價值遷移">VALUE MIGRATION</span>
+                    <span class="mx-4">///</span>
+                    <span class="mx-4" data-lang-en="FAN CO-CREATION" data-lang-zh="粉絲共創">FAN CO-CREATION</span>
+                    <span class="mx-4">///</span>
+                    <span class="mx-4">StarOS ///</span>
+                    <span class="mx-4" data-lang-en="EST. 2025" data-lang-zh="始於 2025">EST. 2025</span>
+                    <span class="mx-4">///</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- SECTION 1: VISION -->
+    <section id="vision" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto bg-white border-b-2 border-black">
+        <div class="text-center mb-16">
+            <span class="bg-black text-white px-4 py-2 font-mono font-bold text-sm inline-block mb-6" data-lang-en="VISION & MISSION" data-lang-zh="願景與使命">VISION & MISSION</span>
+            <h2 class="font-heavy text-4xl md:text-7xl mb-6 leading-none" data-lang-en="BRIDGE TO THE<br>DIGITAL FUTURE" data-lang-zh="通往數位未來的<br>價值橋樑">BRIDGE TO THE<br>DIGITAL FUTURE</h2>
+            <p class="font-mono text-sm md:text-lg text-gray-600 max-w-3xl mx-auto" data-lang-en="As the AI Native era arrives, we are building a bridge for celebrity value migration, ensuring every star maintains and expands their influence in the digital world." data-lang-zh="隨著AI原生時代的到來，我們正在建立明星價值遷移的橋樑，確保每位明星在數位世界中保持並擴大影響力。">
+                As the AI Native era arrives, we are building a bridge for celebrity value migration.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- For Stars -->
+            <div class="border-2 border-black p-8 hover:bg-black hover:text-white transition-all group">
+                <div class="font-mono text-xs border border-black group-hover:border-white inline-block px-2 py-1 mb-4" data-lang-en="FOR STARS" data-lang-zh="對於明星">FOR STARS</div>
+                <h3 class="font-heavy text-3xl mb-4" data-lang-en="STRATEGIC MIGRATION" data-lang-zh="價值戰略遷移">STRATEGIC MIGRATION</h3>
+                <p class="font-mono text-sm text-gray-600 group-hover:text-gray-300 mb-6" data-lang-en="Strategically migrate real-world value to the AI-native world. Preserve and expand influence in an AI-dominated future." data-lang-zh="將現實世界價值戰略性遷移至AI原生世界，在AI主導的未來保存並擴大影響力。">Strategically migrate real-world value...</p>
+                <ul class="font-mono text-xs space-y-2 text-gray-500 group-hover:text-gray-400">
+                    <li><i class="fas fa-check text-signal mr-2"></i><span data-lang-en="Zero Schedule Conflicts" data-lang-zh="零日程衝突">Zero Schedule Conflicts</span></li>
+                    <li><i class="fas fa-check text-signal mr-2"></i><span data-lang-en="No Safety Concerns" data-lang-zh="無安全顧慮">No Safety Concerns</span></li>
+                    <li><i class="fas fa-check text-signal mr-2"></i><span data-lang-en="Digital Immortality" data-lang-zh="數位永生">Digital Immortality</span></li>
+                </ul>
+            </div>
+
+            <!-- For Fans -->
+            <div class="border-2 border-black p-8 bg-black text-white transform lg:-translate-y-4 shadow-2xl">
+                <div class="font-mono text-xs border border-white inline-block px-2 py-1 mb-4" data-lang-en="FOR FANS" data-lang-zh="對於粉絲">FOR FANS</div>
+                <h3 class="font-heavy text-3xl mb-4" data-lang-en="ACTIVE CO-CREATION" data-lang-zh="積極共創">ACTIVE CO-CREATION</h3>
+                <p class="font-mono text-sm text-gray-300 mb-6" data-lang-en="Transform from passive consumption to active participation. Become a stakeholder in the digital ecosystem." data-lang-zh="從被動消費轉變為積極參與和共同創造，成為數位生態系統的利益相關者。">Transform from passive consumption...</p>
+                <ul class="font-mono text-xs space-y-2 text-gray-400">
+                    <li><i class="fas fa-check text-signal mr-2"></i><span data-lang-en="Two-way Interaction" data-lang-zh="真正的雙向互動">Two-way Interaction</span></li>
+                    <li><i class="fas fa-check text-signal mr-2"></i><span data-lang-en="Governance Rights" data-lang-zh="社群治理權利">Governance Rights</span></li>
+                    <li><i class="fas fa-check text-signal mr-2"></i><span data-lang-en="Exclusive Collectibles" data-lang-zh="獨家數位收藏品">Exclusive Collectibles</span></li>
+                </ul>
+            </div>
+
+            <!-- For Creators -->
+            <div class="border-2 border-black p-8 hover:bg-black hover:text-white transition-all group">
+                <div class="font-mono text-xs border border-black group-hover:border-white inline-block px-2 py-1 mb-4" data-lang-en="FOR CREATORS" data-lang-zh="對於創作者">FOR CREATORS</div>
+                <h3 class="font-heavy text-3xl mb-4" data-lang-en="BOUNDLESS CREATIVITY" data-lang-zh="無界創意">BOUNDLESS CREATIVITY</h3>
+                <p class="font-mono text-sm text-gray-600 group-hover:text-gray-300 mb-6" data-lang-en="Break through real-world limitations. Create anytime, anywhere, in any scenario." data-lang-zh="突破現實世界限制，實現真正無界的創意，隨時隨地在任何場景下創作。">Break through real-world limitations...</p>
+                <ul class="font-mono text-xs space-y-2 text-gray-500 group-hover:text-gray-400">
+                    <li><i class="fas fa-check text-signal mr-2"></i><span data-lang-en="Total Schedule Freedom" data-lang-zh="完全自由的日程">Total Schedule Freedom</span></li>
+                    <li><i class="fas fa-check text-signal mr-2"></i><span data-lang-en="Zero Risk Production" data-lang-zh="零風險內容生產">Zero Risk Production</span></li>
+                    <li><i class="fas fa-check text-signal mr-2"></i><span data-lang-en="90%+ Cost Reduction" data-lang-zh="90%+ 成本降低">90%+ Cost Reduction</span></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: CHALLENGES (COMPARISON) -->
+    <section id="challenges" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto bg-black text-white border-b-2 border-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="bg-signal text-black px-4 py-2 font-mono font-bold text-sm inline-block mb-6 transform -rotate-1" data-lang-en="AI ERA CHALLENGES" data-lang-zh="AI時代的挑戰">AI ERA CHALLENGES</span>
+                <h2 class="font-heavy text-4xl md:text-7xl mb-6" data-lang-en="THE TURNING POINT" data-lang-zh="歷史轉折點">THE TURNING POINT</h2>
+                <p class="font-mono text-sm md:text-lg text-gray-400 max-w-3xl mx-auto" data-lang-en="Humanity is at a historical turning point: AI-native content will dominate the digital world, while traditional celebrities face the risk of marginalization." data-lang-zh="人類正處於歷史轉折點：AI原生內容將主導數位世界，而傳統明星面臨邊緣化風險。">
+                    Humanity is at a historical turning point: AI-native content will dominate the digital world.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
+                
+                <!-- Left: Traditional -->
+                <div class="border border-gray-800 p-8 md:p-12 opacity-60 hover:opacity-100 transition-all bg-[#0a0a0a]">
+                    <div class="flex items-center justify-between mb-8 pb-4 border-b border-gray-800">
+                        <h3 class="font-heavy text-2xl text-gray-400" data-lang-en="TRADITIONAL ENTERTAINMENT" data-lang-zh="傳統娛樂困境">TRADITIONAL ENTERTAINMENT</h3>
+                        <i class="fas fa-user-clock text-gray-600 text-2xl"></i>
+                    </div>
+                    
+                    <div class="space-y-8 font-mono text-sm text-gray-400">
+                        <div class="relative pl-8 border-l border-red-900">
+                            <div class="absolute -left-1.5 top-0 w-3 h-3 bg-red-900 rounded-full"></div>
+                            <strong class="block text-gray-300 mb-1" data-lang-en="Losing User Time" data-lang-zh="無法佔據用戶時間">Losing User Time</strong>
+                            <p data-lang-en="AI generated content share grows rapidly: 2025: 25% → 2030: 75%+. Traditional market share shrinks." data-lang-zh="AI生成內容在用戶娛樂時間中的佔比快速增長：2025年 25% → 2030年 75%+。傳統市場份額縮減。">AI generated content share grows rapidly...</p>
+                        </div>
+
+                        <div class="relative pl-8 border-l border-red-900">
+                            <div class="absolute -left-1.5 top-0 w-3 h-3 bg-red-900 rounded-full"></div>
+                            <strong class="block text-gray-300 mb-1" data-lang-en="Physical Limitations" data-lang-zh="時空限制">Physical Limitations</strong>
+                            <p data-lang-en="Physiology, aging, health. Cannot be in multiple places. Limited energy for projects." data-lang-zh="生理時間限制、狀態變化、年齡影響。無法同時出現在多個地方。精力有限。">Physiology, aging, health...</p>
+                        </div>
+
+                        <div class="relative pl-8 border-l border-red-900">
+                            <div class="absolute -left-1.5 top-0 w-3 h-3 bg-red-900 rounded-full"></div>
+                            <strong class="block text-gray-300 mb-1" data-lang-en="High Cost Structure" data-lang-zh="高成本結構">High Cost Structure</strong>
+                            <p data-lang-en="High fees, team costs, travel, insurance, risk of scandal. Opportunity costs." data-lang-zh="高昂的基礎費用、團隊成本、差旅、保險、違約風險。機會成本高。">High fees, team costs...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: AI Native -->
+                <div class="border-2 border-signal p-8 md:p-12 bg-[#111] transform md:scale-105 shadow-[0_0_40px_rgba(255,51,0,0.15)] relative z-10">
+                    <div class="absolute top-0 right-0 bg-signal text-black text-xs font-bold px-3 py-1 font-mono">OPTIMIZED</div>
+                    <div class="flex items-center justify-between mb-8 pb-4 border-b border-gray-700">
+                        <h3 class="font-heavy text-2xl text-white" data-lang-en="AI DIGITAL HUMANS" data-lang-zh="AI原生數位人類">AI DIGITAL HUMANS</h3>
+                        <i class="fas fa-robot text-signal text-2xl"></i>
+                    </div>
+                    
+                    <div class="space-y-8 font-mono text-sm text-gray-300">
+                        <div class="relative pl-8 border-l border-signal">
+                            <div class="absolute -left-1.5 top-0 w-3 h-3 bg-signal rounded-full"></div>
+                            <strong class="block text-white mb-1" data-lang-en="Infinite Production" data-lang-zh="無限生產能力">Infinite Production</strong>
+                            <p data-lang-en="24/7 continuous creation. Near zero marginal cost. Extreme personalization. Real-time interaction." data-lang-zh="24/7 持續創作。接近零邊際成本。極致個性化。實時互動能力。">24/7 continuous creation...</p>
+                        </div>
+
+                        <div class="relative pl-8 border-l border-signal">
+                            <div class="absolute -left-1.5 top-0 w-3 h-3 bg-signal rounded-full"></div>
+                            <strong class="block text-white mb-1" data-lang-en="Perfection" data-lang-zh="永不疲憊的完美表現">Perfection</strong>
+                            <p data-lang-en="Always ready. No bad days. Scandal free. Extremely low maintenance." data-lang-zh="隨時為粉絲服務。零表現不佳風險。完美可控無醜聞。極低的維護成本。">Always ready. No bad days...</p>
+                        </div>
+
+                        <div class="relative pl-8 border-l border-signal">
+                            <div class="absolute -left-1.5 top-0 w-3 h-3 bg-signal rounded-full"></div>
+                            <strong class="block text-white mb-1" data-lang-en="Digital Native" data-lang-zh="數位原生優勢">Digital Native</strong>
+                            <p data-lang-en="Born for the digital environment. Seamless collaboration with other AI systems. Rapid evolution." data-lang-zh="從誕生即為數位環境設計。技術先進性。與其他AI系統無縫協作。">Born for the digital environment...</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- Time Window Warning -->
+            <div class="mt-12 p-6 border border-signal bg-signal/10 text-center font-mono text-xs md:text-sm text-signal">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                <span data-lang-en="CRITICAL TIME WINDOW: 2025-2027 (First Mover Advantage)" data-lang-zh="關鍵時間窗口：2025-2027 (先發優勢期)">CRITICAL TIME WINDOW: 2025-2027 (First Mover Advantage)</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: SOLUTIONS (PROTOCOL) -->
+    <section id="solutions" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto bg-steel">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-16">
+            <div class="lg:col-span-1">
+                <span class="font-mono text-signal font-bold tracking-widest uppercase mb-4 block" data-lang-en="STAROS SOLUTIONS" data-lang-zh="StarOS解決方案">STAROS SOLUTIONS</span>
+                <h2 class="section-title text-black" data-lang-en="THE ACTIVATION<br>PROTOCOL" data-lang-zh="價值激活<br>協議">THE ACTIVATION<br>PROTOCOL</h2>
+                <p class="font-mono text-sm leading-relaxed mb-6" data-lang-en="Not just helping stars 'work better', but enabling them to successfully migrate to the future world through value transformation mechanisms." data-lang-zh="不僅幫助明星「工作得更好」，而是通過價值轉化機制，使他們能夠「成功遷移到未來世界」。">
+                    Not just helping stars 'work better', but enabling them to successfully migrate.
+                </p>
+            </div>
+
+            <div class="lg:col-span-3 relative pl-8 md:pl-0">
+                <!-- Step 1 -->
+                <div class="step-item relative pl-12 pb-16">
+                    <div class="step-line"></div>
+                    <div class="absolute left-0 top-0 w-10 h-10 bg-black text-white flex items-center justify-center font-heavy text-xl border-2 border-white shadow-lg z-10">01</div>
+                    <div class="bg-white p-8 border-2 border-transparent hover:border-black transition-all shadow-sm">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-heavy text-2xl" data-lang-en="GENE MAPPING" data-lang-zh="價值基因映射">GENE MAPPING</h3>
+                            <span class="bg-gray-200 text-xs font-mono px-2 py-1">DIGITALIZATION</span>
+                        </div>
+                        <p class="font-mono text-sm text-gray-600 mb-4" data-lang-en="Capturing all dimensions of real-world value into digital models." data-lang-zh="將明星現實世界價值的所有維度精確捕捉為數位模型。">Capturing all dimensions...</p>
+                        <div class="grid grid-cols-2 gap-2 text-xs font-mono text-gray-500">
+                            <div><i class="fas fa-user text-signal"></i> <span data-lang-en="Visual/Charm" data-lang-zh="形象價值">Visual</span></div>
+                            <div><i class="fas fa-brain text-signal"></i> <span data-lang-en="Talent/Voice" data-lang-zh="才華價值">Talent</span></div>
+                            <div><i class="fas fa-heart text-signal"></i> <span data-lang-en="Personality" data-lang-zh="個性價值">Personality</span></div>
+                            <div><i class="fas fa-star text-signal"></i> <span data-lang-en="Influence" data-lang-zh="影響力">Influence</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="step-item relative pl-12 pb-16">
+                    <div class="step-line"></div>
+                    <div class="absolute left-0 top-0 w-10 h-10 bg-black text-white flex items-center justify-center font-heavy text-xl border-2 border-white shadow-lg z-10">02</div>
+                    <div class="bg-white p-8 border-2 border-transparent hover:border-black transition-all shadow-sm">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-heavy text-2xl" data-lang-en="CONTENT REVOLUTION" data-lang-zh="無界內容革命">CONTENT REVOLUTION</h3>
+                            <span class="bg-signal text-white text-xs font-mono px-2 py-1">LIBERATION</span>
+                        </div>
+                        <p class="font-mono text-sm text-gray-600 mb-4" data-lang-en="Total schedule freedom. Infinite concurrency. Zero risk production. 90%+ cost reduction." data-lang-zh="完全日程解放。無限並發。零風險內容生產。90%+ 成本降低。">Total schedule freedom...</p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="step-item relative pl-12">
+                    <div class="absolute left-0 top-0 w-10 h-10 bg-signal text-white flex items-center justify-center font-heavy text-xl border-2 border-white shadow-lg z-10">03</div>
+                    <div class="bg-black text-white p-8 border-2 border-signal shadow-[10px_10px_0px_0px_#FF3300]">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-heavy text-2xl" data-lang-en="FAN CO-CREATION" data-lang-zh="粉絲社群共創">FAN CO-CREATION</h3>
+                            <span class="bg-white text-black text-xs font-mono px-2 py-1 animate-pulse">COMMUNITY</span>
+                        </div>
+                        <p class="font-mono text-sm text-gray-300 mb-4" data-lang-en="Redefining fans from consumers to co-creators. Participation in scripts, scenarios, and governance." data-lang-zh="重新定義粉絲角色，從被動消費者轉變為明星生態系統中的主動共同創造者。參與劇本、場景構建和治理。">Redefining fans from consumers to co-creators...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: TECHNOLOGY (ACCORDION) -->
+    <section id="technology" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto bg-white">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16">
+            <div>
+                <span class="font-mono text-signal font-bold tracking-widest uppercase mb-4 block" data-lang-en="TECH STACK" data-lang-zh="技術架構">TECH STACK</span>
+                <h2 class="section-title text-black outline-text" data-lang-en="CORE INFRASTRUCTURE" data-lang-zh="核心基礎設施">CORE INFRASTRUCTURE</h2>
+            </div>
+            <div class="font-mono text-right text-gray-600 mb-4">
+                <div data-lang-en="STATUS: OPERATIONAL" data-lang-zh="狀態：運行中">STATUS: OPERATIONAL</div>
+                <div data-lang-en="VERSION: 3.0" data-lang-zh="版本：3.0">VERSION: 3.0</div>
+            </div>
+        </div>
+
+        <div class="space-y-4">
+            <!-- AI Creation -->
+            <div class="accordion-item border border-black bg-paper">
+                <button class="w-full p-6 md:p-8 flex justify-between items-center text-left" onclick="toggleAccordion(this)">
+                    <div class="flex items-center gap-6">
+                        <span class="font-heavy text-4xl md:text-5xl text-signal w-20">01</span>
+                        <div>
+                            <h3 class="font-heavy text-2xl" data-lang-en="AI DIGITAL HUMAN" data-lang-zh="AI數位人類創建">AI DIGITAL HUMAN</h3>
+                            <p class="font-mono text-xs text-gray-600 mt-1" data-lang-en="Deep Learning & Real-time Rendering" data-lang-zh="深度學習模型與實時渲染">Deep Learning & Real-time Rendering</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon text-2xl"></i>
+                </button>
+                <div class="accordion-content">
+                    <div class="p-6 md:p-8 border-t border-black grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="font-bold text-signal mb-2" data-lang-en="CREATION ENGINE" data-lang-zh="創建引擎">CREATION ENGINE</h4>
+                            <p class="font-mono text-sm text-gray-600" data-lang-en="Multimodal fusion, deep learning models, intelligent interaction systems." data-lang-zh="多模態融合、深度學習模型、智能互動系統。">Multimodal fusion...</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-signal mb-2" data-lang-en="IDENTITY AUTH" data-lang-zh="身份真實性">IDENTITY AUTH</h4>
+                            <p class="font-mono text-sm text-gray-600" data-lang-en="Digital watermarking (visible/hidden), behavior analysis, technical fingerprinting." data-lang-zh="數位浮水印（可見/隱含）、行為分析、技術指紋檢測。">Digital watermarking...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Web3 -->
+            <div class="accordion-item border border-black bg-paper">
+                <button class="w-full p-6 md:p-8 flex justify-between items-center text-left" onclick="toggleAccordion(this)">
+                    <div class="flex items-center gap-6">
+                        <span class="font-heavy text-4xl md:text-5xl text-black w-20">02</span>
+                        <div>
+                            <h3 class="font-heavy text-2xl" data-lang-en="WEB3 VERIFICATION" data-lang-zh="Web3價值驗證">WEB3 VERIFICATION</h3>
+                            <p class="font-mono text-xs text-gray-600 mt-1" data-lang-en="Blockchain & Smart Contracts" data-lang-zh="區塊鏈與智能合約">Blockchain & Smart Contracts</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon text-2xl"></i>
+                </button>
+                <div class="accordion-content">
+                    <div class="p-6 md:p-8 border-t border-black grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div>
+                            <h4 class="font-bold text-black mb-2" data-lang-en="REGISTRATION" data-lang-zh="數位身份註冊">REGISTRATION</h4>
+                            <p class="font-mono text-sm text-gray-600" data-lang-en="Creation timestamps, creator identity, technical parameters." data-lang-zh="創建時間戳、創建者身份、技術參數。">Creation timestamps...</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-black mb-2" data-lang-en="SMART CONTRACTS" data-lang-zh="智能合約執行">SMART CONTRACTS</h4>
+                            <p class="font-mono text-sm text-gray-600" data-lang-en="Auto-distribution of revenue, contribution valuation." data-lang-zh="自動分配、貢獻估值、透明追蹤。">Auto-distribution...</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-black mb-2" data-lang-en="TRACEABILITY" data-lang-zh="可追溯保障">TRACEABILITY</h4>
+                            <p class="font-mono text-sm text-gray-600" data-lang-en="Usage tracking, transparency, auditability." data-lang-zh="創建溯源、使用追蹤、透明度。">Usage tracking...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activation -->
+            <div class="accordion-item border border-black bg-paper">
+                <button class="w-full p-6 md:p-8 flex justify-between items-center text-left" onclick="toggleAccordion(this)">
+                    <div class="flex items-center gap-6">
+                        <span class="font-heavy text-4xl md:text-5xl text-black w-20">03</span>
+                        <div>
+                            <h3 class="font-heavy text-2xl" data-lang-en="ACTIVATION ENGINE" data-lang-zh="智能激活引擎">ACTIVATION ENGINE</h3>
+                            <p class="font-mono text-xs text-gray-600 mt-1" data-lang-en="Value Transfer & Flow" data-lang-zh="價值轉移與流通">Value Transfer & Flow</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon text-2xl"></i>
+                </button>
+                <div class="accordion-content">
+                    <div class="p-6 md:p-8 border-t border-black grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="font-bold text-black mb-2" data-lang-en="CROSS-WORLD BRIDGE" data-lang-zh="跨世界價值轉移">CROSS-WORLD BRIDGE</h4>
+                            <p class="font-mono text-sm text-gray-600 mb-4" data-lang-en="Asset mapping and value circulation between physical and digital." data-lang-zh="價值橋接協議、跨鏈操作、資產映射。">Asset mapping...</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-black mb-2" data-lang-en="ADAPTIVE ALGOS" data-lang-zh="自適應算法">ADAPTIVE ALGOS</h4>
+                            <p class="font-mono text-sm text-gray-600 mb-4" data-lang-en="Value quantification and incentive mechanisms." data-lang-zh="價值量化、收益分配、激勵機制。">Value quantification...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: ECOSYSTEM -->
+    <section id="ecosystem" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto bg-black text-white">
+        <h2 class="section-title text-center mb-16 text-white" data-lang-en="ECOSYSTEM & ECONOMY" data-lang-zh="生態系統與經濟">ECOSYSTEM & ECONOMY</h2>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            
+            <!-- BUSINESS MODEL -->
+            <div class="info-card p-8 bg-[#111] border-2 border-signal flex flex-col justify-between h-full transform lg:scale-105 z-10 relative">
+                <div class="absolute top-0 right-0 bg-signal text-black font-bold px-4 py-1 font-mono text-xs">REVENUE</div>
+                <div>
+                    <h3 class="font-heavy text-3xl mb-6 text-white" data-lang-en="BUSINESS MODEL" data-lang-zh="多維價值創造">BUSINESS MODEL</h3>
+                    
+                    <ul class="font-mono text-sm space-y-4 mb-8 text-gray-300">
+                        <li class="flex flex-col border-b border-gray-800 pb-2">
+                            <span class="text-signal font-bold" data-lang-en="MONETIZATION" data-lang-zh="明星變現">MONETIZATION</span>
+                            <span class="text-xs" data-lang-en="Avatar licensing, content revenue share, digital endorsements, IP derivatives." data-lang-zh="數位化身授權、內容創作收益分成、數位品牌代言、IP授權。">Avatar licensing...</span>
+                        </li>
+                        <li class="flex flex-col border-b border-gray-800 pb-2">
+                            <span class="text-signal font-bold" data-lang-en="PLATFORM FEES" data-lang-zh="平台收益">PLATFORM FEES</span>
+                            <span class="text-xs" data-lang-en="Service fees, transaction commissions, tech services." data-lang-zh="平台服務費、交易佣金、技術服務費。">Service fees...</span>
+                        </li>
+                        <li class="flex flex-col border-b border-gray-800 pb-2">
+                            <span class="text-signal font-bold" data-lang-en="COMMUNITY VALUE" data-lang-zh="社群價值共享">COMMUNITY VALUE</span>
+                            <span class="text-xs" data-lang-en="Token rewards, contribution sharing, NFT collectibles." data-lang-zh="代幣獎勵機制、基於貢獻的收益分成、NFT收藏品價值。">Token rewards...</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- TOKENOMICS -->
+            <div class="info-card p-8 bg-white text-black flex flex-col justify-between h-full opacity-90 hover:opacity-100">
+                <div>
+                    <div class="font-mono text-xs bg-black text-white inline-block px-2 py-1 mb-4">WEB3</div>
+                    <h3 class="font-heavy text-3xl mb-6" data-lang-en="TOKEN ECONOMICS" data-lang-zh="代幣經濟體系">TOKEN ECONOMICS</h3>
+                    
+                    <ul class="font-mono text-sm space-y-4 mb-8 text-black">
+                        <li class="flex items-start"><i class="fas fa-coins text-black mt-1 mr-2"></i> 
+                            <div>
+                                <span class="font-bold">STAR (Basic)</span>
+                                <p class="text-xs text-gray-600" data-lang-en="Core currency for transactions. Total: 1B." data-lang-zh="基礎代幣：用於日常交易。總量：10億。">Core currency.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start"><i class="fas fa-medal text-black mt-1 mr-2"></i> 
+                            <div>
+                                <span class="font-bold">CONTRIB (Reward)</span>
+                                <p class="text-xs text-gray-600" data-lang-en="Non-transferable contribution token." data-lang-zh="貢獻代幣：基於社群貢獻的不可轉讓代幣。">Contribution token.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start"><i class="fas fa-vote-yea text-black mt-1 mr-2"></i> 
+                            <div>
+                                <span class="font-bold">GOV (Governance)</span>
+                                <p class="text-xs text-gray-600" data-lang-en="For DAO voting and decisions." data-lang-zh="治理代幣：用於社群治理和重大決策。">Voting rights.</p>
+                            </div>
+                        </li>
+                        <li class="mt-4 pt-4 border-t border-gray-300">
+                            <span class="font-bold text-xs block mb-2" data-lang-en="ALLOCATION" data-lang-zh="分配比例">ALLOCATION</span>
+                            <div class="w-full bg-gray-200 h-2 flex">
+                                <div class="bg-black w-[40%]"></div>
+                                <div class="bg-signal w-[25%]"></div>
+                                <div class="bg-gray-400 w-[20%]"></div>
+                                <div class="bg-gray-300 w-[15%]"></div>
+                            </div>
+                            <div class="flex justify-between text-[10px] text-gray-500 mt-1">
+                                <span data-lang-en="40% Stars" data-lang-zh="40% 明星">Stars</span>
+                                <span data-lang-en="25% Community" data-lang-zh="25% 社群">Comm</span>
+                                <span data-lang-en="20% Team" data-lang-zh="20% 團隊">Team</span>
+                                <span data-lang-en="15% Eco" data-lang-zh="15% 生態">Eco</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Partners Grid -->
+        <div class="max-w-6xl mx-auto mt-16 border-t border-gray-800 pt-16">
+            <h3 class="font-mono text-signal text-center mb-8" data-lang-en="PARTNERSHIP NETWORK" data-lang-zh="生態系統合作夥伴">PARTNERSHIP NETWORK</h3>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 text-center font-mono text-xs text-gray-500">
+                <div class="border border-gray-800 p-4 hover:border-white hover:text-white transition">MEDIA</div>
+                <div class="border border-gray-800 p-4 hover:border-white hover:text-white transition">AI TECH</div>
+                <div class="border border-gray-800 p-4 hover:border-white hover:text-white transition">FINANCE</div>
+                <div class="border border-gray-800 p-4 hover:border-white hover:text-white transition">LEGAL</div>
+                <div class="border border-gray-800 p-4 hover:border-white hover:text-white transition">GLOBAL</div>
+                <div class="border border-gray-800 p-4 hover:border-white hover:text-white transition">ACADEMIA</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6: ROADMAP -->
+    <section id="roadmap" class="py-20 md:py-32 bg-[#EAEAEA] border-t border-black">
+        <div class="max-w-[1920px] mx-auto px-4 md:px-8">
+            <h2 class="font-heavy text-4xl md:text-8xl text-[#222] text-center mb-16 leading-none select-none">
+                ROADMAP<br>2025-2030+
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- PHASE 1 -->
+                <div class="border-t-2 border-signal pt-6">
+                    <h3 class="font-heavy text-2xl mb-2 text-signal" data-lang-en="PHASE 1" data-lang-zh="第一階段">PHASE 1</h3>
+                    <p class="font-mono text-xs text-gray-500 mb-2">2025 Q4 - 2026 Q2</p>
+                    <p class="font-mono text-sm text-gray-800 mb-4 font-bold" data-lang-en="FOUNDATION" data-lang-zh="技術基礎">FOUNDATION</p>
+                    <ul class="space-y-2 font-mono text-xs text-gray-600">
+                        <li>- AI Digital Human Platform</li>
+                        <li>- Blockchain Identity</li>
+                        <li>- Digital Watermarking</li>
+                        <li>- Smart Contract Framework</li>
+                    </ul>
+                </div>
+
+                <!-- PHASE 2 -->
+                <div class="border-t-2 border-black pt-6">
+                    <h3 class="font-heavy text-2xl mb-2" data-lang-en="PHASE 2" data-lang-zh="第二階段">PHASE 2</h3>
+                    <p class="font-mono text-xs text-gray-500 mb-2">2026 Q3 - 2027 Q1</p>
+                    <p class="font-mono text-sm text-gray-800 mb-4 font-bold" data-lang-en="LAUNCH" data-lang-zh="生態系統啟動">LAUNCH</p>
+                    <ul class="space-y-2 font-mono text-xs text-gray-600">
+                        <li>- Pilot Programs</li>
+                        <li>- First Star Avatars</li>
+                        <li>- Market Verification</li>
+                        <li>- UX Optimization</li>
+                    </ul>
+                </div>
+
+                <!-- PHASE 3 -->
+                <div class="border-t-2 border-gray-400 pt-6">
+                    <h3 class="font-heavy text-2xl mb-2 text-gray-600" data-lang-en="PHASE 3" data-lang-zh="第三階段">PHASE 3</h3>
+                    <p class="font-mono text-xs text-gray-500 mb-2">2027 Q2 - 2028 Q4</p>
+                    <p class="font-mono text-sm text-gray-800 mb-4 font-bold" data-lang-en="EXPANSION" data-lang-zh="規模擴展">EXPANSION</p>
+                    <ul class="space-y-2 font-mono text-xs text-gray-600">
+                        <li>- Mass Onboarding</li>
+                        <li>- Global Community</li>
+                        <li>- Token Economy Live</li>
+                        <li>- Interoperability</li>
+                    </ul>
+                </div>
+                
+                <!-- PHASE 4 -->
+                <div class="border-t-2 border-gray-300 pt-6 opacity-60">
+                    <h3 class="font-heavy text-2xl mb-2 text-gray-400" data-lang-en="PHASE 4" data-lang-zh="第四階段">PHASE 4</h3>
+                    <p class="font-mono text-xs text-gray-500 mb-2">2029 - 2030+</p>
+                    <p class="font-mono text-sm text-gray-800 mb-4 font-bold" data-lang-en="MATURITY" data-lang-zh="創新與成熟">MATURITY</p>
+                    <ul class="space-y-2 font-mono text-xs text-gray-600">
+                        <li>- Industry Leadership</li>
+                        <li>- Metaverse Integration</li>
+                        <li>- BCI / AGI Co-creation</li>
+                        <li>- Digital Immortality</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-16 p-8 bg-white border border-black text-center">
+                <h3 class="font-heavy text-xl mb-4" data-lang-en="LONG TERM VISION: 2030" data-lang-zh="長期願景：2030年及以後">LONG TERM VISION: 2030</h3>
+                <p class="font-mono text-sm max-w-3xl mx-auto" data-lang-en="By 2030, StarOS will be the core infrastructure of the global AI-native entertainment ecosystem, connecting reality and the digital world, fundamentally changing how cultural value is preserved." data-lang-zh="到2030年，StarOS將成為全球AI原生娛樂生態系統的核心基礎設施，連接現實與數位世界，從根本上改變文化價值的保存方式。">By 2030, StarOS will be the core infrastructure...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="contact" class="bg-black text-[#EAEAEA] border-t border-[#222] pt-20 pb-10 px-4 md:px-8">
+        <div class="max-w-[1920px] mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+                <div class="lg:col-span-2">
+                    <h2 class="font-heavy text-5xl md:text-7xl mb-6">StarOS<span class="text-signal text-lg align-top ml-2">INC</span></h2>
+                    <p class="font-mono text-sm text-gray-400 max-w-md">
+                        <span data-lang-en="The world's first AI-native platform for migrating and activating celebrity value. Join the revolution. Redefine the future of entertainment."
+                              data-lang-zh="全球首個專為數位時代遷移和激活明星價值的AI原生平台。加入這場革命。重新定義娛樂的未來。">
+                            The world's first AI-native platform for migrating and activating celebrity value. Join the revolution.
+                        </span>
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-mono text-signal mb-6" data-lang-en="CONTACT" data-lang-zh="聯繫方式">CONTACT</h4>
+                    <ul class="font-mono text-sm space-y-4">
+                        <li>
+                            <span class="block text-gray-500 text-xs">EMAIL</span>
+                            <a href="mailto:contact@staros.me" class="hover:text-white">contact@staros.me</a>
+                        </li>
+                        <li>
+                            <span class="block text-gray-500 text-xs">SOCIAL</span>
+                            <div class="flex gap-4 mt-2">
+                                <a href="#" class="hover:text-signal"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="hover:text-signal"><i class="fab fa-discord"></i></a>
+                                <a href="#" class="hover:text-signal"><i class="fab fa-github"></i></a>
+                                <a href="#" class="hover:text-signal"><i class="fab fa-telegram"></i></a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-mono text-signal mb-6" data-lang-en="RESOURCES" data-lang-zh="資源與支持">RESOURCES</h4>
+                    <ul class="font-mono text-sm space-y-2">
+                        <li><a href="#" class="hover:text-signal transition-colors" data-lang-en="Whitepaper" data-lang-zh="白皮書">Whitepaper</a></li>
+                        <li><a href="#" class="hover:text-signal transition-colors" data-lang-en="Documentation" data-lang-zh="技術文檔">Documentation</a></li>
+                        <li><a href="#" class="hover:text-signal transition-colors" data-lang-en="API Reference" data-lang-zh="API文檔">API Reference</a></li>
+                        <li><a href="#" class="hover:text-signal transition-colors" data-lang-en="Community" data-lang-zh="社群論壇">Community</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-[#222] pt-8 flex flex-col md:flex-row justify-between items-center font-mono text-xs text-gray-600">
+                <div>© 2025 StarOS. ALL RIGHTS RESERVED.</div>
+                <div class="mt-4 md:mt-0 flex gap-4">
+                    <a href="#" class="hover:text-white">PRIVACY</a>
+                    <a href="#" class="hover:text-white">TERMS</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        // 1. LOADER
+        window.addEventListener('load', () => {
+            const tl = gsap.timeline();
+            tl.to("#loader", { yPercent: -100, duration: 0.8, ease: "power4.inOut", delay: 0.5 });
+            tl.from("header .hero-title", { y: 100, opacity: 0, duration: 1, ease: "power3.out" }, "-=0.3");
+        });
+
+        // 2. LANGUAGE SWITCHER
+        let currentLang = 'en';
+        function switchLang() {
+            currentLang = currentLang === 'en' ? 'zh' : 'en';
+            const btn = document.getElementById('lang-btn');
+            
+            // Update Button Text
+            if(btn) btn.innerText = currentLang === 'en' ? '[ 繁體中文 ]' : '[ ENGLISH ]';
+            
+            // Update Content
+            document.querySelectorAll('[data-lang-en][data-lang-zh]').forEach(el => {
+                const text = currentLang === 'en' ? el.getAttribute('data-lang-en') : el.getAttribute('data-lang-zh');
+                // Simple fade effect
+                el.style.opacity = '0';
+                setTimeout(() => {
+                    el.innerHTML = text;
+                    el.style.opacity = '1';
+                }, 200);
+            });
+        }
+
+        // 3. MOBILE MENU TOGGLE
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('active');
+            
+            // Toggle Body Scroll
+            if (menu.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // 4. ACCORDION LOGIC
+        function toggleAccordion(button) {
+            const item = button.parentElement;
+            const content = button.nextElementSibling;
+            
+            item.classList.toggle('active');
+            if (item.classList.contains('active')) {
+                content.style.maxHeight = content.scrollHeight + "px";
+            } else {
+                content.style.maxHeight = null;
+            }
+        }
+
+        // 5. GSAP ANIMATIONS
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Fade in sections
+        gsap.utils.toArray('section').forEach(section => {
+            gsap.from(section, {
+                opacity: 0,
+                y: 50,
+                duration: 1,
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
