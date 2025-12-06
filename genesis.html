@@ -201,6 +201,16 @@
             margin-bottom: 1rem;
             border: 2px solid #000;
         }
+        
+        /* Toast Notification */
+        .toast-message {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: #FF3300; color: #000; padding: 10px 20px;
+            font-family: 'Space Mono', monospace; font-weight: bold;
+            border: 2px solid #000; z-index: 10000; opacity: 0; transition: opacity 0.3s; pointer-events: none;
+            box-shadow: 5px 5px 0px 0px #000;
+        }
+        .toast-message.show { opacity: 1; }
     </style>
 </head>
 <body class="grid-bg en">
@@ -912,16 +922,7 @@
                     <i class="fas fa-arrow-right"></i>
                 </a>
 
-                 <a href="https://wise.com/pay/business/uj6hyy?currency=CNY&amount=3690&description=AIF-CNY" target="_blank" class="block border-2 border-black p-4 hover:bg-black hover:text-white transition-colors group flex justify-between items-center bg-white">
-                    <div class="flex items-center gap-4">
-                        <span class="text-2xl">🇨🇳</span>
-                        <div class="font-mono">
-                            <div class="font-bold">CNY</div>
-                            <div class="text-xs text-gray-500 group-hover:text-gray-300">¥3,690</div>
-                        </div>
-                    </div>
-                    <i class="fas fa-arrow-right"></i>
-                </a>
+                <!-- CNY Removed Here -->
             </div>
             
              <div class="mt-6 font-mono text-xs text-gray-600 bg-paper p-4 border border-black">
@@ -979,7 +980,7 @@
             // Using modern clipboard API or fallback
             if (navigator.clipboard && window.isSecureContext) {
                 navigator.clipboard.writeText(text).then(() => {
-                    alert("Address Copied! / 地址已複製!");
+                    showToast("Address Copied! / 地址已複製!");
                 });
             } else {
                 // Fallback
@@ -993,12 +994,35 @@
                 textArea.select();
                 try {
                     document.execCommand('copy');
-                    alert("Address Copied! / 地址已複製!");
+                    showToast("Address Copied! / 地址已複製!");
                 } catch (err) {
                     console.error('Unable to copy', err);
                 }
                 document.body.removeChild(textArea);
             }
+        }
+        
+        // Toast Function (Replaces Alert)
+        function showToast(msg) {
+            let toast = document.createElement('div');
+            toast.className = 'toast-message';
+            toast.innerText = msg;
+            document.body.appendChild(toast);
+            
+            // Animation
+            requestAnimationFrame(() => {
+                toast.classList.add('show');
+            });
+            
+            // Remove
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    if(document.body.contains(toast)) {
+                        document.body.removeChild(toast);
+                    }
+                }, 300);
+            }, 2000);
         }
 
         // 6. GSAP ANIMATIONS
