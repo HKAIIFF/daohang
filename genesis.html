@@ -164,7 +164,7 @@
         /* MODAL */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(5, 5, 5, 0.9);
+            background: rgba(5, 5, 5, 0.95);
             z-index: 1000;
             display: none;
             justify-content: center;
@@ -180,6 +180,48 @@
             box-shadow: 20px 20px 0px 0px rgba(0,0,0,1);
             max-height: 90vh;
             overflow-y: auto;
+        }
+
+        /* COMPLIANCE MODAL SPECIFIC */
+        #complianceModal {
+            display: flex; /* Force display initially */
+            z-index: 99999; /* Highest priority */
+            background: rgba(0, 0, 0, 0.98); /* Opaque background to block view */
+        }
+        
+        .checkbox-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+        
+        .checkbox-wrapper input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            min-width: 24px;
+            height: 24px;
+            border: 2px solid #000;
+            background: #fff;
+            position: relative;
+            margin-top: 2px;
+            cursor: pointer;
+        }
+        
+        .checkbox-wrapper input[type="checkbox"]:checked {
+            background: #FF3300;
+        }
+        
+        .checkbox-wrapper input[type="checkbox"]:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #000;
+            font-weight: bold;
+            font-size: 16px;
         }
 
         /* Lang Logic */
@@ -213,13 +255,97 @@
         .toast-message.show { opacity: 1; }
     </style>
 </head>
-<body class="grid-bg en">
+<body class="grid-bg en overflow-hidden"> <!-- Added overflow-hidden initially -->
 
     <!-- LOADER -->
     <div id="loader">
         <div class="font-heavy text-6xl md:text-9xl font-bold text-black tracking-tighter">GENESIS</div>
         <div class="font-mono text-black mt-4 text-xs md:text-base animate-pulse">
             /// INITIALIZING_PROTOCOL...
+        </div>
+    </div>
+
+    <!-- COMPLIANCE MODAL (MANDATORY) -->
+    <div id="complianceModal" class="modal-overlay">
+        <div class="modal-content p-6 md:p-8 max-w-lg">
+            <!-- Header -->
+            <div class="border-b-4 border-black mb-6 pb-4">
+                <h2 class="font-heavy text-3xl md:text-4xl text-black leading-none">
+                    <span class="lang-en">IMPORTANT STATEMENT</span>
+                    <span class="lang-zh">【重要声明】</span>
+                </h2>
+                <div class="mt-4 font-mono text-xs md:text-sm font-bold text-gray-700 bg-gray-200 p-3 border-l-4 border-signal">
+                    <p class="mb-2">
+                        <span class="lang-en">You are about to enter HKAIIFF Digital Asset Service Area.</span>
+                        <span class="lang-zh">您即将进入HKAIIFF数字资产服务区域。</span>
+                    </p>
+                    <p>
+                        <span class="lang-en">This service is provided by a Hong Kong entity and governed by Hong Kong laws.</span>
+                        <span class="lang-zh">本服务由香港主体提供，受香港法律管辖。</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Checkboxes -->
+            <div class="font-mono text-xs md:text-sm space-y-3 mb-6">
+                <div class="font-bold mb-3 uppercase">
+                    <span class="lang-en">Please confirm:</span>
+                    <span class="lang-zh">请确认：</span>
+                </div>
+
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" class="compliance-check" onchange="checkCompliance()">
+                    <span class="leading-tight pt-1">
+                        <span class="lang-en">I am not a resident of mainland China</span>
+                        <span class="lang-zh">本人非中国大陆居民</span>
+                    </span>
+                </label>
+
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" class="compliance-check" onchange="checkCompliance()">
+                    <span class="leading-tight pt-1">
+                        <span class="lang-en">I am not a U.S. citizen or resident</span>
+                        <span class="lang-zh">本人非美国公民或居民</span>
+                    </span>
+                </label>
+
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" class="compliance-check" onchange="checkCompliance()">
+                    <span class="leading-tight pt-1">
+                        <span class="lang-en">I am participating with my own offshore assets</span>
+                        <span class="lang-zh">本人通过自有境外资产参与</span>
+                    </span>
+                </label>
+
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" class="compliance-check" onchange="checkCompliance()">
+                    <span class="leading-tight pt-1">
+                        <span class="lang-en">I am aware of digital asset investment risks</span>
+                        <span class="lang-zh">本人知悉数字资产投资风险</span>
+                    </span>
+                </label>
+
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" class="compliance-check" onchange="checkCompliance()">
+                    <span class="leading-tight pt-1">
+                        <span class="lang-en">I voluntarily bear all investment risks</span>
+                        <span class="lang-zh">本人自愿承担全部投资风险</span>
+                    </span>
+                </label>
+            </div>
+
+            <!-- Footer Agreement -->
+            <div class="text-center">
+                <p class="font-mono text-[10px] text-gray-500 mb-4">
+                    <span class="lang-en">I have read and agree to "User Agreement" & "Risk Disclosure Statement"</span>
+                    <span class="lang-zh">我已阅读并同意《用户协议》《风险提示书》</span>
+                </p>
+                
+                <button id="complianceBtn" onclick="acceptCompliance()" disabled class="w-full bg-gray-400 text-gray-700 border-2 border-gray-500 py-3 font-mono font-bold text-sm uppercase transition-all duration-300 cursor-not-allowed">
+                    <span class="lang-en">ENTER WEBSITE</span>
+                    <span class="lang-zh">进入网站</span>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -1039,6 +1165,37 @@
                 }
             });
         });
+
+        // 7. COMPLIANCE MODAL LOGIC
+        function checkCompliance() {
+            const checkboxes = document.querySelectorAll('.compliance-check');
+            const btn = document.getElementById('complianceBtn');
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            
+            if (allChecked) {
+                btn.disabled = false;
+                btn.classList.remove('bg-gray-400', 'text-gray-700', 'border-gray-500', 'cursor-not-allowed');
+                btn.classList.add('bg-black', 'text-white', 'border-black', 'hover:bg-signal', 'hover:text-white', 'cursor-pointer');
+            } else {
+                btn.disabled = true;
+                btn.classList.add('bg-gray-400', 'text-gray-700', 'border-gray-500', 'cursor-not-allowed');
+                btn.classList.remove('bg-black', 'text-white', 'border-black', 'hover:bg-signal', 'hover:text-white', 'cursor-pointer');
+            }
+        }
+
+        function acceptCompliance() {
+            const modal = document.getElementById('complianceModal');
+            // Animate out
+            gsap.to(modal, {
+                opacity: 0,
+                duration: 0.5,
+                onComplete: () => {
+                    modal.style.display = 'none';
+                    // Allow scroll only if no other modals are open
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
     </script>
 </body>
 </html>

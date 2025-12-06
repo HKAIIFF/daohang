@@ -197,9 +197,106 @@
         .timeline-track {
             position: absolute; left: 19px; top: 0; bottom: 0; width: 2px; background: #000;
         }
+
+        /* Checkbox Styling for Modal */
+        .modal-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 2px solid #FF3300;
+            background-color: transparent;
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+        }
+        .modal-checkbox:checked {
+            background-color: #FF3300;
+        }
+        .modal-checkbox:checked::after {
+            content: '\2713';
+            font-size: 1rem;
+            color: #000;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+        }
     </style>
 </head>
-<body class="grid-bg">
+<body class="grid-bg overflow-hidden">
+
+    <!-- COMPLIANCE MODAL -->
+    <div id="compliance-modal" class="fixed inset-0 z-[10000] bg-black flex items-center justify-center p-4">
+        <div class="max-w-xl w-full bg-concrete border-2 border-signal p-6 md:p-10 relative shadow-[10px_10px_0px_0px_#FF3300]">
+            
+            <!-- Modal Lang Switcher -->
+            <button onclick="switchLang()" class="absolute top-4 right-4 text-gray-500 hover:text-signal font-mono text-xs font-bold uppercase z-20">
+                <i class="fas fa-globe mr-1"></i>
+                <span id="modal-lang-text">[ 繁體中文 ]</span>
+            </button>
+
+            <div class="text-center mb-8">
+                <div class="text-signal text-5xl mb-4"><i class="fas fa-exclamation-triangle"></i></div>
+                <h2 class="font-heavy text-3xl text-white uppercase tracking-wide mb-2">
+                    <span data-lang-en="IMPORTANT STATEMENT" data-lang-zh="【重要聲明】">IMPORTANT STATEMENT</span>
+                </h2>
+                <div class="w-full h-px bg-gray-700 my-4"></div>
+                <p class="font-mono text-sm text-gray-300 leading-relaxed">
+                    <span data-lang-en="You are about to enter HKAIIFF digital asset service area.<br>This service is provided by a Hong Kong entity and is subject to Hong Kong laws." 
+                          data-lang-zh="您即將進入HKAIIFF數字資產服務區域。<br>本服務由香港主體提供，受香港法律管轄。">
+                        You are about to enter HKAIIFF digital asset service area.<br>This service is provided by a Hong Kong entity and is subject to Hong Kong laws.
+                    </span>
+                </p>
+            </div>
+
+            <div class="font-mono text-xs md:text-sm text-gray-400 space-y-4 mb-8">
+                <p class="mb-2 font-bold text-white">
+                    <span data-lang-en="Please confirm:" data-lang-zh="請確認:">Please confirm:</span>
+                </p>
+                
+                <label class="flex items-start cursor-pointer group hover:text-white transition-colors">
+                    <input type="checkbox" class="modal-checkbox" onchange="checkCompliance()">
+                    <span class="pt-0.5" data-lang-en="I am not a resident of mainland China" data-lang-zh="本人非中國大陸居民">I am not a resident of mainland China</span>
+                </label>
+
+                <label class="flex items-start cursor-pointer group hover:text-white transition-colors">
+                    <input type="checkbox" class="modal-checkbox" onchange="checkCompliance()">
+                    <span class="pt-0.5" data-lang-en="I am not a US citizen or resident" data-lang-zh="本人非美國公民或居民">I am not a US citizen or resident</span>
+                </label>
+
+                <label class="flex items-start cursor-pointer group hover:text-white transition-colors">
+                    <input type="checkbox" class="modal-checkbox" onchange="checkCompliance()">
+                    <span class="pt-0.5" data-lang-en="I participate through my own offshore assets" data-lang-zh="本人通過自有境外資產參與">I participate through my own offshore assets</span>
+                </label>
+
+                <label class="flex items-start cursor-pointer group hover:text-white transition-colors">
+                    <input type="checkbox" class="modal-checkbox" onchange="checkCompliance()">
+                    <span class="pt-0.5" data-lang-en="I am aware of digital asset investment risks" data-lang-zh="本人知悉數字資產投資風險">I am aware of digital asset investment risks</span>
+                </label>
+
+                <label class="flex items-start cursor-pointer group hover:text-white transition-colors">
+                    <input type="checkbox" class="modal-checkbox" onchange="checkCompliance()">
+                    <span class="pt-0.5" data-lang-en="I voluntarily assume all investment risks" data-lang-zh="本人自願承擔全部投資風險">I voluntarily assume all investment risks</span>
+                </label>
+            </div>
+
+            <div class="text-center">
+                <p class="font-mono text-[10px] text-gray-500 mb-4">
+                    <span data-lang-en="I have read and agree to User Agreement and Risk Disclosure Statement" 
+                          data-lang-zh="本人已閱讀並同意《用戶協議》及《風險披露聲明》">
+                        I have read and agree to "User Agreement" and "Risk Disclosure Statement"
+                    </span>
+                </p>
+                <button id="compliance-submit" onclick="submitCompliance()" disabled class="brutal-btn w-full bg-gray-800 text-gray-500 border-gray-800 cursor-not-allowed transition-all duration-300">
+                    <span data-lang-en="ENTER" data-lang-zh="進入">ENTER</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- LOADER -->
     <div id="loader">
@@ -936,9 +1033,12 @@
         function switchLang() {
             currentLang = currentLang === 'en' ? 'zh' : 'en';
             const btn = document.getElementById('lang-btn');
+            const modalBtn = document.getElementById('modal-lang-text');
             
             // Update Button Text
-            if(btn) btn.innerText = currentLang === 'en' ? '[ 繁體中文 ]' : '[ ENGLISH ]';
+            const nextLangText = currentLang === 'en' ? '[ 繁體中文 ]' : '[ ENGLISH ]';
+            if(btn) btn.innerText = nextLangText;
+            if(modalBtn) modalBtn.innerText = nextLangText;
             
             // Update Content
             document.querySelectorAll('[data-lang-en][data-lang-zh]').forEach(el => {
@@ -952,7 +1052,46 @@
             });
         }
 
-        // 3. MOBILE MENU TOGGLE
+        // 3. COMPLIANCE MODAL LOGIC
+        function checkCompliance() {
+            const checkboxes = document.querySelectorAll('.modal-checkbox');
+            const submitBtn = document.getElementById('compliance-submit');
+            let allChecked = true;
+            
+            checkboxes.forEach(box => {
+                if (!box.checked) allChecked = false;
+            });
+
+            if (allChecked) {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('bg-gray-800', 'text-gray-500', 'border-gray-800', 'cursor-not-allowed');
+                submitBtn.classList.add('bg-signal', 'text-black', 'border-black', 'hover:bg-white');
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('bg-gray-800', 'text-gray-500', 'border-gray-800', 'cursor-not-allowed');
+                submitBtn.classList.remove('bg-signal', 'text-black', 'border-black', 'hover:bg-white');
+            }
+        }
+
+        function submitCompliance() {
+            const modal = document.getElementById('compliance-modal');
+            const checkboxes = document.querySelectorAll('.modal-checkbox');
+            let allChecked = true;
+            checkboxes.forEach(box => { if (!box.checked) allChecked = false; });
+
+            if (allChecked) {
+                gsap.to(modal, { 
+                    opacity: 0, 
+                    duration: 0.5, 
+                    onComplete: () => {
+                        modal.style.display = 'none';
+                        document.body.classList.remove('overflow-hidden');
+                    }
+                });
+            }
+        }
+
+        // 4. MOBILE MENU TOGGLE
         function toggleMenu() {
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('active');
@@ -965,7 +1104,7 @@
             }
         }
 
-        // 4. ACCORDION LOGIC
+        // 5. ACCORDION LOGIC
         function toggleAccordion(button) {
             const item = button.parentElement;
             const content = button.nextElementSibling;
@@ -978,7 +1117,7 @@
             }
         }
 
-        // 5. GSAP ANIMATIONS
+        // 6. GSAP ANIMATIONS
         gsap.registerPlugin(ScrollTrigger);
         
         // Fade in sections

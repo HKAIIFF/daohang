@@ -120,6 +120,8 @@
         .brutal-btn:hover::before { transform: translateX(0); }
         .brutal-btn span, .brutal-btn i { position: relative; z-index: 1; }
         .brutal-btn:hover { color: #000; border-color: #FF3300; }
+        .brutal-btn:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(100%); }
+        .brutal-btn:disabled::before { display: none; }
         
         .brutal-btn.outline {
             background: transparent;
@@ -145,6 +147,43 @@
         #loader {
             position: fixed; inset: 0; background: #FF3300; z-index: 9999;
             display: flex; justify-content: center; align-items: center; flex-direction: column;
+        }
+
+        /* COMPLIANCE MODAL */
+        #compliance-modal {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000;
+            display: flex; justify-content: center; align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        /* Custom Checkbox Styling */
+        .checkbox-wrapper input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 1.25em;
+            height: 1.25em;
+            border: 2px solid #000;
+            background-color: #fff;
+            margin-right: 0.75rem;
+            cursor: pointer;
+            position: relative;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        
+        .checkbox-wrapper input[type="checkbox"]:checked {
+            background-color: #FF3300;
+            border-color: #FF3300;
+        }
+
+        .checkbox-wrapper input[type="checkbox"]:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: #000;
+            font-weight: bold;
+            font-size: 0.9em;
         }
 
         /* MOBILE MENU */
@@ -206,7 +245,84 @@
         }
     </style>
 </head>
-<body class="grid-bg">
+<body class="grid-bg overflow-hidden"> <!-- Added overflow-hidden initially -->
+
+    <!-- COMPLIANCE MODAL (GATEKEEPER) -->
+    <div id="compliance-modal">
+        <div class="bg-[#F3F3F3] border-4 border-signal w-full max-w-lg p-6 md:p-10 m-4 shadow-[15px_15px_0px_0px_#FFF] relative">
+            
+            <!-- Language Toggle in Modal -->
+            <button onclick="toggleLanguage()" class="absolute top-4 right-4 text-xs font-mono font-bold border border-black px-2 py-1 hover:bg-black hover:text-white transition-colors">
+                <span class="lang-en">繁體中文</span>
+                <span class="lang-zh">ENGLISH</span>
+            </button>
+
+            <div class="text-center mb-8">
+                <i class="fas fa-exclamation-triangle text-signal text-4xl mb-4"></i>
+                <h2 class="font-heavy text-3xl md:text-4xl uppercase mb-2">
+                    <span class="lang-en">IMPORTANT DISCLAIMER</span>
+                    <span class="lang-zh">【重要聲明】</span>
+                </h2>
+                <div class="w-16 h-1 bg-black mx-auto mb-4"></div>
+                <p class="font-mono text-xs md:text-sm text-gray-700 leading-relaxed">
+                    <span class="lang-en">You are about to enter the HKAIIFF digital asset service area. This service is provided by a Hong Kong entity and is subject to Hong Kong laws.</span>
+                    <span class="lang-zh">您即將進入HKAIIFF數字資產服務區域。本服務由香港主體提供,受香港法律管轄。</span>
+                </p>
+            </div>
+
+            <form id="compliance-form" class="space-y-3 mb-8 font-mono text-xs md:text-sm font-bold">
+                <div class="mb-4">
+                    <span class="lang-en block mb-2">Please confirm:</span>
+                    <span class="lang-zh block mb-2">請確認:</span>
+                </div>
+                
+                <label class="checkbox-wrapper flex items-start cursor-pointer hover:bg-gray-200 p-2 transition-colors select-none">
+                    <input type="checkbox" name="compliance" required onchange="checkCompliance()">
+                    <span class="pt-0.5">
+                        <span class="lang-en">I am not a resident of Mainland China</span>
+                        <span class="lang-zh">本人非中國大陸居民</span>
+                    </span>
+                </label>
+
+                <label class="checkbox-wrapper flex items-start cursor-pointer hover:bg-gray-200 p-2 transition-colors select-none">
+                    <input type="checkbox" name="compliance" required onchange="checkCompliance()">
+                    <span class="pt-0.5">
+                        <span class="lang-en">I am not a U.S. citizen or resident</span>
+                        <span class="lang-zh">本人非美國公民或居民</span>
+                    </span>
+                </label>
+
+                <label class="checkbox-wrapper flex items-start cursor-pointer hover:bg-gray-200 p-2 transition-colors select-none">
+                    <input type="checkbox" name="compliance" required onchange="checkCompliance()">
+                    <span class="pt-0.5">
+                        <span class="lang-en">I am participating with my own offshore assets</span>
+                        <span class="lang-zh">本人通過自有境外資產參與</span>
+                    </span>
+                </label>
+
+                <label class="checkbox-wrapper flex items-start cursor-pointer hover:bg-gray-200 p-2 transition-colors select-none">
+                    <input type="checkbox" name="compliance" required onchange="checkCompliance()">
+                    <span class="pt-0.5">
+                        <span class="lang-en">I am aware of the risks of digital asset investment</span>
+                        <span class="lang-zh">本人知悉數字資產投資風險</span>
+                    </span>
+                </label>
+
+                <label class="checkbox-wrapper flex items-start cursor-pointer hover:bg-gray-200 p-2 transition-colors select-none">
+                    <input type="checkbox" name="compliance" required onchange="checkCompliance()">
+                    <span class="pt-0.5">
+                        <span class="lang-en">I voluntarily assume all investment risks</span>
+                        <span class="lang-zh">本人自願承擔全部投資風險</span>
+                    </span>
+                </label>
+            </form>
+
+            <button id="enter-btn" onclick="enterSite()" disabled class="brutal-btn w-full bg-black text-white border-black hover:bg-signal hover:border-signal">
+                <span class="lang-en">ENTER WEBSITE</span>
+                <span class="lang-zh">進入網站</span>
+            </button>
+        </div>
+    </div>
 
     <!-- LOADER -->
     <div id="loader">
@@ -1281,7 +1397,10 @@
             if (menu.classList.contains('active')) {
                 document.body.style.overflow = 'hidden';
             } else {
-                document.body.style.overflow = 'auto';
+                // Only allow scroll if modal is not active
+                if(document.getElementById('compliance-modal').style.display === 'none') {
+                    document.body.style.overflow = 'auto';
+                }
             }
         }
 
@@ -1300,8 +1419,40 @@
                 }
             });
         });
-        
-        // Random AI decorative elements logic (optional, keeping clean for now)
+
+        // 5. COMPLIANCE MODAL LOGIC
+        function checkCompliance() {
+            const checkboxes = document.querySelectorAll('input[name="compliance"]');
+            const enterBtn = document.getElementById('enter-btn');
+            let allChecked = true;
+            
+            checkboxes.forEach(box => {
+                if(!box.checked) allChecked = false;
+            });
+            
+            if (allChecked) {
+                enterBtn.disabled = false;
+                enterBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'filter', 'grayscale');
+            } else {
+                enterBtn.disabled = true;
+                enterBtn.classList.add('opacity-50', 'cursor-not-allowed', 'filter', 'grayscale');
+            }
+        }
+
+        function enterSite() {
+            const modal = document.getElementById('compliance-modal');
+            
+            // Fade out
+            gsap.to(modal, {
+                opacity: 0,
+                duration: 0.5,
+                onComplete: () => {
+                    modal.style.display = 'none';
+                    document.body.classList.remove('overflow-hidden');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
     </script>
 </body>
 </html>

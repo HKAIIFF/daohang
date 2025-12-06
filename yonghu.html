@@ -44,7 +44,8 @@
     <style>
         /* CORE STYLES */
         html { scroll-behavior: smooth; }
-        body { background-color: #EAEAEA; color: #050505; overflow-x: hidden; }
+        /* Initially hidden overflow to prevent scrolling while modal is active */
+        body { background-color: #EAEAEA; color: #050505; overflow: hidden; }
         ::selection { background: #FF3300; color: #000; }
 
         /* TYPOGRAPHY */
@@ -100,6 +101,16 @@
             border-color: #FF3300;
             color: #FFFFFF;
         }
+        
+        /* Disabled Button Style for Modal */
+        .brutal-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+            border-color: #555 !important;
+            color: #888 !important;
+        }
 
         .brutal-btn.light {
             background: transparent;
@@ -128,6 +139,52 @@
         #loader {
             position: fixed; inset: 0; background: #FF3300; z-index: 9999;
             display: flex; justify-content: center; align-items: center; flex-direction: column;
+        }
+
+        /* COMPLIANCE MODAL */
+        #compliance-modal {
+            position: fixed; inset: 0; 
+            background: rgba(0,0,0,0.95); 
+            z-index: 10000; /* Higher than loader to ensure it's top priority */
+            display: flex; justify-content: center; align-items: center;
+            padding: 1rem;
+            backdrop-filter: blur(5px);
+        }
+        
+        .checkbox-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+        
+        .checkbox-wrapper input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #FF3300;
+            background: transparent;
+            margin-top: 2px;
+            cursor: pointer;
+            position: relative;
+            flex-shrink: 0;
+        }
+        
+        .checkbox-wrapper input[type="checkbox"]:checked {
+            background: #FF3300;
+        }
+        
+        .checkbox-wrapper input[type="checkbox"]:checked::after {
+            content: '✔';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: black;
+            font-size: 14px;
+            font-weight: bold;
         }
 
         /* MOBILE MENU */
@@ -192,6 +249,95 @@
     </style>
 </head>
 <body class="grid-bg">
+
+    <!-- COMPLIANCE MODAL (NEW) -->
+    <div id="compliance-modal">
+        <div class="bg-[#111] border-2 border-[#FF3300] p-6 md:p-10 max-w-lg w-full shadow-[10px_10px_0px_0px_#FFFFFF] relative">
+            
+            <!-- Header -->
+            <div class="text-center mb-6 border-b border-gray-700 pb-4">
+                <i class="fas fa-exclamation-triangle text-[#FF3300] text-3xl mb-3"></i>
+                <h2 class="font-heavy text-2xl md:text-3xl text-white uppercase tracking-wide">
+                    <span class="lang-en">Important Statement</span>
+                    <span class="lang-zh">重要聲明</span>
+                </h2>
+            </div>
+
+            <!-- Content -->
+            <div class="font-mono text-gray-300 text-sm mb-6 space-y-2">
+                <p>
+                    <span class="lang-en">You are about to enter HKAIIFF digital asset service area.</span>
+                    <span class="lang-zh">您即將進入HKAIIFF數字資產服務區域。</span>
+                </p>
+                <p class="text-xs text-gray-500">
+                    <span class="lang-en">This service is provided by a Hong Kong entity and is governed by Hong Kong laws.</span>
+                    <span class="lang-zh">本服務由香港主體提供，受香港法律管轄。</span>
+                </p>
+            </div>
+
+            <!-- Checklist -->
+            <div class="space-y-3 mb-8 font-mono text-sm text-white">
+                <p class="mb-4 font-bold text-[#FF3300]">
+                    <span class="lang-en">Please Confirm:</span>
+                    <span class="lang-zh">請確認:</span>
+                </p>
+                
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" class="compliance-check">
+                    <span>
+                        <span class="lang-en">I am not a resident of mainland China</span>
+                        <span class="lang-zh">本人非中國大陸居民</span>
+                    </span>
+                </label>
+                
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" class="compliance-check">
+                    <span>
+                        <span class="lang-en">I am not a US citizen or resident</span>
+                        <span class="lang-zh">本人非美國公民或居民</span>
+                    </span>
+                </label>
+                
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" class="compliance-check">
+                    <span>
+                        <span class="lang-en">I am participating through my own offshore assets</span>
+                        <span class="lang-zh">本人通過自有境外資產參與</span>
+                    </span>
+                </label>
+                
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" class="compliance-check">
+                    <span>
+                        <span class="lang-en">I am aware of digital asset investment risks</span>
+                        <span class="lang-zh">本人知悉數字資產投資風險</span>
+                    </span>
+                </label>
+
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" class="compliance-check">
+                    <span>
+                        <span class="lang-en">I voluntarily assume all investment risks</span>
+                        <span class="lang-zh">本人自願承擔全部投資風險</span>
+                    </span>
+                </label>
+            </div>
+
+            <!-- Footer & Action -->
+            <div class="space-y-4">
+                <div class="text-xs text-gray-500 font-mono text-center">
+                    <span class="lang-en">I have read and agree to <a href="#" class="underline hover:text-white">User Agreement</a> & <a href="#" class="underline hover:text-white">Risk Warning</a></span>
+                    <span class="lang-zh">我已閱讀並同意 <a href="#" class="underline hover:text-white">《用戶協議》</a> <a href="#" class="underline hover:text-white">《風險提示書》</a></span>
+                </div>
+                
+                <button id="compliance-submit" disabled onclick="submitCompliance()" class="w-full brutal-btn bg-[#FF3300] text-black border-[#FF3300] hover:text-white">
+                    <span class="lang-en">ENTER</span>
+                    <span class="lang-zh">進入</span>
+                </button>
+            </div>
+            
+        </div>
+    </div>
 
     <!-- LOADER -->
     <div id="loader">
@@ -1296,6 +1442,11 @@
             menu.classList.toggle('active');
             
             // Toggle Body Scroll to prevent background scrolling
+            // Note: During the compliance phase, scroll is already disabled via CSS on body
+            // This logic will work normally after compliance is accepted
+            const complianceModal = document.getElementById('compliance-modal');
+            if (complianceModal.style.display !== 'none') return; // Don't mess with overflow if modal is active
+
             if (menu.classList.contains('active')) {
                 document.body.style.overflow = 'hidden';
             } else {
@@ -1324,6 +1475,39 @@
             } else {
                 content.style.maxHeight = null;
             }
+        }
+
+        // 5. COMPLIANCE MODAL LOGIC (NEW)
+        const complianceChecks = document.querySelectorAll('.compliance-check');
+        const complianceSubmitBtn = document.getElementById('compliance-submit');
+        const complianceModal = document.getElementById('compliance-modal');
+
+        function checkCompliance() {
+            let allChecked = true;
+            complianceChecks.forEach(checkbox => {
+                if (!checkbox.checked) {
+                    allChecked = false;
+                }
+            });
+            
+            if (allChecked) {
+                complianceSubmitBtn.removeAttribute('disabled');
+            } else {
+                complianceSubmitBtn.setAttribute('disabled', 'true');
+            }
+        }
+
+        complianceChecks.forEach(checkbox => {
+            checkbox.addEventListener('change', checkCompliance);
+        });
+
+        function submitCompliance() {
+            // Hide the modal
+            complianceModal.style.display = 'none';
+            // Enable scrolling on body (override the CSS overflow: hidden)
+            document.body.style.overflow = 'auto';
+            // Optional: Store consent in session storage if you want it to persist during session
+            // sessionStorage.setItem('complianceAccepted', 'true');
         }
     </script>
 </body>
