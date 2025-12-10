@@ -312,7 +312,6 @@
                 </div>
                 
                 <h1 class="hero-title font-heavy mega-text mb-6 leading-none">
-                    <!-- FIXED: Removed duplicate 'class' attributes and inline display styles -->
                     <span class="block lang-en">AI NATIVE</span>
                     <span class="block outline-text lang-en">FILM</span>
                     <span class="block text-signal lang-en">EDUCATION</span>
@@ -638,7 +637,7 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-0 border-2 border-black bg-white">
-            <!-- Innovation Center -->
+            <!-- Innovation Center (Compliance Adjusted: Removed Financial ROI) -->
             <div class="border-b lg:border-b-0 lg:border-r border-black p-8 hover:bg-black hover:text-white transition-colors duration-300 group">
                 <span class="font-mono text-xs bg-signal text-white px-2 py-1 mb-6 inline-block">01</span>
                 <h3 class="font-heavy text-3xl mb-2">
@@ -652,21 +651,24 @@
                 
                 <div class="border-t border-black group-hover:border-white pt-6 space-y-2 font-mono text-xs">
                     <div class="flex justify-between">
-                        <span>INVESTMENT</span>
-                        <span class="text-signal font-bold">$3M</span>
+                        <span class="lang-en">FACILITIES</span>
+                        <span class="lang-zh">設施配置</span>
+                        <span class="text-signal font-bold">FULL STUDIO</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>ROI (5Y)</span>
-                        <span class="text-signal font-bold">400-700%</span>
+                        <span class="lang-en">CAPACITY/YR</span>
+                        <span class="lang-zh">年容納學員</span>
+                        <span class="text-signal font-bold">500-800</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>PAYBACK</span>
+                        <span class="lang-en">CONSTRUCTION</span>
+                        <span class="lang-zh">建設週期</span>
                         <span class="text-signal font-bold">8-12 MO</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Flagship Center -->
+            <!-- Flagship Center (Compliance Adjusted) -->
             <div class="border-b lg:border-b-0 lg:border-r border-black p-8 bg-black text-white transform lg:scale-105 shadow-[0_0_30px_rgba(0,0,0,0.3)] z-10 relative">
                  <span class="absolute top-0 right-0 bg-signal text-black px-2 py-1 font-mono text-xs font-bold">RECOMMENDED</span>
                 <span class="font-mono text-xs border border-white px-2 py-1 mb-6 inline-block">02</span>
@@ -681,21 +683,24 @@
                 
                 <div class="border-t border-white pt-6 space-y-2 font-mono text-xs">
                     <div class="flex justify-between">
-                        <span>INVESTMENT</span>
-                        <span class="text-signal font-bold">$1.5M</span>
+                        <span class="lang-en">FACILITIES</span>
+                        <span class="lang-zh">設施配置</span>
+                        <span class="text-signal font-bold">AR/VR LAB</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>ROI (5Y)</span>
-                        <span class="text-signal font-bold">300-600%</span>
+                        <span class="lang-en">CAPACITY/YR</span>
+                        <span class="lang-zh">年容納學員</span>
+                        <span class="text-signal font-bold">300-500</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>PAYBACK</span>
-                        <span class="text-signal font-bold">9-15 MO</span>
+                        <span class="lang-en">CONSTRUCTION</span>
+                        <span class="lang-zh">建設週期</span>
+                        <span class="text-signal font-bold">6-9 MO</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Standard Center -->
+            <!-- Standard Center (Compliance Adjusted) -->
             <div class="p-8 hover:bg-black hover:text-white transition-colors duration-300 group">
                 <span class="font-mono text-xs bg-gray-200 text-black px-2 py-1 mb-6 inline-block">03</span>
                 <h3 class="font-heavy text-3xl mb-2">
@@ -709,16 +714,19 @@
                 
                 <div class="border-t border-black group-hover:border-white pt-6 space-y-2 font-mono text-xs">
                     <div class="flex justify-between">
-                        <span>INVESTMENT</span>
-                        <span class="text-signal font-bold">$800K</span>
+                        <span class="lang-en">FACILITIES</span>
+                        <span class="lang-zh">設施配置</span>
+                        <span class="text-signal font-bold">BASIC CLASS</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>ROI (5Y)</span>
-                        <span class="text-signal font-bold">250-500%</span>
+                        <span class="lang-en">CAPACITY/YR</span>
+                        <span class="lang-zh">年容納學員</span>
+                        <span class="text-signal font-bold">100-200</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>PAYBACK</span>
-                        <span class="text-signal font-bold">10-16 MO</span>
+                        <span class="lang-en">CONSTRUCTION</span>
+                        <span class="lang-zh">建設週期</span>
+                        <span class="text-signal font-bold">3-6 MO</span>
                     </div>
                 </div>
             </div>
@@ -838,7 +846,9 @@
                 </h3>
                 <ul class="font-mono text-xs space-y-2 opacity-70">
                     <li>Incubation</li>
-                    <li>Investment Matching</li>
+                    <!-- Compliance Fix: Investment Matching -> Resource Matching -->
+                    <li class="lang-en">Resource Matching</li>
+                    <li class="lang-zh">資源對接</li>
                 </ul>
             </div>
             
@@ -967,14 +977,16 @@
             }
         }
 
-        // 4. PARTNERSHIP ALERT (Preserved from index.html)
+        // 4. PARTNERSHIP ALERT (UPDATED FOR COMPLIANCE)
+        // Removed specific ROI figures to comply with regulations.
         document.addEventListener('DOMContentLoaded', function() {
             const applicationButtons = document.querySelectorAll('[href="#partnership-application"]');
             applicationButtons.forEach(button => {
                 button.addEventListener('click', function(e) {
                     if (this.getAttribute('href') === '#partnership-application') {
                         e.preventDefault();
-                        alert('Partnership Application Portal Opening...\n\nThree-tier Partnership Model:\n\n• Innovation Center: $3M investment, 400-700% ROI\n• Flagship Center: $1.5M investment, 300-600% ROI\n• Standard Center: $800K investment, 250-500% ROI\n\nPlease contact us for details: partnership@hkaifa.academy');
+                        // Compliance Update: Removed specific ROI financial data
+                        alert('Partnership Application Portal Opening...\n\nThree-tier Partnership Model:\n\n• Innovation Center: Large Comprehensive Base (Full Studio)\n• Flagship Center: Regional Education Hub (AR/VR Lab)\n• Standard Center: Localized Education Base (Basic Class)\n\nPlease contact us for details: partnership@hkaifa.academy');
                     }
                 });
             });
