@@ -248,7 +248,6 @@
 </head>
 <body class="grid-bg en overflow-x-hidden"> 
 
-    <!-- LOADER -->
     <div id="loader">
         <div class="font-heavy text-5xl md:text-9xl font-bold text-black tracking-tighter text-center px-4">AIF.GENESIS</div>
         <div class="font-mono text-black mt-4 text-xs md:text-base animate-pulse">
@@ -256,7 +255,6 @@
         </div>
     </div>
 
-    <!-- COMPLIANCE MODAL (EXACT COPY FROM GENESIS.HTML) -->
     <div id="complianceModal" class="modal-overlay">
         <div class="modal-content p-6 md:p-8 max-w-lg">
             <div class="border-b-4 border-black mb-6 pb-4">
@@ -337,13 +335,12 @@
         </div>
     </div>
 
-    <!-- TOP MARQUEE (UPDATED TO ROUND 3) -->
     <div class="fixed top-0 left-0 w-full bg-signal text-black py-2 font-mono text-xs md:text-sm font-bold border-b-2 border-black z-50">
         <div class="marquee-container">
             <div class="marquee-content">
                 <span class="mx-4">///</span>
-                <span class="mx-4 lang-en">🎉 LIMITED 3,000 GENESIS MEMBER RECRUITMENT! ROUND 3 PRICE $0.06/AIF · PARTICIPATING: <span class="participating-count">2044</span>/3000 🚀</span>
-                <span class="mx-4 lang-zh">🎉 限量3,000名 GENESIS創世會員招募中！第3輪價格 $0.06/AIF · 已參與：<span class="participating-count">2044</span>/3000 🚀</span>
+                <span class="mx-4 lang-en">🎉 LIMITED 3,000 GENESIS MEMBER RECRUITMENT! ROUND 3 PRICE $0.06/AIF · PARTICIPATING: <span class="participating-count">2030</span>/3000 🚀</span>
+                <span class="mx-4 lang-zh">🎉 限量3,000名 GENESIS創世會員招募中！第3輪價格 $0.06/AIF · 已參與：<span class="participating-count">2030</span>/3000 🚀</span>
                 <span class="mx-4">///</span>
                 <span class="mx-4 lang-en">CONFIGURE THE FUTURE AT BEST PRICE</span>
                 <span class="mx-4 lang-zh">以最優惠價格配置未來資產</span>
@@ -355,7 +352,6 @@
         </div>
     </div>
 
-    <!-- NAV -->
     <nav class="fixed top-[36px] md:top-[40px] left-0 w-full z-40 border-b-2 border-black h-16 md:h-20 flex items-center bg-[rgba(234,234,234,0.95)] backdrop-blur-md">
         <div class="w-full max-w-[1920px] mx-auto flex justify-between items-stretch h-full">
             <div class="flex flex-col justify-center px-4 md:px-8 border-r-2 border-black hover:bg-black hover:text-white transition-colors cursor-pointer group h-full">
@@ -363,7 +359,6 @@
                 <span class="font-mono text-[10px] tracking-widest font-bold text-signal">GENESIS</span>
             </div>
             
-            <!-- Desktop Menu -->
             <div class="hidden lg:flex items-stretch h-full">
                 <a href="#logic" class="nav-link flex items-center px-6 border-r-2 border-black hover:bg-black hover:text-white transition-colors font-mono text-xs uppercase font-bold">
                     <span class="lang-en">Logic</span><span class="lang-zh">核心邏輯</span>
@@ -379,7 +374,6 @@
                 </a>
             </div>
 
-            <!-- Mobile Controls -->
             <div class="flex h-full">
                 <button id="lang-btn" onclick="switchLang()" class="flex items-center px-4 md:px-6 border-l-2 border-black hover:bg-signal hover:text-white transition-colors font-mono text-xs font-bold uppercase h-full min-w-[80px] md:min-w-[100px] justify-center">
                     CN / EN
@@ -391,7 +385,6 @@
         </div>
     </nav>
 
-    <!-- Mobile Menu -->
     <div id="mobile-menu">
         <div class="flex flex-col p-8 gap-6">
             <a href="#logic" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal"><span class="lang-en">LOGIC</span><span class="lang-zh">核心邏輯</span></a>
@@ -404,32 +397,27 @@
         </div>
     </div>
 
-    <!-- HERO SECTION -->
     <header class="relative min-h-screen flex items-center pt-32 pb-20 overflow-hidden bg-black text-white">
         <div class="absolute inset-0 z-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-gray-800 via-black to-black"></div>
         
         <div class="relative z-10 w-full max-w-[1920px] mx-auto px-4 md:px-8">
             <div class="max-w-7xl mx-auto text-center">
-                <!-- Status Badge (UPDATED ROUND 3) -->
                 <div class="inline-flex items-center gap-2 border border-signal text-signal px-4 py-2 font-mono text-xs md:text-sm font-bold mb-8 uppercase animate-pulse">
                     <i class="fas fa-circle text-[10px]"></i>
                     <span class="lang-en">Live: Round 3 Invitation (Limited 3,000)</span>
                     <span class="lang-zh">進行中：第3輪邀請制招募 (限量3,000名)</span>
                 </div>
 
-                <!-- Main Title -->
                 <h1 class="hero-title font-heavy mega-text mb-6 leading-none">
                     <span class="block text-white">GENESIS</span>
                     <span class="block outline-text text-5xl md:text-7xl lg:text-8xl mt-2 md:mt-4">FISSION PROTOCOL</span>
                 </h1>
                 
-                <!-- Subtitle -->
                 <p class="font-mono text-sm md:text-xl max-w-3xl mx-auto text-gray-300 mb-12 leading-relaxed px-4">
                     <span class="lang-en">Leverage the 2x2 Replication Model. Zero Cost Membership. Infinite Growth.</span>
                     <span class="lang-zh">利用二二複製模型實現零成本會員資格 · 構建您的數字資產未來</span>
                 </p>
 
-                <!-- Value Proposition Box -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto mb-12 px-4">
                     <div class="border-2 border-white bg-black p-6 md:p-8 relative group hover:border-signal transition-colors">
                         <div class="absolute top-0 right-0 bg-white text-black px-2 py-1 text-xs font-bold font-mono group-hover:bg-signal">PUBLIC STANDARD</div>
@@ -442,7 +430,6 @@
                     </div>
 
                     <div class="border-4 border-signal bg-black p-6 md:p-8 relative shadow-[10px_10px_0px_0px_rgba(255,51,0,0.5)]">
-                        <!-- UPDATED TO ROUND 3 -->
                         <div class="absolute top-0 left-0 bg-signal text-black px-2 py-1 text-xs font-bold font-mono">ROUND 3 OFFER</div>
                         <div class="font-heavy text-5xl md:text-6xl text-white mb-2">$0.06</div>
                         <div class="font-mono text-sm text-signal font-bold leading-tight">
@@ -452,13 +439,11 @@
                     </div>
                 </div>
 
-                <!-- CTAs -->
                 <div class="flex flex-col md:flex-row gap-4 justify-center px-4">
                     <a href="#activation" class="brutal-btn bg-signal text-black hover:bg-white border-signal w-full md:w-auto">
                         <span class="lang-en">START ACTIVATION</span>
                         <span class="lang-zh">開始激活流程</span>
                     </a>
-                    <!-- FIX: Added specific class hero-btn-secondary for visibility -->
                     <a href="#logic" class="brutal-btn hero-btn-secondary w-full md:w-auto">
                         <span class="lang-en">VIEW RULES</span>
                         <span class="lang-zh">查看裂變規則</span>
@@ -468,7 +453,6 @@
         </div>
     </header>
 
-    <!-- SECTION 1: THE CORE LOGIC (2x2) -->
     <section id="logic" class="py-20 px-4 md:px-8 border-b-2 border-black bg-white">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
@@ -483,9 +467,7 @@
                 </p>
             </div>
 
-            <!-- VISUAL DIAGRAM -->
             <div class="relative max-w-4xl mx-auto py-8 md:py-12 md:px-12">
-                <!-- User 1 (Center) -->
                 <div class="logic-box bg-black text-white p-6 md:p-8 w-full md:w-1/2 mx-auto text-center mb-12 md:mb-16 relative z-10">
                     <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-signal text-black px-3 py-1 font-heavy text-sm border-2 border-black whitespace-nowrap">YOU (USER 1)</div>
                     <div class="font-heavy text-3xl mb-2">10,000 AIF</div>
@@ -496,11 +478,9 @@
                     </div>
                 </div>
 
-                <!-- Connectors (Desktop Only) -->
                 <div class="hidden md:block absolute top-[140px] left-1/2 w-[50%] h-[80px] border-t-2 border-x-2 border-black -translate-x-1/2 -z-0 rounded-t-3xl"></div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-24 relative z-10">
-                    <!-- User A -->
                     <div class="logic-box p-6 text-center">
                         <div class="bg-gray-200 text-black inline-block px-3 py-1 font-bold text-xs mb-4">USER A</div>
                         <h3 class="font-heavy text-lg md:text-xl mb-2"><span class="lang-zh">發送付款截圖 + 您的郵箱</span></h3>
@@ -511,7 +491,6 @@
                         </div>
                     </div>
 
-                    <!-- User B -->
                     <div class="logic-box p-6 text-center">
                         <div class="bg-gray-200 text-black inline-block px-3 py-1 font-bold text-xs mb-4">USER B</div>
                         <h3 class="font-heavy text-lg md:text-xl mb-2"><span class="lang-zh">發送付款截圖 + 您的郵箱</span></h3>
@@ -524,7 +503,6 @@
                 </div>
             </div>
 
-            <!-- CASE STUDY (UPDATED MATH FOR $0.06 ROUND 3 PRICE) -->
             <div class="mt-16 bg-paper border-2 border-black p-6 md:p-10 max-w-4xl mx-auto">
                 <div class="flex items-center gap-4 mb-6 border-b-2 border-black pb-4">
                     <i class="fas fa-calculator text-3xl text-signal"></i>
@@ -564,7 +542,6 @@
         </div>
     </section>
 
-    <!-- SECTION 2: TEAM OF 7 -->
     <section id="team" class="py-20 px-4 md:px-8 border-b-2 border-black bg-[#111] text-white">
         <div class="max-w-7xl mx-auto">
             <div class="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-gray-800 pb-8">
@@ -582,18 +559,15 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <!-- Visual Pyramid -->
                 <div class="relative py-8">
                     <div class="flex justify-center mb-8">
                         <div class="w-16 h-16 border-2 border-signal bg-black flex items-center justify-center font-bold text-signal rounded-full z-10">YOU</div>
                     </div>
-                    <!-- Level 1 -->
                     <div class="flex justify-center gap-16 mb-8 relative">
                          <div class="absolute top-[-20px] left-1/2 w-[120px] h-[20px] border-t border-x border-gray-600 -translate-x-1/2 rounded-t-xl"></div>
                         <div class="w-12 h-12 border border-white bg-gray-800 flex items-center justify-center text-xs rounded-full z-10">A</div>
                         <div class="w-12 h-12 border border-white bg-gray-800 flex items-center justify-center text-xs rounded-full z-10">B</div>
                     </div>
-                    <!-- Level 2 -->
                     <div class="flex justify-center gap-4 md:gap-6 relative">
                          <div class="absolute top-[-20px] left-[35%] w-[60px] h-[20px] border-t border-x border-gray-700 -translate-x-1/2 rounded-t-lg"></div>
                          <div class="absolute top-[-20px] right-[35%] w-[60px] h-[20px] border-t border-x border-gray-700 translate-x-1/2 rounded-t-lg"></div>
@@ -610,7 +584,6 @@
                     </div>
                 </div>
 
-                <!-- Text Logic -->
                 <div class="space-y-6">
                     <div class="border border-gray-700 p-6 bg-gray-900 hover:border-signal transition-colors">
                         <h4 class="font-heavy text-xl mb-2 text-white"><span class="lang-zh">達成條件</span> <span class="lang-en">Condition</span></h4>
@@ -636,7 +609,6 @@
         </div>
     </section>
 
-    <!-- NEW SECTION: ECOSYSTEM (Added) -->
     <section id="ecosystem" class="py-20 px-4 md:px-8 max-w-[1920px] mx-auto border-b-2 border-black bg-paper">
         <div class="text-center mb-16">
             <span class="font-mono text-signal font-bold tracking-widest uppercase mb-4 block">ECOSYSTEM</span>
@@ -696,7 +668,6 @@
         </div>
     </section>
 
-    <!-- REPLACED SECTION: ABOUT TOKEN (Based on genesis2000.html) -->
     <section id="token" class="py-20 px-4 md:px-8 bg-black text-white border-y-2 border-white">
         <div class="max-w-[1920px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
             <div>
@@ -722,7 +693,6 @@
                         <div class="text-xs font-mono text-gray-400"><span class="lang-en">Total Supply</span><span class="lang-zh">通證總供應量</span></div>
                     </div>
                     <div class="border border-white p-4 text-center">
-                        <!-- Keep Price as $0.06 for Round 3 Consistency -->
                         <div class="text-3xl font-heavy text-signal">$0.06</div>
                         <div class="text-xs font-mono text-gray-400"><span class="lang-en">Current Price</span><span class="lang-zh">當前價格</span></div>
                     </div>
@@ -767,7 +737,6 @@
         </div>
     </section>
 
-    <!-- NEW SECTION: INVITATION RELEASE (UPDATED ROUND 3 DETAILS) -->
     <section id="invitation" class="py-20 px-4 md:px-8 bg-paper border-b-2 border-black">
         <div class="max-w-6xl mx-auto">
             <h2 class="section-title text-center">
@@ -778,7 +747,6 @@
                 <span class="lang-zh">10輪邀請制釋放，每輪限量錢包地址，每個錢包限額10,000 AIF</span>
             </div>
 
-            <!-- STATUS BOX (UPDATED TO ROUND 3) -->
             <div class="bg-white border-2 border-black p-8 mb-16 max-w-4xl mx-auto shadow-lg relative overflow-hidden">
                 <div class="absolute top-0 right-0 bg-signal text-black px-4 py-1 font-bold text-sm">LIVE</div>
                 <h3 class="font-heavy text-2xl md:text-3xl mb-6 text-center border-b-2 border-gray-100 pb-4">
@@ -795,11 +763,10 @@
                     </div>
                     <div>
                         <div class="text-sm font-mono text-gray-500 mb-1"><span class="lang-zh">已參與錢包</span></div>
-                        <div class="font-heavy text-4xl">2044<span class="text-gray-400 text-2xl">/3000</span></div>
+                        <div class="font-heavy text-4xl">2030<span class="text-gray-400 text-2xl">/3000</span></div>
                     </div>
                 </div>
                 
-                <!-- PROGRESS BAR -->
                 <div class="w-full bg-gray-200 h-4 mb-8 border border-black rounded-full overflow-hidden">
                     <div class="bg-signal h-full" style="width: 67%;"></div>
                 </div>
@@ -811,7 +778,6 @@
                 </div>
             </div>
 
-            <!-- ROUNDS GRID (UPDATED) -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
                  <div class="border border-black bg-white p-6 text-center opacity-60">
                     <div class="text-xs font-mono text-gray-500 mb-2"><span class="lang-zh">第2輪</span></div>
@@ -838,7 +804,6 @@
         </div>
     </section>
 
-    <!-- ACTIVATION / PURCHASE (Optimized Payment) -->
     <section id="activation" class="py-20 px-4 md:px-8 bg-signal">
         <div class="max-w-5xl mx-auto bg-white border-4 border-black p-6 md:p-12 shadow-[15px_15px_0px_0px_#000]">
             <h2 class="section-title text-center mb-12">
@@ -846,7 +811,6 @@
                 <span class="lang-zh">激活創世權限</span>
             </h2>
 
-            <!-- STEP 1: PAYMENT -->
             <div class="mb-12">
                 <div class="flex items-center gap-4 mb-4">
                     <div class="w-12 h-12 bg-black text-white flex items-center justify-center font-heavy text-2xl">1</div>
@@ -864,7 +828,6 @@
                 </div>
             </div>
 
-            <!-- STEP 2: EMAIL VERIFICATION (CRITICAL LOGIC) -->
             <div class="mb-8">
                  <div class="flex items-center gap-4 mb-4">
                     <div class="w-12 h-12 bg-black text-white flex items-center justify-center font-heavy text-2xl">2</div>
@@ -883,7 +846,6 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- SCENARIO A: NEW USER (USER 1) -->
                         <div class="border border-dashed border-gray-400 p-4 relative">
                             <span class="absolute -top-3 left-4 bg-paper px-2 text-[10px] md:text-xs font-bold text-gray-500">SCENARIO A: I AM NEW</span>
                             <h4 class="font-bold mb-2 text-sm md:text-base"><span class="lang-zh">我是首位用戶 (User 1)</span></h4>
@@ -894,7 +856,6 @@
                             <div class="mt-2 text-[10px] bg-black text-white inline-block px-2 py-1">RESULT: GET 10,000 AIF</div>
                         </div>
 
-                        <!-- SCENARIO B: INVITED USER -->
                         <div class="border-2 border-signal bg-white p-4 relative shadow-lg">
                              <span class="absolute -top-3 left-4 bg-white px-2 text-[10px] md:text-xs font-bold text-signal border border-signal">SCENARIO B: I WAS INVITED</span>
                             <h4 class="font-bold mb-2 text-sm md:text-base"><span class="lang-zh">我是被邀請的 (User A/B)</span></h4>
@@ -917,7 +878,6 @@
         </div>
     </section>
 
-    <!-- FOOTER (UPDATED) -->
     <footer class="bg-black text-steel py-16 px-4 border-t-2 border-signal">
         <div class="max-w-7xl mx-auto text-center">
             <h2 class="font-heavy text-5xl md:text-6xl mb-2 tracking-tighter">AIF<span class="text-signal">GENESIS</span></h2>
@@ -939,9 +899,6 @@
         </div>
     </footer>
 
-    <!-- MODALS (Updated) -->
-    
-    <!-- CRYPTO MODAL -->
     <div id="cryptoModal" class="modal-overlay">
         <div class="modal-content p-6 md:p-8">
             <button onclick="closeModal('cryptoModal')" class="absolute top-4 right-4 text-2xl font-bold hover:text-signal">&times;</button>
@@ -949,7 +906,6 @@
                 <span class="lang-en">CRYPTO EXCHANGE</span><span class="lang-zh">加密貨幣兌換</span>
             </h2>
             <div class="font-mono text-sm mb-6">
-                <!-- Solana -->
                 <p class="mb-2 font-bold bg-gray-200 p-2 inline-block"><span class="lang-zh">OPTION 1: SOLANA (推薦)</span></p>
                 <p class="mb-2 text-xs"><span class="lang-zh">請發送 <strong>USDT</strong> 或 <strong>USDC</strong> 至以下 Solana 地址：</span></p>
                 <div class="bg-white border-2 border-black p-3 mb-2 break-all font-bold select-all text-xs md:text-sm">
@@ -959,7 +915,6 @@
                     <span class="lang-zh">複製 SOLANA 地址</span>
                 </button>
                 
-                <!-- Binance (Added) -->
                 <div class="border-t-2 border-dashed border-gray-400 pt-4">
                     <p class="mb-2 font-bold bg-gray-200 p-2 inline-block"><span class="lang-zh">OPTION 2: BINANCE (BSC/BEP20)</span></p>
                     <p class="mb-2 text-xs"><span class="lang-zh">或發送至幣安錢包地址：</span></p>
@@ -977,7 +932,6 @@
         </div>
     </div>
 
-    <!-- FIAT MODAL (Restored to genesis.html content with Style Fixes) -->
     <div id="fiatModal" class="modal-overlay">
         <div class="modal-content p-6 md:p-8">
             <button onclick="closeModal('fiatModal')" class="absolute top-4 right-4 text-2xl font-bold hover:text-signal">&times;</button>
@@ -987,7 +941,6 @@
             
             <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-2 font-mono">
                 
-                <!-- USD -->
                 <a href="https://buy.stripe.com/14AeVd9Is9Rx9mr7130x202" target="_blank" class="block border-2 border-black p-4 hover:bg-black hover:text-white transition-colors group flex justify-between items-center bg-white">
                     <div class="flex items-center gap-4 text-black group-hover:text-white">
                         <span class="text-2xl">🇺🇸</span>
@@ -999,7 +952,6 @@
                     <i class="fas fa-arrow-right text-black group-hover:text-white"></i>
                 </a>
 
-                <!-- JPY -->
                 <a href="https://buy.stripe.com/8x24gz1bW7Jp6af2KN0x203" target="_blank" class="block border-2 border-black p-4 hover:bg-black hover:text-white transition-colors group flex justify-between items-center bg-white">
                     <div class="flex items-center gap-4 text-black group-hover:text-white">
                         <span class="text-2xl">🇯🇵</span>
@@ -1011,8 +963,7 @@
                     <i class="fas fa-arrow-right text-black group-hover:text-white"></i>
                 </a>
 
-                <!-- HKD -->
-                 <a href="https://buy.stripe.com/7sYeVd5sc9RxaqvgBD0x200" target="_blank" class="block border-2 border-black p-4 hover:bg-black hover:text-white transition-colors group flex justify-between items-center bg-white">
+                <a href="https://buy.stripe.com/7sYeVd5sc9RxaqvgBD0x200" target="_blank" class="block border-2 border-black p-4 hover:bg-black hover:text-white transition-colors group flex justify-between items-center bg-white">
                     <div class="flex items-center gap-4 text-black group-hover:text-white">
                         <span class="text-2xl">🇭🇰</span>
                         <div>
@@ -1023,7 +974,6 @@
                     <i class="fas fa-arrow-right text-black group-hover:text-white"></i>
                 </a>
 
-                <!-- AED -->
                 <a href="https://buy.stripe.com/dRmdR9f2MfbR0PVdpr0x207" target="_blank" class="block border-2 border-black p-4 hover:bg-black hover:text-white transition-colors group flex justify-between items-center bg-white">
                     <div class="flex items-center gap-4 text-black group-hover:text-white">
                         <span class="text-2xl">🇦🇪</span>
@@ -1035,7 +985,6 @@
                     <i class="fas fa-arrow-right text-black group-hover:text-white"></i>
                 </a>
 
-                <!-- SGD -->
                 <a href="https://buy.stripe.com/9B600jcUE0gX2Y3adf0x204" target="_blank" class="block border-2 border-black p-4 hover:bg-black hover:text-white transition-colors group flex justify-between items-center bg-white">
                     <div class="flex items-center gap-4 text-black group-hover:text-white">
                         <span class="text-2xl">🇸🇬</span>
@@ -1047,7 +996,6 @@
                     <i class="fas fa-arrow-right text-black group-hover:text-white"></i>
                 </a>
 
-                <!-- EUR -->
                 <a href="https://buy.stripe.com/00w5kDcUE5BheGL5WZ0x206" target="_blank" class="block border-2 border-black p-4 hover:bg-black hover:text-white transition-colors group flex justify-between items-center bg-white">
                     <div class="flex items-center gap-4 text-black group-hover:text-white">
                         <span class="text-2xl">🇪🇺</span>
@@ -1059,7 +1007,6 @@
                     <i class="fas fa-arrow-right text-black group-hover:text-white"></i>
                 </a>
 
-                <!-- THB -->
                 <a href="https://buy.stripe.com/aFa8wPg6Q2p5eGL8570x208" target="_blank" class="block border-2 border-black p-4 hover:bg-black hover:text-white transition-colors group flex justify-between items-center bg-white">
                     <div class="flex items-center gap-4 text-black group-hover:text-white">
                         <span class="text-2xl">🇹🇭</span>
@@ -1071,7 +1018,6 @@
                     <i class="fas fa-arrow-right text-black group-hover:text-white"></i>
                 </a>
 
-                <!-- GBP -->
                 <a href="https://buy.stripe.com/3cI7sL6wg5Bh2Y3bhj0x205" target="_blank" class="block border-2 border-black p-4 hover:bg-black hover:text-white transition-colors group flex justify-between items-center bg-white">
                     <div class="flex items-center gap-4 text-black group-hover:text-white">
                         <span class="text-2xl">🇬🇧</span>
