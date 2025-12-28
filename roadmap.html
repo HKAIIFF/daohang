@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIF Strategic Roadmap (2025-2035) | HKAIIFF</title>
+    <meta name="description" content="AIF Ecosystem 120-Month Strategic Roadmap. Building the infrastructure for AI-Native Cinema.">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        void: '#050505',      // Deep Black
+                        concrete: '#1F1F1F',  // Dark Gray
+                        signal: '#CCFF00',    // Neon Green (Retained from Roadmap identity but used in HKAIIFF style)
+                        steel: '#EAEAEA',     // Off White
+                        paper: '#F3F3F3',     // Light Gray
+                        gold: '#D4AF37',
+                        silver: '#C0C0C0',
+                        bronze: '#CD7F32'
+                    },
+                    fontFamily: {
+                        heavy: ['"Oswald"', 'sans-serif'],
+                        mono: ['"Space Mono"', 'monospace'],
+                        zh: ['"Noto Sans TC"', 'sans-serif']
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* CORE STYLES - Derived strictly from HKAIIFF.html */
+        
+        html { 
+            scroll-behavior: smooth; 
+        }
+        
+        body { 
+            background-color: #050505; 
+            color: #EAEAEA; 
+            overflow-x: hidden; 
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+        
+        ::selection { 
+            background: #CCFF00; 
+            color: #000; 
+        }
+
+        /* TYPOGRAPHY */
+        .mega-text {
+            /* Responsive font size specifically tuned for the layout */
+            font-size: clamp(2.5rem, 8vw, 9rem); 
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            font-weight: 700;
+            word-break: normal; 
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 5rem);
+            line-height: 1;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            letter-spacing: -0.02em;
+        }
+
+        .outline-text {
+            color: transparent;
+            -webkit-text-stroke: 1.5px #CCFF00;
+            text-stroke: 1.5px #CCFF00;
+            transition: all 0.3s ease;
+        }
+        
+        .hero-title .outline-text {
+            -webkit-text-stroke: 1px #CCFF00; 
+        }
+        
+        @media (min-width: 768px) {
+            .hero-title .outline-text {
+                -webkit-text-stroke: 2px #CCFF00;
+            }
+        }
+
+        /* BUTTONS - Brutalist Style */
+        .brutal-btn {
+            background: #CCFF00;
+            color: #000;
+            border: 2px solid #CCFF00;
+            padding: 1rem 2rem;
+            font-family: 'Space Mono', monospace;
+            text-transform: uppercase;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            white-space: nowrap;
+            min-height: 3.5rem;
+        }
+
+        .brutal-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff;
+            transform: translateX(-101%);
+            transition: transform 0.3s cubic-bezier(0.77, 0, 0.175, 1);
+            z-index: 0;
+        }
+
+        .brutal-btn:hover::before { transform: translateX(0); }
+        .brutal-btn span { position: relative; z-index: 1; }
+        .brutal-btn:hover { color: #000; border-color: #fff; }
+        
+        .brutal-btn.outline { 
+            background: transparent; 
+            color: #CCFF00; 
+            border-color: #CCFF00; 
+        }
+        .brutal-btn.outline:hover { 
+            color: #000; 
+            background: #CCFF00;
+            border-color: #CCFF00;
+        }
+
+        /* CARD STYLES */
+        .info-card { 
+            background: #111;
+            border: 2px solid #333;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            height: 100%; 
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .info-card:hover { 
+            transform: translate(-4px, -4px);
+            box-shadow: 8px 8px 0px 0px #CCFF00; 
+            border-color: #CCFF00;
+        }
+        
+        .info-card.light { 
+            background: #EAEAEA; 
+            color: #050505; 
+            border-color: #EAEAEA; 
+        }
+        
+        .info-card.light:hover { 
+            box-shadow: 8px 8px 0px 0px #CCFF00; 
+            border-color: #fff;
+        }
+
+        /* MARQUEE */
+        .marquee-container { overflow: hidden; white-space: nowrap; display: flex; }
+        .marquee-content { display: flex; animation: marquee 40s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* LOADER */
+        #loader {
+            position: fixed; inset: 0; background: #050505; z-index: 9999;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+            border-bottom: 4px solid #CCFF00;
+        }
+
+        /* MOBILE MENU */
+        #mobile-menu {
+            position: fixed; top: 80px; left: 0; width: 100%; height: calc(100vh - 80px);
+            background: #050505; transform: translateX(100%); transition: transform 0.3s ease-in-out;
+            z-index: 49; overflow-y: auto; border-top: 1px solid #333;
+        }
+        #mobile-menu.active { transform: translateX(0); }
+
+        /* NAV */
+        nav { background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(10px); }
+
+        /* LANGUAGE TOGGLE LOGIC */
+        /* Default state: English shown, Chinese hidden */
+        .lang-zh { display: none !important; }
+        .lang-en { display: block; }
+        span.lang-en { display: inline; }
+        
+        /* State when body has 'show-zh' class */
+        body.show-zh .lang-zh { display: block !important; font-family: 'Noto Sans TC', sans-serif; font-weight: 500; letter-spacing: 0.02em; }
+        body.show-zh span.lang-zh { display: inline !important; }
+        body.show-zh .lang-en { display: none !important; }
+
+        /* TIMELINE */
+        .timeline-step { 
+            position: relative; 
+            padding-left: 1.5rem; 
+            padding-bottom: 4rem; 
+            border-left: 2px solid #333; 
+        }
+        
+        .timeline-step:last-child { 
+            border-left: 2px solid transparent; 
+        }
+        
+        .timeline-marker { 
+            position: absolute; 
+            left: -1.35rem; 
+            top: 0; 
+            width: 2.5rem; 
+            height: 2.5rem; 
+            background: #000; 
+            color: #CCFF00; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: bold; 
+            border: 2px solid #CCFF00; 
+            z-index: 10; 
+            font-family: 'Space Mono', monospace; 
+        }
+        
+        @media (min-width: 768px) {
+            .timeline-step { padding-left: 4rem; }
+        }
+
+        /* TEXT UTILS for READABILITY */
+        .text-justified {
+            text-align: justify;
+        }
+        
+        /* Grid Background Animation */
+        .grid-bg {
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+        
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+    </style>
+</head>
+<body class="grid-bg">
+
+    <div id="loader">
+        <div class="font-heavy text-5xl md:text-9xl font-bold text-white tracking-tighter">ROADMAP</div>
+        <div class="font-mono text-signal mt-4 text-xs md:text-base animate-pulse">
+            LOADING_STRATEGIC_BLUEPRINT_V5.0...
+        </div>
+    </div>
+
+    <nav class="fixed top-0 left-0 w-full z-50 border-b-2 border-[#333] h-20 md:h-24 flex items-center">
+        <div class="w-full max-w-[1920px] mx-auto flex justify-between items-stretch h-full">
+            
+            <div class="flex flex-col justify-center px-4 md:px-8 border-r-2 border-[#333] hover:bg-[#111] transition-colors cursor-pointer group h-full" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+                <span class="font-heavy text-3xl md:text-4xl font-bold text-white tracking-tighter leading-none mb-1">AIF</span>
+                <div class="flex flex-col leading-none">
+                    <span class="font-mono text-[10px] md:text-xs tracking-widest text-signal font-bold">ROADMAP</span>
+                </div>
+            </div>
+            
+            <div class="hidden xl:flex items-stretch h-full text-white">
+                <a href="#vision" class="nav-link flex items-center px-6 border-r-2 border-[#333] hover:bg-signal hover:text-black transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span class="lang-en">VISION</span><span class="lang-zh">願景</span>
+                </a>
+                <a href="#2025" class="nav-link flex items-center px-6 border-r-2 border-[#333] hover:bg-signal hover:text-black transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span class="lang-en">2025: FOUNDATION</span><span class="lang-zh">2025: 基礎</span>
+                </a>
+                <a href="#2026" class="nav-link flex items-center px-6 border-r-2 border-[#333] hover:bg-signal hover:text-black transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span class="lang-en">2026: EXPLOSION</span><span class="lang-zh">2026: 爆發</span>
+                </a>
+                <a href="#longterm" class="nav-link flex items-center px-6 border-r-2 border-[#333] hover:bg-signal hover:text-black transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span class="lang-en">2027-2035</span><span class="lang-zh">2027-2035 規劃</span>
+                </a>
+                <a href="#finance" class="nav-link flex items-center px-6 border-r-2 border-[#333] hover:bg-signal hover:text-black transition-colors font-mono text-xs uppercase font-bold tracking-wider">
+                    <span class="lang-en">GROWTH</span><span class="lang-zh">增長</span>
+                </a>
+            </div>
+
+            <div class="flex h-full">
+                <button id="lang-btn" onclick="toggleLanguage()" class="flex items-center px-6 border-l-2 border-[#333] text-white hover:bg-white hover:text-black transition-colors font-mono text-xs font-bold uppercase h-full w-32 md:w-40 justify-center">
+                    <span class="lang-en">[ 繁體中文 ]</span>
+                    <span class="lang-zh">[ ENGLISH ]</span>
+                </button>
+                <button onclick="toggleMenu()" class="xl:hidden flex items-center px-6 border-l-2 border-[#333] text-white hover:bg-signal hover:text-black transition-colors h-full">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="mobile-menu">
+        <div class="flex flex-col p-8 gap-6">
+            <a href="#vision" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span class="lang-en">VISION</span><span class="lang-zh">願景</span></a>
+            <a href="#2025" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span class="lang-en">2025: FOUNDATION</span><span class="lang-zh">2025: 基礎</span></a>
+            <a href="#2026" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span class="lang-en">2026: EXPLOSION</span><span class="lang-zh">2026: 爆發</span></a>
+            <a href="#longterm" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span class="lang-en">2027+ STRATEGY</span><span class="lang-zh">2027+ 戰略</span></a>
+            <a href="#finance" onclick="toggleMenu()" class="text-white font-heavy text-4xl hover:text-signal transition-colors"><span class="lang-en">GROWTH</span><span class="lang-zh">增長</span></a>
+        </div>
+    </div>
+
+    <header class="relative min-h-screen flex items-center pt-24 overflow-hidden bg-void">
+        <div class="absolute inset-0 z-0 opacity-20" style="background-image: linear-gradient(#333 1px, transparent 1px), linear-gradient(90deg, #333 1px, transparent 1px); background-size: 50px 50px;"></div>
+        
+        <div class="relative z-10 w-full max-w-[1920px] mx-auto px-4 md:px-8">
+            <div class="max-w-7xl">
+                <div class="font-mono text-signal mb-4 flex items-center gap-2 animate-pulse">
+                    <div class="w-2 h-2 bg-signal rounded-full"></div>
+                    <span>/// STRATEGIC BLUEPRINT v5.0</span>
+                </div>
+                
+                <div class="mb-8">
+                    <div class="hero-title font-heavy mega-text leading-none mb-6">
+                        <div class="lang-en">
+                            <span class="block text-white">DEFINING THE</span>
+                            <span class="block outline-text">AI CINEMA</span>
+                            <span class="block text-white">ERA</span>
+                        </div>
+                        
+                        <div class="lang-zh">
+                            <span class="block text-white">定義</span>
+                            <span class="block outline-text">AI 電影時代</span>
+                            <span class="block text-white">新紀元</span>
+                        </div>
+                    </div>
+                    
+                    <p class="font-mono text-sm md:text-xl text-gray-400 max-w-3xl border-l-4 border-signal pl-6 bg-white/5 p-4 backdrop-blur-sm">
+                        <span class="lang-en">A 120-month definitive roadmap. From laying the infrastructure in 2025 to architecting a virtual civilization by 2035. Reshaping the industry, defining new careers, and digitizing assets.</span>
+                        <span class="lang-zh">AIF 生態 120 個月發展路線圖。從 2025 年基礎設施搭建，到 2035 年構建虛擬文明。這是我們重塑電影產業、定義未來職業、並實現資產數字化的十年征程。</span>
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10 max-w-4xl">
+                    <div class="border border-[#333] p-4 bg-[#111]">
+                        <div class="font-heavy text-2xl md:text-3xl text-signal">120</div>
+                        <div class="font-mono text-[10px] md:text-xs text-gray-400 mt-1"><span class="lang-en">Months Roadmap</span><span class="lang-zh">個月發展規劃</span></div>
+                    </div>
+                    <div class="border border-[#333] p-4 bg-[#111]">
+                        <div class="font-heavy text-2xl md:text-3xl text-white">10+</div>
+                        <div class="font-mono text-[10px] md:text-xs text-gray-400 mt-1"><span class="lang-en">Global Hubs</span><span class="lang-zh">全球中心</span></div>
+                    </div>
+                    <div class="border border-[#333] p-4 bg-[#111]">
+                        <div class="font-heavy text-2xl md:text-3xl text-white">$1B+</div>
+                        <div class="font-mono text-[10px] md:text-xs text-gray-400 mt-1"><span class="lang-en">2030 Target</span><span class="lang-zh">2030 營收目標</span></div>
+                    </div>
+                    <div class="border border-[#333] p-4 bg-[#111]">
+                        <div class="font-heavy text-2xl md:text-3xl text-white">AGI</div>
+                        <div class="font-mono text-[10px] md:text-xs text-gray-400 mt-1"><span class="lang-en">Integration</span><span class="lang-zh">深度集成</span></div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                    <a href="#2025" class="brutal-btn w-full sm:w-auto text-center justify-center">
+                        <span><i class="fas fa-flag mr-2"></i> <span class="lang-en">Start 2025</span><span class="lang-zh">啟動 2025</span></span>
+                    </a>
+                    <a href="#longterm" class="brutal-btn outline w-full sm:w-auto text-center justify-center">
+                        <span><i class="fas fa-eye mr-2"></i> <span class="lang-en">Future Vision</span><span class="lang-zh">未來願景</span></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="absolute bottom-0 w-full bg-signal text-black py-2 font-mono text-xs md:text-sm font-bold border-t-2 border-white z-20">
+            <div class="marquee-container">
+                <div class="marquee-content">
+                    <span class="mx-4">AIF ROADMAP 2025-2035 ///</span>
+                    <span class="mx-4"><span class="lang-en">INFRASTRUCTURE</span><span class="lang-zh">基礎設施</span></span>
+                    <span class="mx-4">///</span>
+                    <span class="mx-4"><span class="lang-en">EDUCATION</span><span class="lang-zh">教育</span></span>
+                    <span class="mx-4">///</span>
+                    <span class="mx-4"><span class="lang-en">TRADING</span><span class="lang-zh">交易</span></span>
+                    <span class="mx-4">///</span>
+                    <span class="mx-4"><span class="lang-en">VIRTUAL CIVILIZATION</span><span class="lang-zh">虛擬文明</span></span>
+                    <span class="mx-4">///</span>
+                    <span class="mx-4">AIF ROADMAP 2025-2035 ///</span>
+                    <span class="mx-4"><span class="lang-en">STARTING NOW</span><span class="lang-zh">即刻啟動</span></span>
+                    <span class="mx-4">///</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="vision" class="py-20 md:py-32 px-4 md:px-8 max-w-[1920px] mx-auto border-b border-[#333]">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <div class="lg:col-span-4">
+                <span class="font-mono text-signal font-bold tracking-widest uppercase mb-4 block"><span class="lang-en">STRATEGY</span><span class="lang-zh">核心戰略</span></span>
+                <h2 class="section-title mb-6 text-white">
+                    <span class="lang-en">THE MASTER<br>PLAN</span>
+                    <span class="lang-zh">生態<br>總藍圖</span>
+                </h2>
+                <div class="w-20 h-2 bg-signal mb-8"></div>
+                <p class="font-mono text-sm md:text-base leading-relaxed text-gray-400 mb-6">
+                    <span class="lang-en">The AIF Ecosystem is more than a festival; it is the industrial infrastructure for the AI-Native era. Integrating Education (HKAIFA), Exhibition (HKAIIFF), and Trading (HKAIFM).</span>
+                    <span class="lang-zh">AIF 生態系統不僅僅是一個電影節，它是 AI 原生時代的產業基礎設施。通過 HKAIFA（教育）、HKAIIFF（展示）、HKAIFM（交易）的三位一體，我們構建了一個完整的價值閉環。</span>
+                </p>
+            </div>
+            
+            <div class="lg:col-span-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-full">
+                    <div class="info-card p-6 border-t-4 border-t-signal">
+                        <div class="text-4xl mb-4 text-signal"><i class="fa-solid fa-graduation-cap"></i></div>
+                        <h4 class="font-heavy text-xl mb-2 text-white"><span class="lang-en">1. Education Engine</span><span class="lang-zh">1. 教育引擎 (HKAIFA)</span></h4>
+                        <p class="font-mono text-xs text-gray-400 mt-auto leading-relaxed">
+                            <span class="lang-en">Solving the talent gap. Developing curriculum with top global universities to define future careers like "Prompt Cinematographer".</span>
+                            <span class="lang-zh">解決 AI 時代的最大痛點——人才缺口。通過與全球頂尖院校聯合研發課程，我們定義未來的職業標準。</span>
+                        </p>
+                    </div>
+
+                    <div class="info-card p-6 border-t-4 border-t-white">
+                        <div class="text-4xl mb-4 text-white"><i class="fa-solid fa-trophy"></i></div>
+                        <h4 class="font-heavy text-xl mb-2 text-white"><span class="lang-en">2. Value Discovery</span><span class="lang-zh">2. 價值發現 (HKAIIFF)</span></h4>
+                        <p class="font-mono text-xs text-gray-400 mt-auto leading-relaxed">
+                            <span class="lang-en">The "Sundance" of the AI era. Discovering premium IPs and seed teams through high-prize global competitions.</span>
+                            <span class="lang-zh">全球首個 AI 電影節不是為了評獎，而是為了發現優質 IP 和種子團隊，將 AIF 打造成為 AI 影視界的聖丹斯。</span>
+                        </p>
+                    </div>
+
+                    <div class="info-card p-6 border-t-4 border-t-purple-500">
+                        <div class="text-4xl mb-4 text-purple-500"><i class="fa-solid fa-coins"></i></div>
+                        <h4 class="font-heavy text-xl mb-2 text-white"><span class="lang-en">3. Commercial Loop</span><span class="lang-zh">3. 商業閉環 (HKAIFM)</span></h4>
+                        <p class="font-mono text-xs text-gray-400 mt-auto leading-relaxed">
+                            <span class="lang-en">Blockchain-based copyright confirmation and revenue distribution. AIF Token fuels the ecosystem, FilmToken represents assets.</span>
+                            <span class="lang-zh">利用 Blockchain 技術解決版權確權與收益分配問題。AIF Token 作為生態燃料，FilmToken 作為資產憑證。</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="2025" class="py-20 md:py-32 bg-[#0a0a0a] border-b border-[#333]">
+        <div class="max-w-[1920px] mx-auto px-4 md:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                <div class="lg:col-span-1 sticky top-24 h-fit">
+                    <span class="font-mono text-signal font-bold tracking-widest uppercase mb-4 block">PHASE 1</span>
+                    <h2 class="section-title text-white">2025<br><span class="text-3xl md:text-5xl text-gray-500">FOUNDATION</span></h2>
+                    <p class="font-mono text-sm text-gray-400 mb-8">
+                        <span class="lang-en">From Zero to One. Securing licenses, developing core systems, and validating the business model (MVP).</span>
+                        <span class="lang-zh">這一年是從 0 到 1 的關鍵。我們的核心任務是完成合規牌照的獲取、核心系統的研發以及商業模式的初步驗證（MVP）。</span>
+                    </p>
+                    <div class="hidden lg:block border-t border-gray-800 pt-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-3 h-3 bg-signal rounded-full"></div>
+                            <span class="font-mono text-xs text-gray-500 uppercase">System Dev</span>
+                        </div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-3 h-3 bg-white rounded-full"></div>
+                            <span class="font-mono text-xs text-gray-500 uppercase">Licensing</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-3 h-3 bg-purple-500 rounded-full"></div>
+                            <span class="font-mono text-xs text-gray-500 uppercase">Token/Web3</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-3 pt-12 lg:pt-0">
+                    
+                    <div class="timeline-step">
+                        <div class="timeline-marker">01</div>
+                        <div class="info-card p-6 md:p-8">
+                            <div class="flex flex-col md:flex-row justify-between items-start mb-6">
+                                <h3 class="font-heavy text-2xl md:text-3xl text-white">
+                                    <span class="lang-en">Architecture Launch & System R&D</span>
+                                    <span class="lang-zh">架構啟動與系統研發</span>
+                                </h3>
+                                <span class="bg-[#111] border border-signal text-signal text-xs font-mono px-3 py-1 mt-2 md:mt-0 uppercase tracking-wider">JANUARY 2025</span>
+                            </div>
+                            
+                            <div class="space-y-6">
+                                <div class="bg-[#1a1a1a] p-5 border-l-4 border-signal">
+                                    <strong class="text-white block text-sm mb-2 uppercase tracking-wide"><span class="lang-en">Core Task</span><span class="lang-zh">核心任務</span></strong>
+                                    <p class="font-mono text-xs md:text-sm text-gray-300 leading-relaxed text-justified">
+                                        <span class="lang-en">Based on HK government approval, officially launch the comprehensive digital infrastructure development for HKAIIFF. Concurrently assemble the tech team for HKAIFA online teaching & student management system backend coding.</span>
+                                        <span class="lang-zh">依據港府批复，正式啟動香港 AI 國際電影節 (HKAIIFF) 整體數字架構開發。同步組建技術團隊進行香港 AI 電影學院 (HKAIFA) 在線教學系統與學籍管理系統的底層代碼編寫。</span>
+                                    </p>
+                                </div>
+                                
+                                <div class="bg-[#1a1a1a] p-5 border-l-4 border-gray-600">
+                                    <strong class="text-white block text-sm mb-2 uppercase tracking-wide"><span class="lang-en">Strategic Layout</span><span class="lang-zh">戰略佈局</span></strong>
+                                    <p class="font-mono text-xs md:text-sm text-gray-300 leading-relaxed text-justified">
+                                        <span class="lang-en">Establish "Technology guides Art" development tone. Systems must natively support AI model integration (e.g., Midjourney, Runway API) to lay the foundation for future automated judging.</span>
+                                        <span class="lang-zh">確立「技術引導藝術」的開發基調。系統需原生支持 AI 模型接入（如 Midjourney, Runway API），為後續的自動化賽事評審打下基礎。</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-step">
+                        <div class="timeline-marker">02</div>
+                        <div class="info-card p-6 md:p-8">
+                            <div class="flex flex-col md:flex-row justify-between items-start mb-6">
+                                <h3 class="font-heavy text-2xl md:text-3xl text-white">
+                                    <span class="lang-en">Curriculum R&D & Career Mapping</span>
+                                    <span class="lang-zh">課程研發與職業圖譜</span>
+                                </h3>
+                                <span class="bg-[#111] border border-white text-white text-xs font-mono px-3 py-1 mt-2 md:mt-0 uppercase tracking-wider">FEBRUARY 2025</span>
+                            </div>
+
+                            <div class="space-y-6">
+                                <div class="bg-[#1a1a1a] p-5 border-l-4 border-white">
+                                    <strong class="text-white block text-sm mb-2 uppercase tracking-wide"><span class="lang-en">Core Task</span><span class="lang-zh">核心任務</span></strong>
+                                    <p class="font-mono text-xs md:text-sm text-gray-300 leading-relaxed text-justified">
+                                        <span class="lang-en">Apply for Academy & Market licenses. Jointly form international curriculum committee with USC, Tokyo University of the Arts, and European film schools. Publish "Future 10-Year AI Film Career Whitepaper", defining new roles like "Prompt Cinematographer", "Algorithm Editor".</span>
+                                        <span class="lang-zh">申請學院與市場牌照。聯合美國 USC、日本東京藝術大學及歐洲影視院校，組建跨國課程研發委員會。發佈《未來 10 年 AI 影視職業白皮書》，定義如 "Prompt Cinematographer", "Algorithm Editor" 等全新職位。</span>
+                                    </p>
+                                </div>
+
+                                <div class="bg-gray-900 p-4 border border-gray-700 flex flex-col md:flex-row gap-4 items-center">
+                                    <div class="text-4xl text-white"><i class="fa-solid fa-project-diagram"></i></div>
+                                    <div>
+                                        <strong class="text-white text-sm block mb-1 uppercase"><span class="lang-en">Knowledge Graph</span><span class="lang-zh">知識圖譜</span></strong>
+                                        <p class="font-mono text-xs text-gray-400">
+                                            <span class="lang-en">Complete v1.0 of the Career Knowledge Graph, structurally mapping AI toolchains to traditional filmmaking workflows.</span>
+                                            <span class="lang-zh">完成職業知識圖譜 (Knowledge Graph) 的 1.0 版本開發，將 AI 工具鏈與傳統電影製作流程進行結構化映射。</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-step">
+                        <div class="timeline-marker">03</div>
+                        <div class="info-card p-6 md:p-8 border-signal">
+                            <div class="flex flex-col md:flex-row justify-between items-start mb-6">
+                                <h3 class="font-heavy text-2xl md:text-3xl text-white">
+                                    <span class="lang-en">License Approval & System Launch</span>
+                                    <span class="lang-zh">牌照落地與系統上線</span>
+                                </h3>
+                                <span class="bg-signal text-black text-xs font-mono px-3 py-1 mt-2 md:mt-0 font-bold uppercase tracking-wider">KEY MILESTONE</span>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div class="flex flex-col md:flex-row gap-4 border-b border-gray-800 pb-4">
+                                    <div class="min-w-[80px] text-signal font-heavy text-xl">MAR</div>
+                                    <p class="font-mono text-xs md:text-sm text-gray-300 leading-relaxed">
+                                        <span class="lang-en">Officially apply for "HKAIIFF Association" non-profit license, establishing dual commercial and academic tracks.</span>
+                                        <span class="lang-zh">正式申請「香港人工智能國際電影節協會」非營利組織牌照，確立商業與學術雙軌並行機制。</span>
+                                    </p>
+                                </div>
+
+                                <div class="flex flex-col md:flex-row gap-4">
+                                    <div class="min-w-[80px] text-signal font-heavy text-xl">APR</div>
+                                    <p class="font-mono text-xs md:text-sm text-gray-300 leading-relaxed">
+                                        <span class="lang-en">HK AI Film Academy license approved. Academy website & teaching system v1.0 live, opening global pre-registration.</span>
+                                        <span class="lang-zh">香港 AI 電影學院牌照正式獲批。學院官網與教學系統 V1.0 正式上線運營，開放全球預註冊。</span>
+                                    </p>
+                                </div>
+
+                                <div class="bg-[#1a1a1a] p-4 mt-4 border border-gray-700">
+                                    <strong class="text-signal text-xs block mb-1 font-mono uppercase">STRATEGIC GOAL</strong>
+                                    <p class="font-mono text-xs text-white leading-relaxed">
+                                        <span class="lang-en">Complete all core compliance procedures, ensuring operations are legal under HK law, laying legal foundation for Mainland authorizations.</span>
+                                        <span class="lang-zh">完成所有核心合規手續，確保業務在香港法律框架下合法合規運行，為大陸地區授權打下法律基礎。</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-step">
+                        <div class="timeline-marker">04</div>
+                        <div class="info-card p-6 md:p-8 bg-gradient-to-br from-[#111] to-[#1a1a1a]">
+                            <div class="flex flex-col md:flex-row justify-between items-start mb-6">
+                                <h3 class="font-heavy text-2xl md:text-3xl text-white">
+                                    <span class="lang-en">First Authorization & Revenue Validation</span>
+                                    <span class="lang-zh">首家授權與營收驗證</span>
+                                </h3>
+                                <span class="text-gray-500 text-xs font-mono mt-2 md:mt-0 uppercase">MAY - JUN 2025</span>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4 mb-6 border-b border-gray-700 pb-6">
+                                <div class="bg-black border border-gray-800 p-4">
+                                    <div class="text-3xl font-mono font-bold text-white mb-1">¥1M+</div>
+                                    <div class="text-[10px] text-gray-500 uppercase tracking-wider">May Revenue</div>
+                                </div>
+                                <div class="bg-black border border-gray-800 p-4">
+                                    <div class="text-3xl font-mono font-bold text-white mb-1">3</div>
+                                    <div class="text-[10px] text-gray-500 uppercase tracking-wider">Centers Approved</div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-6">
+                                <div>
+                                    <h4 class="font-bold text-white text-sm uppercase mb-2 border-l-2 border-white pl-3">
+                                        <span class="lang-en">Commercial Launch</span><span class="lang-zh">商業化啟動</span>
+                                    </h4>
+                                    <p class="font-mono text-xs md:text-sm text-gray-400 leading-relaxed text-justified">
+                                        <span class="lang-en">First Mainland China authorized center approved and starts recruitment. "HKAIFA Content + Local Operations" model validated.</span>
+                                        <span class="lang-zh">大陸地區首家學院授權中心正式獲批並啟動招生。標誌著 "HKAIFA Content + Local Operations" 模式跑通。</span>
+                                    </p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white text-sm uppercase mb-2 border-l-2 border-white pl-3">
+                                        <span class="lang-en">Full Licensing Loop</span><span class="lang-zh">全牌照閉環</span>
+                                    </h4>
+                                    <p class="font-mono text-xs md:text-sm text-gray-400 leading-relaxed text-justified">
+                                        <span class="lang-en">June: HKAIFM (Market) and Association licenses both approved. Education, Association, and Market structures fully established.</span>
+                                        <span class="lang-zh">6月，香港 AI 電影市場 (HKAIFM) 與協會牌照雙雙獲批。至此，教育、協會、市場三大實體架構全部搭建完成。</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-step">
+                        <div class="timeline-marker">05</div>
+                        <div class="info-card p-6 md:p-8 border-purple-500 shadow-[4px_4px_0px_0px_rgba(168,85,247,0.3)]">
+                             <div class="flex flex-col md:flex-row justify-between items-start mb-6">
+                                <h3 class="font-heavy text-2xl md:text-3xl text-white">
+                                    <span class="lang-en">Scaling & Token Launch</span>
+                                    <span class="lang-zh">規模擴張與 Token 發行</span>
+                                </h3>
+                                <span class="bg-purple-900 text-purple-200 text-xs font-mono px-3 py-1 mt-2 md:mt-0 uppercase font-bold">WEB3 LEAP</span>
+                            </div>
+
+                            <div class="space-y-4 mb-6">
+                                <div class="flex gap-4">
+                                    <div class="min-w-[40px] font-mono text-purple-400 font-bold">JUL</div>
+                                    <p class="font-mono text-xs md:text-sm text-gray-300">
+                                        <span class="lang-en">Mainland centers increase to 3, monthly revenue breaks 3M. Education product scalability validated.</span>
+                                        <span class="lang-zh">大陸授權中心增至 3 家，單月營收破 300 萬。驗證了教育產品的可複製性。</span>
+                                    </p>
+                                </div>
+                                <div class="flex gap-4">
+                                    <div class="min-w-[40px] font-mono text-purple-400 font-bold">AUG</div>
+                                    <p class="font-mono text-xs md:text-sm text-gray-300">
+                                        <span class="lang-en">First Mainland submission center authorized, establishing content supply pipeline.</span>
+                                        <span class="lang-zh">首家大陸地區徵片中心授權獲批，正式建立內容供給管道。</span>
+                                    </p>
+                                </div>
+                                <div class="flex gap-4 bg-purple-900/20 p-3 rounded border border-purple-500/30">
+                                    <div class="min-w-[40px] font-mono text-purple-400 font-bold">SEP</div>
+                                    <p class="font-mono text-xs md:text-sm text-white font-bold">
+                                        <span class="lang-en">AIF Token launched on Solana. Marking the leap from physical to Web3 economy; token used for compute, courses, and copyright.</span>
+                                        <span class="lang-zh">AIF 算力通證於 Solana 鏈上正式發行。這標誌著 AIF 從實體經濟向 Web3 經濟體跨越，通證將用於未來的算力支付、課程購買及版權交易。</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-step">
+                        <div class="timeline-marker">06</div>
+                        <div class="info-card p-6 md:p-8">
+                            <div class="flex flex-col md:flex-row justify-between items-start mb-6">
+                                <h3 class="font-heavy text-2xl md:text-3xl text-white">
+                                    <span class="lang-en">Ecosystem Launch & Community Fission</span>
+                                    <span class="lang-zh">生態面世與社區裂變</span>
+                                </h3>
+                                <span class="bg-[#222] text-gray-400 text-xs font-mono px-3 py-1 mt-2 md:mt-0 uppercase">OCT - DEC 2025</span>
+                            </div>
+
+                            <div class="space-y-6">
+                                <div>
+                                    <h4 class="font-heavy text-xl text-white mb-3">GENESIS & CAPTAIN PLAN</h4>
+                                    <ul class="font-mono text-xs md:text-sm space-y-4 text-gray-300">
+                                        <li class="pl-4 border-l-2 border-signal">
+                                            <strong class="text-white">OCT:</strong>
+                                            <span class="lang-en">AIF ecosystem officially released. "Genesis" plan established.</span>
+                                            <span class="lang-zh">AIF 整體生態正式對外發佈。確立 "Genesis" 創世計劃。</span>
+                                        </li>
+                                        <li class="pl-4 border-l-2 border-signal">
+                                            <strong class="text-white">NOV:</strong>
+                                            <span class="lang-en"><span class="text-signal">Captain Plan</span> launched. Recruiting 100 ecosystem evangelists with token incentives & distribution rights.</span>
+                                            <span class="lang-zh"><span class="text-signal">船長計劃 (Captain Plan)</span> 面世。招募 100 位生態佈道者，給予 Token 激勵與分銷權限。</span>
+                                        </li>
+                                        <li class="pl-4 border-l-2 border-signal">
+                                            <strong class="text-white">DEC:</strong>
+                                            <span class="lang-en">Active wallets > 2000. Seed users accumulated; community enters spontaneous fission phase.</span>
+                                            <span class="lang-zh">錢包地址激活數超過 2000。完成種子用戶積累，社區進入自發裂變階段。</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="mt-4 pt-6 border-t border-gray-800 text-center">
+                                    <span class="font-mono text-xs text-gray-500 uppercase block mb-1">END OF 2025 STATUS</span>
+                                    <span class="font-heavy text-lg md:text-xl text-white">INFRASTRUCTURE READY. COMMUNITY ACTIVE.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="2026" class="py-20 md:py-32 bg-void border-b border-[#333]">
+        <div class="max-w-[1920px] mx-auto px-4 md:px-8">
+            <h2 class="section-title text-center text-white mb-16">
+                <span class="lang-en">2026: THE EXPLOSION</span><span class="lang-zh">2026: 爆發之年</span>
+            </h2>
+            
+            <p class="text-center font-mono text-gray-400 mb-12 max-w-2xl mx-auto text-sm md:text-base">
+                <span class="lang-en">The year of explosion. First festival, global tour, and market launch. We move from behind the scenes to the world stage.</span>
+                <span class="lang-zh">這一年是 AIF 的爆發之年。首屆電影節舉辦、全球巡展啟動、市場系統上線，我們將從幕後走到台前，震撼全球影視行業。</span>
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border-2 border-[#333]">
+                <div class="p-8 border-b lg:border-r border-[#333] hover:bg-[#111] transition-all group h-full">
+                    <div class="font-mono text-signal mb-2 text-sm font-bold">Q1 (JAN-MAR)</div>
+                    <h3 class="font-heavy text-2xl md:text-3xl mb-4 text-white"><span class="lang-en">Incentive & Launch</span><span class="lang-zh">激勵與啟動</span></h3>
+                    <div class="w-full bg-gray-800 h-2 mb-6"><div class="bg-signal h-2" style="width: 30%"></div></div>
+                    
+                    <ul class="font-mono text-xs md:text-sm text-gray-400 space-y-6">
+                        <li class="flex gap-3">
+                            <i class="fa-solid fa-check text-signal mt-1"></i>
+                            <div>
+                                <strong class="text-white block mb-1"><span class="lang-en">Top 100 Captains (Jan)</span><span class="lang-zh">百大船長計劃 (Jan)</span></strong>
+                                <span class="lang-en">Selected Top 100 contributors, distributing Node NFTs & resource packs, forming core interest group.</span>
+                                <span class="lang-zh">優選 Top 100 生態貢獻者，發放節點 NFT 與資源包，形成核心利益共同體。</span>
+                            </div>
+                        </li>
+                        <li class="flex gap-3">
+                            <i class="fa-solid fa-check text-signal mt-1"></i>
+                            <div>
+                                <strong class="text-white block mb-1"><span class="lang-en">"Fortune God" Plan (Feb)</span><span class="lang-zh">「財神到」計劃 (Feb)</span></strong>
+                                <span class="lang-en">CNY Million Dollar Airdrop & Rewards, igniting social media traffic.</span>
+                                <span class="lang-zh">春節期間上線價值百萬美金的 AIF 空投與獎勵活動，引爆社交媒體流量。</span>
+                            </div>
+                        </li>
+                        <li class="flex gap-3">
+                            <i class="fa-solid fa-check text-signal mt-1"></i>
+                            <div>
+                                <strong class="text-white block mb-1"><span class="lang-en">Liquidity & Entries (Mar)</span><span class="lang-zh">流動池與徵片 (Mar)</span></strong>
+                                <span class="lang-en">AIF Liquidity Pool live; Global Festival Submission System open, inviting global creators.</span>
+                                <span class="lang-zh">AIF 流動性池上線；電影節全球徵片系統開放，向全球 AI 創作者發出邀請。</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="p-8 border-b lg:border-r border-[#333] hover:bg-[#111] transition-all group h-full bg-[#0a0a0a]">
+                    <div class="font-mono text-white mb-2 text-sm font-bold">Q2 (APR-JUN)</div>
+                    <h3 class="font-heavy text-2xl md:text-3xl mb-4 text-white"><span class="lang-en">Inaugural Gala</span><span class="lang-zh">首屆盛典</span></h3>
+                    <div class="w-full bg-gray-800 h-2 mb-6"><div class="bg-white h-2" style="width: 60%"></div></div>
+                    
+                    <ul class="font-mono text-xs md:text-sm text-gray-400 space-y-6">
+                        <li class="flex gap-3">
+                            <i class="fa-solid fa-rocket text-white mt-1"></i>
+                            <div>
+                                <strong class="text-white block mb-1"><span class="lang-en">Roadshow Center (Apr)</span><span class="lang-zh">路演中心啟動 (Apr)</span></strong>
+                                <span class="lang-en">First batch AI film seed projects roadshow. Connecting Silicon Valley & HK capital for angel rounds.</span>
+                                <span class="lang-zh">首批 AI 影視種子項目路演。連接矽谷與港資，完成首批項目的天使輪融資。</span>
+                            </div>
+                        </li>
+                        <li class="flex gap-3">
+                            <i class="fa-solid fa-film text-white mt-1"></i>
+                            <div>
+                                <strong class="text-white block mb-1"><span class="lang-en">HKAIIFF Opening (May)</span><span class="lang-zh">HKAIIFF 開幕 (May)</span></strong>
+                                <span class="lang-en">Grand Opening of 1st HK AI Int'l Film Festival. First AI Oscars awarded, setting industry standards.</span>
+                                <span class="lang-zh">首屆香港 AI 國際電影節盛大開幕。頒發首個 AI 奧斯卡獎項，確立行業最高榮譽標準。</span>
+                            </div>
+                        </li>
+                        <li class="flex gap-3">
+                            <i class="fa-solid fa-store text-white mt-1"></i>
+                            <div>
+                                <strong class="text-white block mb-1"><span class="lang-en">HKAIFM Launch (Jun)</span><span class="lang-zh">HKAIFM 上線 (Jun)</span></strong>
+                                <span class="lang-en">HK AI Film Market System Live. Award-winning IP rights tokenized and auctioned on-site.</span>
+                                <span class="lang-zh">香港 AI 電影市場交易系統正式上線。獲獎作品 IP 現場實現版權 Token 化與拍賣。</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="p-8 border-b md:border-r-0 border-[#333] hover:bg-[#111] transition-all group h-full">
+                    <div class="font-mono text-purple-400 mb-2 text-sm font-bold">H2 (JUL-DEC)</div>
+                    <h3 class="font-heavy text-2xl md:text-3xl mb-4 text-white"><span class="lang-en">Global Tour & Tech</span><span class="lang-zh">全球巡展與迭代</span></h3>
+                    <div class="w-full bg-gray-800 h-2 mb-6"><div class="bg-purple-500 h-2" style="width: 90%"></div></div>
+                    
+                    <div class="mb-6">
+                        <strong class="text-white block mb-3 text-sm"><span class="lang-en">Global Tour Roadmap:</span><span class="lang-zh">全球巡展路線圖：</span></strong>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-[#222] text-gray-300 px-3 py-1 text-xs border border-gray-700 rounded-full"><span class="lang-en">Shanghai</span><span class="lang-zh">上海</span></span>
+                            <span class="bg-[#222] text-gray-300 px-3 py-1 text-xs border border-gray-700 rounded-full"><span class="lang-en">Hangzhou</span><span class="lang-zh">杭州</span></span>
+                            <span class="bg-[#222] text-gray-300 px-3 py-1 text-xs border border-gray-700 rounded-full"><span class="lang-en">Tokyo</span><span class="lang-zh">東京</span></span>
+                            <span class="bg-[#222] text-gray-300 px-3 py-1 text-xs border border-gray-700 rounded-full"><span class="lang-en">Seoul</span><span class="lang-zh">首爾</span></span>
+                            <span class="bg-[#222] text-gray-300 px-3 py-1 text-xs border border-gray-700 rounded-full"><span class="lang-en">Dubai</span><span class="lang-zh">杜拜</span></span>
+                            <span class="bg-[#222] text-gray-300 px-3 py-1 text-xs border border-gray-700 rounded-full"><span class="lang-en">LA</span><span class="lang-zh">洛杉磯</span></span>
+                        </div>
+                    </div>
+
+                    <ul class="font-mono text-xs md:text-sm text-gray-400 space-y-6 pt-4 border-t border-gray-800">
+                        <li class="flex justify-between items-start">
+                            <div>
+                                <strong class="text-white block mb-1">404.world Beta</strong>
+                                <span class="lang-en">Interactive streaming platform beta. "Parallel Universe" viewing mode.</span>
+                                <span class="lang-zh">互動流媒體平台內測，開啟「平行宇宙」觀影模式。</span>
+                            </div>
+                            <span class="text-xs text-purple-400 bg-purple-900/30 px-2 py-1 rounded ml-2 whitespace-nowrap">Q3</span>
+                        </li>
+                        <li class="flex justify-between items-start">
+                            <div>
+                                <strong class="text-white block mb-1">StarOS Alpha</strong>
+                                <span class="lang-en">Digital Human Agency. Signing first 10 stars for digitization.</span>
+                                <span class="lang-zh">數字人經紀平台啟動，簽約首批 10 位明星進行數字資產化。</span>
+                            </div>
+                            <span class="text-xs text-purple-400 bg-purple-900/30 px-2 py-1 rounded ml-2 whitespace-nowrap">Q4</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="longterm" class="py-20 md:py-32 bg-concrete border-b border-[#333]">
+        <div class="max-w-[1920px] mx-auto px-4 md:px-8">
+            <h2 class="section-title text-center text-white mb-16">
+                <span class="lang-en">2027-2035 STRATEGY</span><span class="lang-zh">2027-2035 戰略願景</span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                <div class="info-card bg-black p-8 border-l-4 border-l-signal">
+                    <div class="font-heavy text-4xl md:text-5xl text-signal mb-2">2027</div>
+                    <h3 class="font-heavy text-2xl text-white mb-4"><span class="lang-en">SCALING</span><span class="lang-zh">規模化與深耕</span></h3>
+                    
+                    <div class="mb-4">
+                        <h4 class="text-signal font-bold mb-2 text-xs uppercase tracking-widest"><span class="lang-en">Analysis</span><span class="lang-zh">分析</span></h4>
+                        <p class="font-mono text-sm text-gray-400 leading-relaxed text-justified">
+                            <span class="lang-en">The "New Wave" of AI Cinema begins. Early adopters are now professionals. EU/US regulatory frameworks solidify.</span>
+                            <span class="lang-zh">AI 電影的「新浪潮」正式開啟。歐美對 AI 版權的法律框架趨於穩定，為規模化鋪平道路。</span>
+                        </p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h4 class="text-signal font-bold mb-2 text-xs uppercase tracking-widest"><span class="lang-en">Key Actions</span><span class="lang-zh">關鍵行動</span></h4>
+                        <ul class="font-mono text-sm text-gray-300 list-disc pl-5 space-y-2">
+                            <li>
+                                <span class="lang-en">Establish Regional HQs: London, Tokyo, LA.</span>
+                                <span class="lang-zh">設立區域總部：倫敦、東京、洛杉磯。</span>
+                            </li>
+                            <li>
+                                <span class="lang-en">Global Market Expansion: Target $50M Ecosystem Value.</span>
+                                <span class="lang-zh">全球市場擴張：目標生態價值達到 5000 萬美元。</span>
+                            </li>
+                            <li>
+                                <span class="lang-en">Launch "AIF Education Cloud" SaaS covering 100+ global universities.</span>
+                                <span class="lang-zh">推出「AIF 教育雲」SaaS 服務，覆蓋全球 100+ 高校。</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="border-t border-gray-800 pt-4 mt-auto flex justify-between">
+                        <div class="font-mono text-xs text-white"><span class="lang-en">Target: 5M Users</span><span class="lang-zh">目標：500 萬用戶</span></div>
+                        <div class="font-mono text-xs text-gray-500">Tech: 8K/60fps Real-time</div>
+                    </div>
+                </div>
+
+                <div class="info-card bg-black p-8 border-l-4 border-l-white">
+                    <div class="font-heavy text-4xl md:text-5xl text-white mb-2">2028</div>
+                    <h3 class="font-heavy text-2xl text-white mb-4"><span class="lang-en">STANDARDS</span><span class="lang-zh">行業標準制定</span></h3>
+                    
+                    <div class="mb-4">
+                        <h4 class="text-white font-bold mb-2 text-xs uppercase tracking-widest"><span class="lang-en">Analysis</span><span class="lang-zh">分析</span></h4>
+                        <p class="font-mono text-sm text-gray-400 leading-relaxed text-justified">
+                            <span class="lang-en">AI content floods the market. Quality control and verification become critical.</span>
+                            <span class="lang-zh">AI 內容充斥市場，質量控制與真實性驗證成為痛點。</span>
+                        </p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h4 class="text-white font-bold mb-2 text-xs uppercase tracking-widest"><span class="lang-en">Key Actions</span><span class="lang-zh">關鍵行動</span></h4>
+                        <ul class="font-mono text-sm text-gray-300 list-disc pl-5 space-y-2">
+                            <li>
+                                <span class="lang-en">Publish "Global AI Cinema Protocol" (Whitepaper v2.0).</span>
+                                <span class="lang-zh">發布「全球 AI 電影協議」（白皮書 v2.0）。</span>
+                            </li>
+                            <li>
+                                <span class="lang-en">Establish "AIF Certification": The ISO standard for AI filmmakers.</span>
+                                <span class="lang-zh">建立「AIF 認證體系」：成為 AI 電影人的 ISO 行業標準。</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="border-t border-gray-800 pt-4 mt-auto">
+                        <div class="font-mono text-xs text-gray-500"><span class="lang-en">Tech Prediction: AI Agents automate 80% of pre-production.</span><span class="lang-zh">技術預測：AI 智能體自動化完成 80% 的前期製作。</span></div>
+                    </div>
+                </div>
+
+                <div class="info-card bg-black p-8 border-l-4 border-l-purple-500">
+                    <div class="font-heavy text-4xl md:text-5xl text-purple-500 mb-2">2029</div>
+                    <h3 class="font-heavy text-2xl text-white mb-4"><span class="lang-en">DAO GOVERNANCE</span><span class="lang-zh">DAO 治理轉型</span></h3>
+                    <p class="font-mono text-sm text-gray-400 mb-6 leading-relaxed text-justified">
+                        <span class="lang-en">Decentralization becomes the core value prop against centralized AI giants. Full transition to DAO structure.</span>
+                        <span class="lang-zh">去中心化成為對抗中心化 AI 巨頭的核心價值主張。全面轉型為 DAO 架構。</span>
+                    </p>
+                    <div class="bg-purple-900/20 p-4 border border-purple-500/30">
+                        <strong class="text-purple-400 text-xs block mb-1 font-mono uppercase">KEY MILESTONE</strong>
+                        <p class="font-mono text-sm text-white">
+                            <span class="lang-en">Launch "Creator UBI" funded by ecosystem tax.</span>
+                            <span class="lang-zh">啟動由生態稅收資助的「創作者 UBI（全民基本收入）」計劃。</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="info-card bg-black p-8 border-l-4 border-l-signal bg-gradient-to-r from-[rgba(204,255,0,0.1)] to-transparent">
+                    <div class="font-heavy text-4xl md:text-5xl text-signal mb-2">2030</div>
+                    <h3 class="font-heavy text-2xl text-white mb-4"><span class="lang-en">UNICORN STATUS</span><span class="lang-zh">獨角獸與統治力</span></h3>
+                    <div class="text-5xl font-mono font-bold text-white mb-2">$1 Billion</div>
+                    <div class="text-xs text-signal uppercase tracking-widest mb-6"><span class="lang-en">Ecosystem Revenue</span><span class="lang-zh">生態綜合營收</span></div>
+                    <p class="font-mono text-sm text-gray-400 leading-relaxed text-justified">
+                        <span class="lang-en">AIF becomes the default currency for 30% of global digital asset transactions in entertainment. StarOS manages over 5,000 active digital celebrities.</span>
+                        <span class="lang-zh">AIF 成為全球娛樂數字資產交易中 30% 的默認結算貨幣。StarOS 管理超過 5,000 位活躍數字明星。</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-12 border-t-2 border-[#333] pt-12">
+                <h3 class="font-heavy text-3xl md:text-5xl text-blue-400 mb-2"><span class="lang-en">2031-2035</span><span class="lang-zh">2031-2035</span></h3>
+                <p class="font-mono text-gray-400 mb-8"><span class="lang-en">VIRTUAL CIVILIZATION: The era of AGI and full immersion.</span><span class="lang-zh">虛擬文明：AGI 與全沉浸時代。</span></p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div class="border border-blue-900/50 p-6 bg-[#0a0a0a] hover:border-blue-400 transition-colors group">
+                        <div class="font-mono text-blue-400 font-bold mb-2 text-xl">2031</div>
+                        <div class="text-lg font-heavy text-white mb-2"><span class="lang-en">Neural Cinema</span><span class="lang-zh">神經電影</span></div>
+                        <p class="text-xs font-mono text-gray-500 group-hover:text-gray-300">
+                            <span class="lang-en">BCI (Brain-Computer Interface) pilot integration. "Thought-to-Film" experimental lab.</span>
+                            <span class="lang-zh">BCI（腦機接口）試點集成。啟動「意念成片」實驗實驗室。</span>
+                        </p>
+                    </div>
+
+                    <div class="border border-blue-900/50 p-6 bg-[#0a0a0a] hover:border-blue-400 transition-colors group">
+                        <div class="font-mono text-blue-400 font-bold mb-2 text-xl">2032</div>
+                        <div class="text-lg font-heavy text-white mb-2"><span class="lang-en">Dream Recording</span><span class="lang-zh">夢境錄製</span></div>
+                        <p class="text-xs font-mono text-gray-500 group-hover:text-gray-300">
+                            <span class="lang-en">"Dream Cinema" app launch. Subscription service for recording high-fidelity subconscious imagery.</span>
+                            <span class="lang-zh">發布「夢境電影院」App。推出夢境錄製訂閱服務。</span>
+                        </p>
+                    </div>
+
+                    <div class="border border-blue-900/50 p-6 bg-[#0a0a0a] hover:border-blue-400 transition-colors group">
+                        <div class="font-mono text-blue-400 font-bold mb-2 text-xl">2033</div>
+                        <div class="text-lg font-heavy text-white mb-2"><span class="lang-en">Virtual Sovereignty</span><span class="lang-zh">虛擬主權</span></div>
+                        <p class="text-xs font-mono text-gray-500 group-hover:text-gray-300">
+                            <span class="lang-en">404.world recognized as digital economic zone. FilmToken accepted as collateral by banks.</span>
+                            <span class="lang-zh">404.world 被多國認可為數字經濟特區。FilmToken 資產被傳統銀行接受。</span>
+                        </p>
+                    </div>
+
+                    <div class="border border-blue-900/50 p-6 bg-[#0a0a0a] hover:border-blue-400 transition-colors group">
+                        <div class="font-mono text-blue-400 font-bold mb-2 text-xl">2034</div>
+                        <div class="text-lg font-heavy text-white mb-2"><span class="lang-en">Universal Access</span><span class="lang-zh">全域接入</span></div>
+                        <p class="text-xs font-mono text-gray-500 group-hover:text-gray-300">
+                            <span class="lang-en">Quantum computing powers infinite simulation. AIF runs on contact lenses.</span>
+                            <span class="lang-zh">量子計算驅動無限模擬。AIF 系統可在智能隱形眼鏡上運行。</span>
+                        </p>
+                    </div>
+
+                    <div class="border border-blue-900/50 p-6 bg-[#0a0a0a] hover:border-blue-400 transition-colors group">
+                        <div class="font-mono text-blue-400 font-bold mb-2 text-xl">2035</div>
+                        <div class="text-lg font-heavy text-white mb-2"><span class="lang-en">The Singularity</span><span class="lang-zh">奇點時刻</span></div>
+                        <p class="text-xs font-mono text-gray-500 group-hover:text-gray-300">
+                            <span class="lang-en">AI creates content autonomously. Humans shift to "Experience Curators". AIF governs ethics.</span>
+                            <span class="lang-zh">AI 實現內容自主創造。人類轉型為「體驗策展人」。AIF 成為這個新世界的倫理仲裁者。</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="finance" class="py-20 md:py-32 bg-void relative">
+         <div class="max-w-[1920px] mx-auto px-4 md:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16">
+                <div>
+                    <h2 class="section-title text-white mb-4">FINANCIAL <span class="text-signal">GROWTH</span></h2>
+                    <p class="font-mono text-gray-400 max-w-xl text-sm md:text-base">
+                        <span class="lang-en">Conservative revenue forecast based on education licensing, transaction fees, and ecosystem value-added services.</span>
+                        <span class="lang-zh">基於教育授權、版權交易手續費及生態增值服務的保守收入預測。</span>
+                    </p>
+                </div>
+                <div class="text-left md:text-right mt-8 md:mt-0">
+                    <div class="font-heavy text-5xl md:text-7xl text-white">$1,000M+</div>
+                    <div class="font-mono text-sm text-signal tracking-widest mt-2">2030 REVENUE TARGET</div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-5 gap-4 md:gap-8 h-64 md:h-96 items-end border-b-2 border-white pb-0">
+                <div class="flex flex-col justify-end h-full group w-full">
+                    <div class="bg-[#222] w-full relative overflow-hidden group-hover:bg-[#333] transition-all border border-[#444]" style="height: 5%;">
+                        <div class="absolute bottom-0 w-full bg-signal h-full transition-all duration-1000 ease-out"></div>
+                        <div class="absolute -top-8 left-1/2 transform -translate-x-1/2 font-mono text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity">Start</div>
+                    </div>
+                    <div class="text-center mt-4 font-mono text-gray-500 text-xs md:text-sm">2025</div>
+                </div>
+                <div class="flex flex-col justify-end h-full group w-full">
+                    <div class="bg-[#222] w-full relative overflow-hidden group-hover:bg-[#333] transition-all border border-[#444]" style="height: 15%;">
+                        <div class="absolute bottom-0 w-full bg-signal h-full opacity-80 transition-all duration-1000 ease-out delay-100"></div>
+                        <div class="absolute -top-8 left-1/2 transform -translate-x-1/2 font-mono text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity">Growth</div>
+                    </div>
+                    <div class="text-center mt-4 font-mono text-gray-500 text-xs md:text-sm">2026</div>
+                </div>
+                <div class="flex flex-col justify-end h-full group w-full">
+                    <div class="bg-[#222] w-full relative overflow-hidden group-hover:bg-[#333] transition-all border border-[#444]" style="height: 35%;">
+                        <div class="absolute bottom-0 w-full bg-signal h-full opacity-60 transition-all duration-1000 ease-out delay-200"></div>
+                        <div class="absolute -top-8 left-1/2 transform -translate-x-1/2 font-mono text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity">Expand</div>
+                    </div>
+                    <div class="text-center mt-4 font-mono text-gray-500 text-xs md:text-sm">2027</div>
+                </div>
+                <div class="flex flex-col justify-end h-full group w-full">
+                    <div class="bg-[#222] w-full relative overflow-hidden group-hover:bg-[#333] transition-all border border-[#444]" style="height: 60%;">
+                        <div class="absolute bottom-0 w-full bg-signal h-full opacity-40 transition-all duration-1000 ease-out delay-300"></div>
+                        <div class="absolute -top-8 left-1/2 transform -translate-x-1/2 font-mono text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity">Scale</div>
+                    </div>
+                    <div class="text-center mt-4 font-mono text-gray-500 text-xs md:text-sm">2028</div>
+                </div>
+                <div class="flex flex-col justify-end h-full group w-full">
+                    <div class="bg-[#222] w-full relative overflow-hidden group-hover:bg-[#333] transition-all border border-[#444]" style="height: 100%;">
+                        <div class="absolute bottom-0 w-full bg-gradient-to-t from-signal to-white h-full transition-all duration-1000 ease-out delay-400"></div>
+                        <div class="absolute -top-8 left-1/2 transform -translate-x-1/2 font-mono text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity">$1B</div>
+                    </div>
+                    <div class="text-center mt-4 font-mono text-white font-bold text-xs md:text-sm">2030</div>
+                </div>
+            </div>
+         </div>
+    </section>
+
+    <footer class="bg-black text-[#EAEAEA] border-t border-[#333] pt-20 pb-10 px-4 md:px-8">
+        <div class="max-w-[1920px] mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+                <div class="lg:col-span-2">
+                    <h2 class="font-heavy text-5xl md:text-7xl mb-6">AIF ROADMAP</h2>
+                    <p class="font-mono text-sm text-gray-400 max-w-md">
+                        <span class="lang-en">Building the future of cinema through Artificial Intelligence, Blockchain, and Global Community.</span>
+                        <span class="lang-zh">通過人工智能、區塊鏈和全球社區共建電影的未來。</span>
+                    </p>
+                    <div class="flex space-x-4 mt-6 text-2xl">
+                        <a href="#" class="hover:text-signal transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="hover:text-signal transition"><i class="fab fa-discord"></i></a>
+                        <a href="#" class="hover:text-signal transition"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-mono text-signal mb-6"><span class="lang-en">QUICK LINKS</span><span class="lang-zh">快速鏈接</span></h4>
+                    <ul class="font-mono text-sm space-y-2">
+                        <li><a href="#vision" class="hover:text-signal transition"><span class="lang-en">Vision</span><span class="lang-zh">願景</span></a></li>
+                        <li><a href="#2025" class="hover:text-signal transition"><span class="lang-en">2025 Foundation</span><span class="lang-zh">2025 基礎</span></a></li>
+                        <li><a href="#2026" class="hover:text-signal transition"><span class="lang-en">2026 Explosion</span><span class="lang-zh">2026 爆發</span></a></li>
+                        <li><a href="#finance" class="hover:text-signal transition"><span class="lang-en">Growth</span><span class="lang-zh">增長</span></a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-mono text-signal mb-6"><span class="lang-en">LEGAL</span><span class="lang-zh">法律</span></h4>
+                    <ul class="font-mono text-sm space-y-4">
+                        <li>
+                            <span class="block text-gray-500 text-xs">PRIVACY</span>
+                            Privacy Policy
+                        </li>
+                        <li>
+                            <span class="block text-gray-500 text-xs">TERMS</span>
+                            Terms of Use
+                        </li>
+                        <li>
+                            <span class="block text-gray-500 text-xs">DOCS</span>
+                            Whitepaper
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-[#222] pt-8 flex flex-col md:flex-row justify-between items-center font-mono text-xs text-gray-600">
+                <div>© 2025 HKAIIFF Association. ALL RIGHTS RESERVED.</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 1. LOADER
+        window.addEventListener('load', () => {
+            const tl = gsap.timeline();
+            tl.to("#loader", { yPercent: -100, duration: 0.6, ease: "power4.inOut", delay: 0.3 });
+            tl.from("header h1", { y: 20, opacity: 0, duration: 0.8, ease: "power3.out" }, "-=0.3");
+        });
+
+        // 2. LANGUAGE SWITCHER
+        function toggleLanguage() {
+            document.body.classList.toggle('show-zh');
+            
+            // Re-trigger scrolltrigger refresh to handle height changes
+            setTimeout(() => {
+                ScrollTrigger.refresh();
+            }, 100);
+        }
+
+        // 3. MOBILE MENU TOGGLE
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('active');
+            
+            if (menu.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // 4. GSAP ANIMATIONS
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Reveal elements on scroll
+        gsap.utils.toArray('.info-card, .timeline-step, .section-title, .hero-title').forEach(el => {
+            gsap.from(el, {
+                opacity: 0,
+                y: 30,
+                duration: 0.8,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: el,
+                    start: "top 90%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        });
+
+        // Finance Bar Animation
+        gsap.utils.toArray('#finance .group').forEach((group, i) => {
+            ScrollTrigger.create({
+                trigger: '#finance',
+                start: "top 70%",
+                onEnter: () => {
+                    const bar = group.querySelector('.bg-signal, .bg-gradient-to-t');
+                    gsap.fromTo(bar, 
+                        { height: '0%' }, 
+                        { height: '100%', duration: 1.5, delay: i * 0.1, ease: "power3.out" }
+                    );
+                }
+            });
+        });
+
+        // Grid Background Animation (Parallax)
+        gsap.to(".grid-bg", {
+            backgroundPosition: "0px 100px",
+            ease: "none",
+            scrollTrigger: {
+                trigger: "body",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 1
+            }
+        });
+    </script>
+</body>
+</html>
