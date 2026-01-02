@@ -35,6 +35,8 @@
                         steel: '#EAEAEA',
                         dim: '#888888',
                         terminal: '#00FF41',
+                        accent: '#2563eb',      // Blue for modal
+                        accentHover: '#1d4ed8',
                     },
                     fontFamily: {
                         sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
@@ -174,10 +176,84 @@
             pointer-events: none;
         }
 
+        /* Glass Panel for Modal */
+        .glass-panel {
+            background: rgba(24, 24, 27, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Custom Checkbox */
+        .custom-checkbox {
+            appearance: none; background-color: rgba(255,255,255,0.1); margin: 0; font: inherit; color: currentColor;
+            width: 1.15em; height: 1.15em; border: 2px solid #444; border-radius: 4px; display: grid; place-content: center;
+            cursor: pointer; flex-shrink: 0; transition: all 0.2s;
+        }
+        .custom-checkbox::before {
+            content: ""; width: 0.65em; height: 0.65em; transform: scale(0);
+            transition: 120ms transform ease-in-out; background-color: #2563eb;
+            clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+        }
+        .custom-checkbox:checked::before { transform: scale(1); background-color: #2563eb; }
+        .custom-checkbox:checked { border-color: #2563eb; }
+
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
     </style>
 </head>
-<body class="font-sans antialiased text-sm md:text-base">
+<body id="mainBody" class="font-sans antialiased text-sm md:text-base overflow-hidden">
+
+    <!-- DISCLAIMER MODAL (New) -->
+    <div id="disclaimer-modal" class="fixed inset-0 z-[10000] bg-black/95 backdrop-blur-xl flex justify-center items-center p-4">
+        <div class="glass-panel w-full max-w-lg p-6 md:p-8 rounded-2xl border border-dim/20 shadow-[0_0_50px_rgba(37,99,235,0.15)] max-h-[90vh] overflow-y-auto">
+            <h2 class="text-xl md:text-2xl font-bold mb-6 text-white border-b border-white/10 pb-4">
+                <span data-i18n="disc_title">IMPORTANT DISCLAIMER</span>
+            </h2>
+            
+            <div class="font-mono text-xs text-gray-300 mb-6 space-y-2">
+                <p data-i18n="disc_p1">You are about to enter the AIF.WTF Node Service Area.</p>
+                <p data-i18n="disc_p2">This service involves digital assets and infrastructure participation.</p>
+            </div>
+
+            <div class="space-y-4 mb-8 font-mono text-xs text-gray-200">
+                <p class="mb-4 text-signal font-bold uppercase tracking-wider" data-i18n="disc_confirm">Please confirm:</p>
+
+                <label class="flex items-start gap-3 cursor-pointer hover:text-white transition-colors group">
+                    <input type="checkbox" class="custom-checkbox mt-0.5 disclaimer-check" onchange="checkDisclaimer()">
+                    <span class="group-hover:text-signal transition-colors" data-i18n="disc_c1">I am not a resident of Mainland China</span>
+                </label>
+
+                <label class="flex items-start gap-3 cursor-pointer hover:text-white transition-colors group">
+                    <input type="checkbox" class="custom-checkbox mt-0.5 disclaimer-check" onchange="checkDisclaimer()">
+                    <span class="group-hover:text-signal transition-colors" data-i18n="disc_c2">I am not a U.S. citizen or resident</span>
+                </label>
+
+                <label class="flex items-start gap-3 cursor-pointer hover:text-white transition-colors group">
+                    <input type="checkbox" class="custom-checkbox mt-0.5 disclaimer-check" onchange="checkDisclaimer()">
+                    <span class="group-hover:text-signal transition-colors" data-i18n="disc_c3">I am participating with my own offshore assets</span>
+                </label>
+
+                <label class="flex items-start gap-3 cursor-pointer hover:text-white transition-colors group">
+                    <input type="checkbox" class="custom-checkbox mt-0.5 disclaimer-check" onchange="checkDisclaimer()">
+                    <span class="group-hover:text-signal transition-colors" data-i18n="disc_c4">I acknowledge the risks of digital asset participation</span>
+                </label>
+
+                <label class="flex items-start gap-3 cursor-pointer hover:text-white transition-colors group">
+                    <input type="checkbox" class="custom-checkbox mt-0.5 disclaimer-check" onchange="checkDisclaimer()">
+                    <span class="group-hover:text-signal transition-colors" data-i18n="disc_c5">I voluntarily assume all risks</span>
+                </label>
+            </div>
+
+            <div class="border-t border-white/10 pt-6">
+                <p class="font-mono text-[10px] text-gray-500 mb-4" data-i18n="disc_agree">
+                    I have read and agree to the "User Agreement" and "Risk Disclosure Statement".
+                </p>
+                <button id="disclaimer-submit" disabled onclick="acceptDisclaimer()" class="w-full bg-concrete text-dim border border-dim/30 py-3 rounded-lg font-bold text-sm uppercase tracking-widest transition-all duration-300 cursor-not-allowed">
+                    <span data-i18n="disc_enter">ENTER SITE</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Loading Screen -->
     <div id="boot-sequence" class="fixed inset-0 z-[9999] bg-void flex flex-col items-center justify-center font-mono">
@@ -833,7 +909,19 @@
                 pay_title: "SELECT PAYMENT METHOD", btn_back: "BACK", btn_get_code: "GET CODE",
                 code_label: "YOUR UNIQUE NODE IDENTIFIER", click_copy: "CLICK TO COPY", timer_label: "TO LOCK NODE", pay_note: "Please save a screenshot after payment.", btn_paid: "I HAVE PAID",
                 verify_title: "LOCK REQUEST INITIATED", verify_desc: "Please copy the text below and email depin@aif.wtf with your payment screenshot.", btn_copy_tpl: "COPY TEMPLATE", btn_email: "OPEN EMAIL", btn_close: "CLOSE",
-                invite_only: "INVITE ONLY", coming_soon: "COMING SOON"
+                invite_only: "INVITE ONLY", coming_soon: "COMING SOON",
+                // Disclaimer
+                disc_title: "IMPORTANT DISCLAIMER",
+                disc_p1: "You are about to enter the AIF.WTF Node Service Area.",
+                disc_p2: "This service involves digital assets and infrastructure participation.",
+                disc_confirm: "Please confirm:",
+                disc_c1: "I am not a resident of Mainland China",
+                disc_c2: "I am not a U.S. citizen or resident",
+                disc_c3: "I am participating with my own offshore assets",
+                disc_c4: "I acknowledge the risks of digital asset participation",
+                disc_c5: "I voluntarily assume all risks",
+                disc_agree: "I have read and agree to the \"User Agreement\" and \"Risk Disclosure Statement\".",
+                disc_enter: "ENTER SITE",
             },
             zh: {
                 nav_eco: "生態系統", nav_rules: "創世協議", nav_analysis: "價值分析", nav_buy: "搶購節點",
@@ -860,7 +948,19 @@
                 pay_title: "選擇支付方式", btn_back: "返回", btn_get_code: "獲取節點代碼",
                 code_label: "您的唯一節點標識", click_copy: "點擊複製", timer_label: "鎖定倒計時", pay_note: "請在支付完成後保存截圖。", btn_paid: "我已支付",
                 verify_title: "鎖定申請已發起", verify_desc: "請複製以下內容並發送郵件至 depin@aif.wtf，同時附上您的支付截圖。", btn_copy_tpl: "複製郵件模板", btn_email: "打開郵箱", btn_close: "關閉",
-                invite_only: "邀請開通", coming_soon: "陸續開放"
+                invite_only: "邀請開通", coming_soon: "陸續開放",
+                // Disclaimer
+                disc_title: "重要免責聲明",
+                disc_p1: "您即將進入 AIF.WTF 節點服務區域。",
+                disc_p2: "本服務涉及數字資產和基礎設施參與。",
+                disc_confirm: "請確認：",
+                disc_c1: "本人非中國大陸居民",
+                disc_c2: "本人非美國公民或居民",
+                disc_c3: "本人通過自有境外資產參與",
+                disc_c4: "本人知悉數字資產參與風險",
+                disc_c5: "本人自願承擔全部風險",
+                disc_agree: "我已閱讀並同意《用戶協議》《風險提示書》",
+                disc_enter: "進入網站",
             }
         };
         let currentLang = 'zh';
@@ -909,21 +1009,21 @@
         };
 
         const CITIES = [
-            { name: "Beijing", zh: "北京", color: "bg-red-600", lat: 39.9042, lng: 116.4074, landmarks: ["Forbidden City", "Guomao"] },
-            { name: "Shanghai", zh: "上海", color: "bg-blue-600", lat: 31.2304, lng: 121.4737, landmarks: ["Shanghai Tower", "The Bund"] },
-            { name: "Shenzhen", zh: "深圳", color: "bg-teal-500", lat: 22.5431, lng: 114.0579, landmarks: ["Ping An Finance Center", "Nanshan"] },
-            { name: "Hong Kong", zh: "香港", color: "bg-purple-600", lat: 22.3193, lng: 114.1694, landmarks: ["ICC Tower", "Central IFC"] },
-            { name: "Macau", zh: "澳門", color: "bg-yellow-600", lat: 22.1987, lng: 113.5439, landmarks: ["Macau Tower", "Grand Lisboa"] },
-            { name: "Hangzhou", zh: "杭州", color: "bg-emerald-500", lat: 30.2741, lng: 120.1551, landmarks: ["West Lake", "Alibaba Campus"] }
+            { name: "Beijing", zh: "北京", color: "bg-red-600", lat: 39.9042, lng: 116.4074, landmarks: ["Forbidden City", "Guomao"], landmarks_zh: ["紫禁城", "國貿"] },
+            { name: "Shanghai", zh: "上海", color: "bg-blue-600", lat: 31.2304, lng: 121.4737, landmarks: ["Shanghai Tower", "The Bund"], landmarks_zh: ["上海中心大廈", "外灘"] },
+            { name: "Shenzhen", zh: "深圳", color: "bg-teal-500", lat: 22.5431, lng: 114.0579, landmarks: ["Ping An Finance Center", "Nanshan"], landmarks_zh: ["平安金融中心", "南山"] },
+            { name: "Hong Kong", zh: "香港", color: "bg-purple-600", lat: 22.3193, lng: 114.1694, landmarks: ["ICC Tower", "Central IFC"], landmarks_zh: ["環球貿易廣場", "中環IFC"] },
+            { name: "Macau", zh: "澳門", color: "bg-yellow-600", lat: 22.1987, lng: 113.5439, landmarks: ["Macau Tower", "Grand Lisboa"], landmarks_zh: ["澳門旅遊塔", "新葡京"] },
+            { name: "Hangzhou", zh: "杭州", color: "bg-emerald-500", lat: 30.2741, lng: 120.1551, landmarks: ["West Lake", "Alibaba Campus"], landmarks_zh: ["西湖", "阿里巴巴園區"] }
         ];
 
         const FUTURE_CITIES = [
-            { name: "New York", zh: "紐約", color: "bg-indigo-600", lat: 40.7128, lng: -74.0060, landmarks: ["Times Square"] },
-            { name: "London", zh: "倫敦", color: "bg-rose-700", lat: 51.5074, lng: -0.1278, landmarks: ["The Shard"] },
-            { name: "Tokyo", zh: "東京", color: "bg-pink-600", lat: 35.6762, lng: 139.6503, landmarks: ["Tokyo Tower"] },
-            { name: "Seoul", zh: "首爾", color: "bg-cyan-600", lat: 37.5665, lng: 126.9780, landmarks: ["Lotte Tower"] },
-            { name: "Bangkok", zh: "曼谷", color: "bg-amber-600", lat: 13.7563, lng: 100.5018, landmarks: ["Mahanakhon"] },
-            { name: "Paris", zh: "巴黎", color: "bg-sky-600", lat: 48.8566, lng: 2.3522, landmarks: ["Eiffel Tower"] }
+            { name: "New York", zh: "紐約", color: "bg-indigo-600", lat: 40.7128, lng: -74.0060, landmarks: ["Times Square"], landmarks_zh: ["時代廣場"] },
+            { name: "London", zh: "倫敦", color: "bg-rose-700", lat: 51.5074, lng: -0.1278, landmarks: ["The Shard"], landmarks_zh: ["碎片大廈"] },
+            { name: "Tokyo", zh: "東京", color: "bg-pink-600", lat: 35.6762, lng: 139.6503, landmarks: ["Tokyo Tower"], landmarks_zh: ["東京鐵塔"] },
+            { name: "Seoul", zh: "首爾", color: "bg-cyan-600", lat: 37.5665, lng: 126.9780, landmarks: ["Lotte Tower"], landmarks_zh: ["樂天塔"] },
+            { name: "Bangkok", zh: "曼谷", color: "bg-amber-600", lat: 13.7563, lng: 100.5018, landmarks: ["Mahanakhon"], landmarks_zh: ["王權瑪哈納功大廈"] },
+            { name: "Paris", zh: "巴黎", color: "bg-sky-600", lat: 48.8566, lng: 2.3522, landmarks: ["Eiffel Tower"], landmarks_zh: ["艾菲爾鐵塔"] }
         ];
 
         const WALLETS = {
@@ -933,6 +1033,33 @@
 
         let allNodes = [];
         let currentFilter = { tier: 'all', city: 'all' };
+
+        // --- DISCLAIMER LOGIC ---
+        function checkDisclaimer() {
+            const checks = document.querySelectorAll('.disclaimer-check');
+            const btn = document.getElementById('disclaimer-submit');
+            let allChecked = true;
+            checks.forEach(c => { if(!c.checked) allChecked = false; });
+            
+            if(allChecked) {
+                btn.removeAttribute('disabled');
+                btn.classList.remove('bg-concrete', 'text-dim', 'cursor-not-allowed', 'border-dim/30');
+                btn.classList.add('bg-signal', 'text-white', 'hover:bg-red-600', 'border-signal');
+            } else {
+                btn.setAttribute('disabled', 'true');
+                btn.classList.add('bg-concrete', 'text-dim', 'cursor-not-allowed', 'border-dim/30');
+                btn.classList.remove('bg-signal', 'text-white', 'hover:bg-red-600', 'border-signal');
+            }
+        }
+
+        function acceptDisclaimer() {
+            const modal = document.getElementById('disclaimer-modal');
+            const body = document.getElementById('mainBody');
+            gsap.to(modal, { opacity: 0, duration: 0.5, onComplete: () => {
+                modal.style.display = 'none';
+                body.classList.remove('overflow-hidden');
+            }});
+        }
 
         // --- DATA GENERATION ---
         function initData() {
@@ -950,7 +1077,8 @@
                     color: city.color,
                     lat: city.lat.toFixed(4), 
                     lng: city.lng.toFixed(4),
-                    location: `${city.landmarks[0]} (Landmark)`,
+                    locationEn: `${city.landmarks[0]} (Landmark)`,
+                    locationZh: `${city.landmarks_zh[0]} (地標)`,
                     h3: "GENESIS-PRIME",
                     heat: 100,
                     hash: "0x" + Array.from({length: 40}, () => Math.floor(Math.random()*16).toString(16)).join(''),
@@ -970,7 +1098,8 @@
                     color: city.color,
                     lat: city.lat.toFixed(4), 
                     lng: city.lng.toFixed(4),
-                    location: `${city.landmarks[0]} (Future)`,
+                    locationEn: `${city.landmarks[0]} (Future)`,
+                    locationZh: `${city.landmarks_zh[0]} (未來規劃)`,
                     h3: "PENDING-EXPANSION",
                     heat: 0,
                     hash: "WAITING_FOR_GENESIS",
@@ -995,6 +1124,7 @@
                 const latOff = (Math.random() - 0.5) * 0.08;
                 const lngOff = (Math.random() - 0.5) * 0.08;
                 const locName = city.landmarks[1] || city.landmarks[0]; // Secondary landmark or generic
+                const locNameZh = city.landmarks_zh[1] || city.landmarks_zh[0];
                 const blockNum = Math.floor(Math.random() * 900 + 100);
                 
                 allNodes.push({
@@ -1006,7 +1136,8 @@
                     color: city.color,
                     lat: (city.lat + latOff).toFixed(4), 
                     lng: (city.lng + lngOff).toFixed(4),
-                    location: `${locName} Area Block ${blockNum}`,
+                    locationEn: `${locName} Area Block ${blockNum}`,
+                    locationZh: `${locNameZh} 區域 ${blockNum} 號街區`,
                     h3: Math.random().toString(36).substring(2, 9).toUpperCase(),
                     heat: Math.floor(Math.random() * 40 + 50),
                     hash: "0x" + Array.from({length: 40}, () => Math.floor(Math.random()*16).toString(16)).join(''),
@@ -1081,6 +1212,7 @@
                 
                 // City Tag Logic
                 const cityDisplayName = currentLang === 'zh' ? node.cityZh : node.city;
+                const locationDisplay = currentLang === 'zh' ? node.locationZh : node.locationEn;
                 let tagLabel = cityDisplayName.toUpperCase(); 
                 let tagColor = node.color + " text-white"; // Use city specific color
 
@@ -1138,7 +1270,7 @@
                             <div class="text-[9px] md:text-[10px] text-dim font-mono tracking-widest mb-1 flex items-center gap-2">
                                 <span class="bg-white/10 px-1 rounded text-white truncate max-w-[90%]">${node.id}</span>
                             </div>
-                            <div class="text-xs md:text-sm font-bold text-white truncate w-full" title="${node.location}">${node.location}</div>
+                            <div class="text-xs md:text-sm font-bold text-white truncate w-full" title="${locationDisplay}">${locationDisplay}</div>
                             <div class="flex justify-between items-center mt-1">
                                 <div class="text-[9px] md:text-[10px] text-dim">${cityDisplayName}</div>
                                 <div class="flex items-center gap-1">
@@ -1233,9 +1365,13 @@
                 
                 const conf = TIERS[this.currentNode.tier] || TIERS['C'];
                 
+                // Use localized data
+                const cityDisplay = currentLang === 'zh' ? this.currentNode.cityZh : this.currentNode.city;
+                const locDisplay = currentLang === 'zh' ? this.currentNode.locationZh : this.currentNode.locationEn;
+
                 document.getElementById('detail-id').innerText = `ID: ${this.currentNode.id}`;
                 document.getElementById('detail-hash').innerText = `HASH: ${this.currentNode.hash.substring(0,10)}...`;
-                document.getElementById('detail-loc').innerText = this.currentNode.location.toUpperCase();
+                document.getElementById('detail-loc').innerText = locDisplay;
                 document.getElementById('detail-tier').innerText = `${conf.name} (${this.currentNode.tier})`;
                 document.getElementById('detail-tier').className = `px-3 py-1 rounded bg-dim/20 text-xs font-mono border border-dim/30 ${conf.text} whitespace-nowrap`;
                 document.getElementById('detail-price').innerText = `$${conf.price.toLocaleString()}`;
@@ -1422,6 +1558,7 @@
             prepareReceipt() {
                 const conf = TIERS[this.currentNode.tier];
                 const date = new Date().toISOString().split('T')[0];
+                const locDisplay = currentLang === 'zh' ? this.currentNode.locationZh : this.currentNode.locationEn;
                 const text = `
 To: depin@aif.wtf
 Subject: PAYMENT PROOF: ${this.nodeCode}
@@ -1430,7 +1567,7 @@ Subject: PAYMENT PROOF: ${this.nodeCode}
 Date: ${date}
 Node ID: ${this.nodeCode}
 Hash: ${this.currentNode.hash}
-Location: ${this.currentNode.location} (${this.currentNode.city})
+Location: ${locDisplay} (${this.currentNode.city})
 Tier: ${this.currentNode.tier}
 Payment Type: ${this.paymentType.toUpperCase()}
 Amount: ${this.paymentType === 'aif' ? conf.aif + ' AIF' : '$'+conf.price}
