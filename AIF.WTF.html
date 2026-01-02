@@ -3,49 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIF.WTF | SPATIAL COMPUTING DEPIN</title>
+    <title>AIF.WTF | SPATIAL COMPUTING GENESIS NODE SALE</title>
     
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- GSAP Suite -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Fonts: Oswald + Space Mono -->
+    <!-- External Resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuration -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['"Oswald"', '"Noto Sans TC"', 'sans-serif'],
-                        mono: ['"Space Mono"', 'monospace'],
-                    },
                     colors: {
                         void: '#050505',
-                        concrete: '#121212',
-                        concreteLight: '#1f1f1f',
-                        signal: '#ef4444', // Red signal
-                        signalDim: 'rgba(239, 68, 68, 0.2)',
-                        white: '#e5e5e5',
-                        gray: {
-                            400: '#a3a3a3',
-                            500: '#737373',
-                            800: '#262626',
-                        }
+                        concrete: '#1F1F1F',
+                        signal: '#FF3300',      // Tier S / Primary / Red
+                        tierA: '#A855F7',       // Purple
+                        tierB: '#EAB308',       // Yellow
+                        tierC: '#3B82F6',       // Blue
+                        future: '#00FFFF',      // Cyan for future nodes
+                        steel: '#EAEAEA',
+                        dim: '#888888',
+                        terminal: '#00FF41',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
+                        mono: ['Space Mono', 'monospace'],
                     },
                     backgroundImage: {
-                        'grid-pattern': "linear-gradient(to right, #1a1a1a 1px, transparent 1px), linear-gradient(to bottom, #1a1a1a 1px, transparent 1px)",
+                        'grid-pattern': "linear-gradient(to right, #1f1f1f 1px, transparent 1px), linear-gradient(to bottom, #1f1f1f 1px, transparent 1px)",
+                        'future-grid': "linear-gradient(to right, #003333 1px, transparent 1px), linear-gradient(to bottom, #003333 1px, transparent 1px)",
                     },
                     animation: {
+                        'blink': 'blink 1s step-end infinite',
+                        'scan': 'scan 4s linear infinite',
                         'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 10s linear infinite',
                     }
                 }
             }
@@ -53,940 +53,1442 @@
     </script>
 
     <style>
+        :root {
+            --primary: #FF3300;
+            --bg: #050505;
+        }
+
         body {
-            background-color: #050505;
-            color: #e5e5e5;
-            font-family: 'Oswald', 'Noto Sans TC', sans-serif;
+            background-color: var(--bg);
+            color: #EAEAEA;
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #333; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+        /* Glitch Effect */
+        .glitch-text { position: relative; }
+        .glitch-text::before, .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg);
+        }
+        .glitch-text::before {
+            left: 2px; text-shadow: -1px 0 #ff00c1;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+        .glitch-text::after {
+            left: -2px; text-shadow: -1px 0 #00fff9;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 2s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-anim {
+            0% { clip: rect(12px, 9999px, 32px, 0); }
+            20% { clip: rect(85px, 9999px, 140px, 0); }
+            40% { clip: rect(42px, 9999px, 78px, 0); }
+            60% { clip: rect(15px, 9999px, 15px, 0); }
+            80% { clip: rect(120px, 9999px, 60px, 0); }
+            100% { clip: rect(45px, 9999px, 80px, 0); }
         }
 
-        /* Industrial Scrollbar */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: #050505; }
-        ::-webkit-scrollbar-thumb { background: #ef4444; }
+        /* Node Card Styles */
+        .node-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(4px);
+            position: relative;
+            overflow: hidden;
+        }
+        .node-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+            background: currentColor; opacity: 0.5;
+        }
+        .node-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            z-index: 10;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        /* Tier Specific Styling */
+        .node-S { border-color: #FF3300; background: rgba(255, 51, 0, 0.05); }
+        .node-S:hover { box-shadow: 0 0 30px rgba(255, 51, 0, 0.6); background: rgba(255, 51, 0, 0.15); }
+        
+        .node-A { border-color: rgba(168, 85, 247, 0.4); background: rgba(168, 85, 247, 0.05); }
+        .node-A:hover { box-shadow: 0 0 25px rgba(168, 85, 247, 0.5); border-color: #A855F7; }
+        
+        .node-B { border-color: rgba(234, 179, 8, 0.4); background: rgba(234, 179, 8, 0.05); }
+        .node-B:hover { box-shadow: 0 0 25px rgba(234, 179, 8, 0.5); border-color: #EAB308; }
+        
+        .node-C { border-color: rgba(59, 130, 246, 0.4); background: rgba(59, 130, 246, 0.05); }
+        .node-C:hover { box-shadow: 0 0 25px rgba(59, 130, 246, 0.5); border-color: #3B82F6; }
 
-        .glass-panel {
-            background: rgba(18, 18, 18, 0.95); /* More opaque for readability */
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        .node-future { border-color: #00FFFF; background: rgba(0, 255, 255, 0.02); opacity: 0.7; border-style: dashed; }
+        .node-future:hover { opacity: 1; box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); }
+
+        .node-card.sold {
+            opacity: 0.4;
+            filter: grayscale(100%);
+            border-style: dashed;
+            border-color: #333;
+            background: repeating-linear-gradient(45deg, #111, #111 10px, #1a1a1a 10px, #1a1a1a 20px);
+            pointer-events: none;
+        }
+        
+        /* Node Tag */
+        .node-tag {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 2px 6px;
+            font-size: 9px;
+            font-weight: bold;
+            font-family: 'Space Mono', monospace;
+            z-index: 20;
+            clip-path: polygon(0 0, 100% 0, 100% 70%, 90% 100%, 0 100%);
         }
 
-        .border-signal-glow {
-            border-color: #ef4444;
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.15);
-        }
-
-        .fids-table { width: 100%; border-collapse: separate; border-spacing: 0 2px; }
-        .fids-row { background: #121212; transition: all 0.1s; }
-        .fids-row:hover { background: #ef4444; color: #000; }
-        .fids-row:hover .text-signal { color: #000; } /* Invert signal text on hover */
-        .fids-row:hover .text-emerald-400 { color: #000; } /* Invert signal text on hover */
-        .fids-cell { padding: 8px 12px; font-family: 'Space Mono', monospace; font-size: 12px; border-bottom: 1px solid #1f1f1f; }
-
-        .custom-checkbox {
-            appearance: none; background-color: #121212; margin: 0; font: inherit; color: currentColor;
-            width: 1.2em; height: 1.2em; border: 1px solid #333; display: grid; place-content: center;
-            cursor: pointer; flex-shrink: 0;
-        }
-        .custom-checkbox::before {
-            content: ""; width: 0.65em; height: 0.65em; transform: scale(0);
-            transition: 120ms transform ease-in-out; background-color: #ef4444;
-        }
-        .custom-checkbox:checked::before { transform: scale(1); }
-        .custom-checkbox:checked { border-color: #ef4444; }
-
-        /* Loader */
-        #loader {
-            position: fixed; inset: 0; background: #050505; z-index: 9999;
-            display: flex; justify-content: center; align-items: center; flex-direction: column;
-        }
+        /* Typography improvements */
+        .content-block p { margin-bottom: 1.5rem; line-height: 1.8; color: #bbb; }
+        .content-block h3 { color: #fff; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.25rem; }
+        .content-block ul { list-style: disc; padding-left: 1.5rem; color: #999; margin-bottom: 1.5rem; }
+        .content-block li { margin-bottom: 0.5rem; }
     </style>
 </head>
+<body class="font-sans antialiased">
 
-<body id="mainBody" class="overflow-x-hidden overflow-hidden">
-
-    <!-- LOADER -->
-    <div id="loader">
-        <div class="text-6xl md:text-9xl font-bold tracking-tighter text-white">AIF<span class="text-signal">.WTF</span></div>
-        <div class="font-mono text-signal mt-4 text-xs tracking-[0.5em] animate-pulse">
-            SYSTEM_BOOT_SEQUENCE_INIT
+    <!-- Loading Screen -->
+    <div id="boot-sequence" class="fixed inset-0 z-[9999] bg-void flex flex-col items-center justify-center font-mono">
+        <div class="w-[300px] text-xs text-dim mb-4">
+            > INITIALIZING SPATIAL MATRIX...<br>
+            > LOADING GLOBAL NODE DATA...<br>
+            > SYNCING HKAIIFF PROTOCOL...<br>
+            > ESTABLISHING SECURE UPLINK...
         </div>
-    </div>
-
-    <!-- DISCLAIMER MODAL -->
-    <div id="disclaimer-modal" class="fixed inset-0 z-[10000] bg-void/95 flex justify-center items-center p-4">
-        <div class="bg-concrete w-full max-w-lg p-8 border border-signal shadow-[0_0_50px_rgba(239,68,68,0.1)]">
-            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-white border-b border-white/10 pb-4 uppercase">
-                <i class="fas fa-exclamation-triangle text-signal mr-2"></i> <span data-i18n="disc_title">IMPORTANT DISCLAIMER</span>
-            </h2>
-            
-            <div class="font-mono text-xs text-gray-400 mb-8 space-y-2">
-                <p data-i18n="disc_p1">You are about to enter the AIF.WTF Node Service Area.</p>
-                <p data-i18n="disc_p2">This service involves digital assets and infrastructure participation.</p>
-            </div>
-
-            <div class="space-y-4 mb-8 font-mono text-xs text-gray-300">
-                <p class="mb-4 text-signal font-bold uppercase tracking-wider" data-i18n="disc_confirm">Please confirm:</p>
-
-                <label class="flex items-start gap-3 cursor-pointer hover:text-white transition-colors">
-                    <input type="checkbox" class="custom-checkbox mt-0.5 disclaimer-check" onchange="checkDisclaimer()">
-                    <span data-i18n="disc_c1">I am not a resident of Mainland China</span>
-                </label>
-
-                <label class="flex items-start gap-3 cursor-pointer hover:text-white transition-colors">
-                    <input type="checkbox" class="custom-checkbox mt-0.5 disclaimer-check" onchange="checkDisclaimer()">
-                    <span data-i18n="disc_c2">I am not a U.S. citizen or resident</span>
-                </label>
-
-                <label class="flex items-start gap-3 cursor-pointer hover:text-white transition-colors">
-                    <input type="checkbox" class="custom-checkbox mt-0.5 disclaimer-check" onchange="checkDisclaimer()">
-                    <span data-i18n="disc_c3">I am participating with my own offshore assets</span>
-                </label>
-
-                <label class="flex items-start gap-3 cursor-pointer hover:text-white transition-colors">
-                    <input type="checkbox" class="custom-checkbox mt-0.5 disclaimer-check" onchange="checkDisclaimer()">
-                    <span data-i18n="disc_c4">I acknowledge the risks of digital asset participation</span>
-                </label>
-
-                <label class="flex items-start gap-3 cursor-pointer hover:text-white transition-colors">
-                    <input type="checkbox" class="custom-checkbox mt-0.5 disclaimer-check" onchange="checkDisclaimer()">
-                    <span data-i18n="disc_c5">I voluntarily assume all risks</span>
-                </label>
-            </div>
-
-            <div class="border-t border-white/10 pt-6">
-                <p class="font-mono text-[10px] text-gray-500 mb-4" data-i18n="disc_agree">
-                    I have read and agree to the "User Agreement" and "Risk Disclosure Statement".
-                </p>
-                <button id="disclaimer-submit" disabled onclick="acceptDisclaimer()" class="w-full bg-concreteLight text-gray-500 border border-gray-800 py-4 font-bold text-lg uppercase tracking-widest transition-all duration-300 cursor-not-allowed hover:bg-signal hover:text-white hover:border-signal">
-                    <span data-i18n="disc_enter">ENTER PROTOCOL</span>
-                </button>
-            </div>
+        <div class="text-6xl font-bold text-signal mb-2 tracking-tighter">AIF<span class="text-white">.WTF</span></div>
+        <div class="w-64 h-1 bg-concrete overflow-hidden relative">
+            <div id="loader-progress" class="h-full bg-signal w-0 absolute top-0 left-0"></div>
         </div>
     </div>
 
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-[9999] bg-void/90 backdrop-blur border-b border-white/5">
-        <div class="px-6 py-4 flex justify-between items-center max-w-[1920px] mx-auto">
-            <a href="#" class="flex items-center gap-2 group" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-                <div class="w-8 h-8 bg-signal text-black flex items-center justify-center font-bold text-lg">A</div>
-                <div class="flex flex-col leading-none">
-                    <span class="text-lg font-bold tracking-tight text-white group-hover:text-signal transition-colors">AIF.WTF</span>
-                    <span class="text-[0.6rem] font-mono text-gray-500">DEPIN_PROTOCOL_V1</span>
+    <nav class="fixed w-full z-50 top-0 left-0 border-b border-concrete/60 bg-void/90 backdrop-blur-md">
+        <div class="max-w-[1600px] mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3 group cursor-pointer" onclick="window.scrollTo(0,0)">
+                <div class="w-8 h-8 bg-signal flex items-center justify-center font-bold text-black font-mono group-hover:animate-pulse">A</div>
+                <div class="leading-none">
+                    <div class="font-mono font-bold text-lg tracking-tight text-white">AIF.WTF</div>
+                    <div class="text-[10px] text-dim tracking-widest">SPATIAL DEPIN MATRIX</div>
                 </div>
-            </a>
+            </div>
             
-            <div class="hidden xl:flex items-center gap-8 text-sm font-medium text-gray-400 font-mono">
-                <a href="#vision" class="hover:text-white hover:underline decoration-signal underline-offset-4" data-i18n="nav_vision">VISION</a>
-                <a href="#problem" class="hover:text-white hover:underline decoration-signal underline-offset-4" data-i18n="nav_problem">CONTEXT</a>
-                <a href="#heatmap" class="text-signal font-bold hover:text-white" data-i18n="nav_heatmap">[ LIVE GRID ]</a>
-                <a href="#tech" class="hover:text-white hover:underline decoration-signal underline-offset-4" data-i18n="nav_tech">TECH</a>
-                <a href="#nodes" class="hover:text-white hover:underline decoration-signal underline-offset-4" data-i18n="nav_nodes">NODES</a>
-                <a href="#roadmap" class="hover:text-white hover:underline decoration-signal underline-offset-4" data-i18n="nav_roadmap">ROADMAP</a>
+            <div class="hidden lg:flex items-center gap-8 font-mono text-xs tracking-widest text-dim">
+                <a href="#ecosystem" class="hover:text-signal transition-colors flex items-center gap-2" data-i18n="nav_eco">ECOSYSTEM</a>
+                <a href="#fission-rules" class="hover:text-signal transition-colors flex items-center gap-2" data-i18n="nav_rules">GENESIS PROTOCOL</a>
+                <a href="#deep-dive" class="hover:text-signal transition-colors flex items-center gap-2" data-i18n="nav_analysis">ANALYSIS</a>
+                <a href="#node-matrix" class="hover:text-signal transition-colors flex items-center gap-2 text-white border border-signal/50 px-3 py-1 bg-signal/10 rounded" data-i18n="nav_buy">BUY NODES</a>
             </div>
 
             <div class="flex items-center gap-4">
-                <button onclick="toggleLanguage()" class="text-xs font-mono border border-white/20 px-3 py-1 hover:bg-white hover:text-black transition-colors uppercase">
-                    <span class="lang-text">EN / 中文</span>
+                <button onclick="toggleLang()" class="border border-dim/50 px-3 py-1 text-xs font-mono text-dim hover:text-white hover:border-white transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-globe"></i> <span id="lang-btn">EN/中文</span>
                 </button>
-                <button onclick="toggleMobileMenu()" class="xl:hidden text-white w-8 h-8 flex items-center justify-center border border-white/20 hover:bg-white/10 transition-colors"><i class="fas fa-bars"></i></button>
             </div>
-        </div>
-
-        <!-- Mobile Menu (Fixed Transparency Issue: bg-void/98) -->
-        <div id="mobileMenu" class="fixed inset-0 bg-void/98 backdrop-blur-xl z-40 transform translate-x-full transition-transform duration-300 flex flex-col pt-24 px-8 gap-8 border-l border-white/10">
-            <a href="#vision" onclick="toggleMobileMenu()" class="text-3xl font-bold text-white border-b border-white/10 pb-4" data-i18n="nav_vision">VISION</a>
-            <a href="#problem" onclick="toggleMobileMenu()" class="text-3xl font-bold text-white border-b border-white/10 pb-4" data-i18n="nav_problem">CONTEXT</a>
-            <a href="#heatmap" onclick="toggleMobileMenu()" class="text-3xl font-bold text-signal border-b border-white/10 pb-4" data-i18n="nav_heatmap">LIVE GRID</a>
-            <a href="#tech" onclick="toggleMobileMenu()" class="text-3xl font-bold text-white border-b border-white/10 pb-4" data-i18n="nav_tech">TECH</a>
-            <a href="#nodes" onclick="toggleMobileMenu()" class="text-3xl font-bold text-white border-b border-white/10 pb-4" data-i18n="nav_nodes">NODES</a>
-            <a href="#roadmap" onclick="toggleMobileMenu()" class="text-3xl font-bold text-white border-b border-white/10 pb-4" data-i18n="nav_roadmap">ROADMAP</a>
-            <button onclick="toggleLanguage()" class="text-lg font-mono border border-white/20 py-4 hover:bg-white hover:text-black transition-colors uppercase text-center mt-auto mb-12">
-                <span class="lang-text">SWITCH LANGUAGE</span>
-            </button>
         </div>
     </nav>
 
-    <!-- Hero -->
-    <header id="vision" class="relative min-h-[90vh] flex items-center pt-20 border-b border-white/5 bg-void">
-        <div class="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none"></div>
-        <div class="max-w-[1920px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 w-full relative z-10">
-            <div class="flex flex-col justify-center">
-                <div class="flex items-center gap-2 mb-6">
-                    <span class="w-2 h-2 bg-signal animate-pulse-fast"></span>
-                    <span class="font-mono text-xs text-signal tracking-widest" data-i18n="hero_status">/// SYSTEM STATUS: ONLINE</span>
-                </div>
-                <h1 class="text-5xl md:text-7xl font-bold uppercase leading-[0.9] mb-8">
-                    <span data-i18n="hero_title1">DROP CONTENT</span><br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-600" data-i18n="hero_title2">NOT HARDWARE</span>
-                </h1>
-                <p class="text-gray-400 font-mono text-sm md:text-base leading-relaxed max-w-xl border-l-2 border-signal pl-4 mb-8" data-i18n="hero_desc">
-                    The world's first decentralized physical infrastructure network (DePIN) optimized for AI-native interactive content. We transform idle computing power into "digital anchors" for the spatial web.
-                </p>
-                <div class="flex flex-col sm:flex-row gap-4">
-                    <a href="#nodes" class="bg-white text-black px-8 py-4 font-bold text-sm hover:bg-signal hover:text-white transition-colors text-center">
-                        <i class="fas fa-microchip mr-2"></i> <span data-i18n="hero_cta_primary">INITIATE NODE</span>
-                    </a>
-                    <a href="#heatmap" class="border border-white/20 text-white px-8 py-4 font-bold text-sm hover:bg-white hover:text-black transition-colors text-center font-mono">
-                        <span data-i18n="hero_cta_heatmap">VIEW LIVE GRID</span>
-                    </a>
-                </div>
-                <div class="mt-12 flex gap-6 text-[10px] font-mono text-gray-500 uppercase tracking-widest">
-                    <span><i class="fas fa-shield-alt text-signal mr-1"></i> <span data-i18n="trust_audit">AUDIT: CERTIK</span></span>
-                    <span><i class="fas fa-link text-signal mr-1"></i> <span data-i18n="trust_chain">SOLANA SVM</span></span>
-                </div>
-            </div>
-            
-            <!-- Hero Stats / Visual -->
-            <div class="hidden lg:block relative">
-                <div class="bg-concrete border border-white/5 p-8 relative">
-                    <div class="absolute top-0 right-0 p-2 bg-signal text-black font-mono text-xs font-bold">LIVE</div>
-                    <div class="space-y-6">
-                        <div class="flex justify-between items-center border-b border-white/5 pb-4">
-                            <span class="text-gray-500 font-mono text-xs" data-i18n="stat_nodes">ACTIVE NODES</span>
-                            <span class="text-2xl font-bold">1,248</span>
+    <main class="relative z-10 pt-20">
+
+        <!-- Hero Section -->
+        <section class="max-w-[1600px] mx-auto px-6 py-20 relative">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Text Content -->
+                <div class="z-20">
+                    <div class="inline-flex items-center gap-2 border border-signal/30 bg-signal/5 px-3 py-1 rounded-sm mb-6">
+                        <span class="w-2 h-2 rounded-full bg-signal animate-pulse"></span>
+                        <span class="text-xs font-mono text-signal uppercase" data-i18n="hero_badge">Live Deployment Phase 1</span>
+                    </div>
+                    
+                    <h1 class="text-5xl xl:text-8xl font-bold tracking-tighter leading-[0.9] mb-8">
+                        <span class="block glitch-text" data-text="DROP CONTENT">DROP CONTENT</span>
+                        <span class="block text-transparent bg-clip-text bg-gradient-to-r from-white to-dim">NOT HARDWARE</span>
+                    </h1>
+                    
+                    <p class="text-lg text-dim max-w-xl font-light leading-relaxed mb-8 border-l-2 border-signal pl-4" data-i18n="hero_desc">
+                        全球首個專為 AI原生互動內容 優化的去中心化物理基礎設施網絡 (DePIN)。我們將閒置算力轉化為空間網絡的「數字錨點」。<br><br>
+                        香港AI國際電影節 (HKAIIFF) 官方指定物理基礎設施。<br>
+                        搶購 500 個創世節點，成為空間計算時代的數字地主。<br>
+                        支持 USDT / AIF / 法幣支付，即刻開啟 DePIN 被動收益。
+                    </p>
+
+                    <div class="flex flex-wrap gap-4 font-mono">
+                        <div class="bg-concrete/40 border border-concrete p-4 w-40 hover:border-signal transition-colors">
+                            <div class="text-[10px] text-dim mb-1" data-i18n="stat_remaining">REMAINING</div>
+                            <div class="text-2xl font-bold text-white" id="hero-count">492</div>
                         </div>
-                        <div class="flex justify-between items-center border-b border-white/5 pb-4">
-                            <span class="text-gray-500 font-mono text-xs" data-i18n="stat_latency">LATENCY</span>
-                            <span class="text-2xl font-bold text-signal font-mono">18.4 MS</span>
+                        <div class="bg-concrete/40 border border-concrete p-4 w-40 hover:border-terminal transition-colors">
+                            <div class="text-[10px] text-dim mb-1" data-i18n="stat_apy">CURRENT APY</div>
+                            <div class="text-2xl font-bold text-terminal">342%</div>
                         </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-500 font-mono text-xs" data-i18n="stat_compute">COMPUTE</span>
-                            <span class="text-2xl font-bold">450 PFLOPS</span>
+                        <div class="bg-concrete/40 border border-concrete p-4 min-w-[200px] hover:border-white transition-colors">
+                            <div class="text-[10px] text-dim mb-1" data-i18n="stat_timer">SALE ENDS IN</div>
+                            <div class="text-2xl font-bold text-white tabular-nums" id="hero-timer">00:00:00:00</div>
                         </div>
                     </div>
-                    <div class="mt-8 h-32 bg-void border border-white/5 relative overflow-hidden" id="mini-graph">
-                        <!-- JS generated graph bars -->
+                </div>
+
+                <!-- Visual / Ecosystem Map -->
+                <div id="heatmap-section" class="relative h-[600px] w-full bg-concrete/10 border border-concrete rounded-lg overflow-hidden group">
+                    <div class="absolute top-4 left-4 z-10 bg-black/80 backdrop-blur px-3 py-1 text-xs font-mono text-terminal border border-terminal/30">
+                        <i class="fa-solid fa-satellite-dish mr-2 animate-pulse"></i><span data-i18n="map_status">LIVE NETWORK STATUS</span>
                     </div>
+                    <!-- The Canvas Map -->
+                    <canvas id="heatmapCanvas" class="w-full h-full opacity-80 group-hover:opacity-100 transition-opacity duration-500"></canvas>
+                    <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTTAgNDBMMCAwTDQwIDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsIDI1NSwgMjU1LCAwLjAzKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIiAvPjwvc3ZnPg==')] pointer-events-none"></div>
                 </div>
             </div>
-        </div>
-    </header>
+        </section>
 
-    <!-- Context / Problem -->
-    <section id="problem" class="py-24 bg-concrete relative border-b border-white/5">
-        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16">
-            <div>
-                <span class="text-signal font-mono text-xs uppercase tracking-widest font-bold block mb-4" data-i18n="prob_label">THE BOTTLENECK</span>
-                <h2 class="text-4xl font-bold mb-6" data-i18n="prob_title">PHYSICS IS THE ENEMY</h2>
-                <div class="space-y-6 text-gray-400 font-light leading-relaxed">
-                    <p data-i18n="prob_p1">
-                        The speed of light is finite. Connecting to a cloud server 2,000km away introduces unavoidable physical latency (20-100ms) that breaks immersion. For spatial computing to feel "real", motion-to-photon latency must stay under 20ms.
-                    </p>
-                    <p data-i18n="prob_p2">
-                        Traditional cloud rendering is economically unsustainable. Streaming 4K 3D content consumes massive bandwidth, costing platforms millions. AIF.WTF solves this by moving computation to the "Edge" - physically closer to the user.
-                    </p>
-                </div>
-            </div>
-            <div class="bg-void p-8 border border-white/5">
-                <h3 class="text-white font-bold mb-6 border-b border-white/10 pb-4 uppercase" data-i18n="comp_title">Why Edge Matters</h3>
-                <div class="space-y-4 font-mono text-sm">
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-500">CLOUD COST (1M Users)</span>
-                        <span class="text-red-500 line-through decoration-red-500">$1.8 Million</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-signal">AIF EDGE COST</span>
-                        <span class="text-signal font-bold">$800</span>
-                    </div>
-                    <div class="mt-4 pt-4 border-t border-white/5 text-[10px] text-gray-600" data-i18n="comp_note">
-                        *Based on P2P caching efficiency vs AWS egress fees.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Heatmap (Fix: Guaranteed Canvas Rendering) -->
-    <section id="heatmap" class="min-h-[900px] relative bg-void border-b border-white/5 overflow-hidden">
-        <canvas id="globalCanvas" class="absolute inset-0 w-full h-full z-0"></canvas>
-        <div class="absolute inset-0 bg-gradient-to-t from-void via-transparent to-transparent pointer-events-none z-10"></div>
-        
-        <div class="relative z-20 flex flex-col h-full pointer-events-none">
-            <div class="p-8 flex flex-col md:flex-row justify-between items-start gap-4 pointer-events-auto">
-                <div class="bg-concrete/95 p-6 border border-white/10 backdrop-blur max-w-md">
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="w-1.5 h-1.5 bg-signal rounded-full animate-pulse"></span>
-                        <span class="font-mono text-[10px] text-signal" data-i18n="map_status_live">LIVE_NET_V3.0.EXE</span>
-                    </div>
-                    <h2 class="text-2xl font-bold mb-2" data-i18n="map_title">GLOBAL GRID</h2>
-                    <p class="text-xs text-gray-400 font-mono" data-i18n="map_desc">Real-time visualization of Cloud-Fog-Edge data transmission.</p>
-                </div>
-                <div id="liveTickerContainer" class="w-full md:w-64 space-y-1"></div>
-            </div>
-
-            <div class="flex-1"></div>
-
-            <div class="p-8 pointer-events-auto mt-20">
-                <div class="bg-concrete/95 border-t-2 border-signal p-6 backdrop-blur shadow-2xl">
-                    <div class="flex justify-between items-end mb-4">
-                        <h3 class="text-lg font-bold">NODE STATUS BOARD <span class="text-xs text-gray-500 font-mono ml-2 font-normal">H3 RES-9</span></h3>
-                        <span class="text-xs font-mono text-signal animate-pulse">SYNCING...</span>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="fids-table">
-                            <thead>
-                                <tr class="text-left text-gray-600 text-[10px] font-mono uppercase">
-                                    <th class="p-2">ID</th>
-                                    <th class="p-2">CITY</th>
-                                    <th class="p-2">COORDS</th>
-                                    <th class="p-2">TIER</th>
-                                    <th class="p-2">LATENCY</th>
-                                    <th class="p-2">STATUS</th>
-                                </tr>
-                            </thead>
-                            <tbody id="fids-body"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Tech -->
-    <section id="tech" class="py-24 bg-concrete border-b border-white/5">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <span class="text-signal font-mono text-xs uppercase tracking-widest" data-i18n="tech_label_main">CORE INNOVATION</span>
-                <h2 class="text-4xl font-bold mt-2" data-i18n="tech_title_main">3 PILLARS OF VIABILITY</h2>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-1">
-                <!-- Card 1 -->
-                <div class="bg-void p-8 border border-white/5 hover:border-signal transition-colors group">
-                    <div class="text-3xl text-gray-700 mb-6 group-hover:text-white transition-colors"><i class="fas fa-bolt"></i></div>
-                    <h3 class="text-xl font-bold mb-4 text-white" data-i18n="bk_1_t">Sub-20ms Latency</h3>
-                    <p class="text-sm text-gray-500 leading-relaxed font-mono" data-i18n="bk_1_d">
-                        By bypassing the public internet backbone and processing data on local Fog Nodes via WiFi 7, we reduce motion-to-photon latency from 110ms to 19ms.
-                    </p>
-                </div>
-                <!-- Card 2 -->
-                <div class="bg-void p-8 border border-white/5 hover:border-signal transition-colors group">
-                    <div class="text-3xl text-gray-700 mb-6 group-hover:text-white transition-colors"><i class="fas fa-hdd"></i></div>
-                    <h3 class="text-xl font-bold mb-4 text-white" data-i18n="bk_2_t">Predictive Pre-Caching</h3>
-                    <p class="text-sm text-gray-500 leading-relaxed font-mono" data-i18n="bk_2_d">
-                        Nodes use AI to predict user movement and pre-load heavy 3D assets to local NVMe storage. Content loads in < 3s instead of minutes.
-                    </p>
-                </div>
-                <!-- Card 3 -->
-                <div class="bg-void p-8 border border-white/5 hover:border-signal transition-colors group">
-                    <div class="text-3xl text-gray-700 mb-6 group-hover:text-white transition-colors"><i class="fas fa-user-shield"></i></div>
-                    <h3 class="text-xl font-bold mb-4 text-white" data-i18n="bk_3_t">TEE Privacy Compute</h3>
-                    <p class="text-sm text-gray-500 leading-relaxed font-mono" data-i18n="bk_3_d">
-                        Camera data never leaves the local node. All processing happens inside CPU/GPU Trusted Execution Environments (TEE).
-                    </p>
-                </div>
-            </div>
-
-            <!-- Workflow -->
-            <div class="mt-24 border border-white/5 bg-void p-8">
-                <h3 class="text-center font-bold text-xl mb-12" data-i18n="flow_title">ECOSYSTEM WORKFLOW</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center relative">
+        <!-- Ecosystem & Backing -->
+        <section id="ecosystem" class="py-20 bg-concrete/5 border-y border-concrete">
+            <div class="max-w-[1600px] mx-auto px-6">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-12">
                     <div>
-                        <div class="w-12 h-12 bg-concrete mx-auto flex items-center justify-center border border-white/10 mb-4"><i class="fas fa-cube"></i></div>
-                        <h4 class="font-bold text-sm mb-2" data-i18n="step_1_t">Content Creation</h4>
-                        <p class="text-xs text-gray-500 font-mono" data-i18n="step_1_d">Creators upload AR assets to 404.world cloud.</p>
-                    </div>
-                    <div>
-                        <div class="w-12 h-12 bg-signal/20 text-signal mx-auto flex items-center justify-center border border-signal mb-4"><i class="fas fa-server"></i></div>
-                        <h4 class="font-bold text-sm mb-2 text-signal" data-i18n="step_2_t">Fog Distribution</h4>
-                        <p class="text-xs text-gray-500 font-mono" data-i18n="step_2_d">AIF Nodes pre-cache content based on location demand.</p>
-                    </div>
-                    <div>
-                        <div class="w-12 h-12 bg-concrete mx-auto flex items-center justify-center border border-white/10 mb-4"><i class="fas fa-glasses"></i></div>
-                        <h4 class="font-bold text-sm mb-2" data-i18n="step_3_t">User Experience</h4>
-                        <p class="text-xs text-gray-500 font-mono" data-i18n="step_3_d">Zero-latency streaming to 404GLASS via WiFi 7.</p>
+                        <h2 class="text-3xl font-bold mb-2"><span data-i18n="eco_title">生態背書</span> <span class="text-dim font-mono text-lg">// ECOSYSTEM</span></h2>
+                        <p class="text-dim max-w-2xl" data-i18n="eco_subtitle">AIF.WTF 節點不僅是礦機，更是支撐 HKAIIFF 空間計算的邊緣算力單元。</p>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Nodes -->
-    <section id="nodes" class="py-24 bg-void border-b border-white/5">
-        <div class="max-w-[1920px] mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4" data-i18n="node_title">JOIN THE NETWORK</h2>
-                <p class="text-gray-500 font-mono text-sm max-w-2xl mx-auto" data-i18n="node_subtitle">Stake AIF to become a node operator. Provide compute, earn rewards.</p>
-                <div class="inline-block border border-signal text-signal px-3 py-1 mt-6 text-[10px] font-bold font-mono">
-                    ⚠ NOTICE: EQUIVALENT AIF STAKE REQUIRED (0.06 USD/AIF)
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-                
-                <!-- Tier S -->
-                <div class="bg-concrete border border-white/5 p-6 flex flex-col hover:border-signal transition-all group">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="w-10 h-10 bg-white text-black flex items-center justify-center font-bold text-lg">S</div>
-                        <span class="text-[10px] bg-signal text-black font-bold px-2 py-0.5">LIMITED</span>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-2">TIER S</h3>
-                    <p class="text-xs text-gray-500 font-mono mb-6 h-12 overflow-hidden" data-i18n="tier_s_desc">Global Core: NYC, Tokyo. High-density coverage for 100k+ daily users.</p>
-                    
-                    <div class="bg-void p-3 mb-6 border border-white/5 space-y-2">
-                        <div class="flex justify-between text-[10px] font-mono text-gray-400"><span>HARDWARE</span> <span class="text-white text-right">Dual EPYC + H100</span></div>
-                        <div class="flex justify-between text-[10px] font-mono text-gray-400"><span>STAKE</span> <span class="text-signal text-right">5M AIF (~$300k)</span></div>
-                    </div>
-
-                    <div class="mt-auto">
-                        <div class="flex justify-between items-end border-b border-white/10 pb-2 mb-4">
-                            <span class="text-xs text-gray-500">ENTRY COST</span>
-                            <span class="text-xl font-bold font-mono">$500,000</span>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Card 1 -->
+                    <div class="p-8 border border-concrete bg-void hover:border-signal/50 transition-all group">
+                        <div class="w-12 h-12 bg-concrete/50 flex items-center justify-center rounded mb-6 group-hover:bg-signal group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-vr-cardboard text-xl"></i>
                         </div>
-                        <button onclick="openJoinModal('S')" class="w-full bg-white text-black py-3 font-bold text-sm hover:bg-signal transition-colors">INITIALIZE</button>
-                    </div>
-                </div>
-
-                <!-- Tier A -->
-                <div class="bg-concrete border border-white/5 p-6 flex flex-col hover:border-white transition-all">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="w-10 h-10 bg-concreteLight border border-white/20 flex items-center justify-center font-bold text-lg text-gray-400">A</div>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-2">TIER A</h3>
-                    <p class="text-xs text-gray-500 font-mono mb-6 h-12 overflow-hidden" data-i18n="tier_a_desc">Urban Centers: Malls, Stadiums. Regional backbone.</p>
-                    
-                    <div class="bg-void p-3 mb-6 border border-white/5 space-y-2">
-                        <div class="flex justify-between text-[10px] font-mono text-gray-400"><span>HARDWARE</span> <span class="text-white text-right">Ryzen 9 + 4090</span></div>
-                        <div class="flex justify-between text-[10px] font-mono text-gray-400"><span>STAKE</span> <span class="text-signal text-right">500k AIF (~$30k)</span></div>
+                        <h3 class="text-xl font-bold mb-4 text-white" data-i18n="card1_title">空間計算渲染層</h3>
+                        <p class="text-sm text-dim leading-relaxed" data-i18n="card1_desc">
+                            為 HKAIIFF 電影節提供分佈式渲染算力。節點負責處理 XR/VR 內容的邊緣計算，確保觀影體驗 <20ms 延遲。
+                        </p>
                     </div>
 
-                    <div class="mt-auto">
-                        <div class="flex justify-between items-end border-b border-white/10 pb-2 mb-4">
-                            <span class="text-xs text-gray-500">ENTRY COST</span>
-                            <span class="text-xl font-bold font-mono">$50,000</span>
+                    <!-- Card 2 -->
+                    <div class="p-8 border border-concrete bg-void hover:border-signal/50 transition-all group">
+                        <div class="w-12 h-12 bg-concrete/50 flex items-center justify-center rounded mb-6 group-hover:bg-signal group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-database text-xl"></i>
                         </div>
-                        <button onclick="openJoinModal('A')" class="w-full border border-white/20 text-white py-3 font-bold text-sm hover:bg-white hover:text-black transition-colors">INITIALIZE</button>
-                    </div>
-                </div>
-
-                <!-- Tier B -->
-                <div class="bg-concrete border border-white/5 p-6 flex flex-col hover:border-white transition-all">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="w-10 h-10 bg-concreteLight border border-white/20 flex items-center justify-center font-bold text-lg text-gray-400">B</div>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-2">TIER B</h3>
-                    <p class="text-xs text-gray-500 font-mono mb-6 h-12 overflow-hidden" data-i18n="tier_b_desc">Residential: Condos. Local caching.</p>
-                    
-                    <div class="bg-void p-3 mb-6 border border-white/5 space-y-2">
-                        <div class="flex justify-between text-[10px] font-mono text-gray-400"><span>HARDWARE</span> <span class="text-white text-right">Ryzen 7 + 4070</span></div>
-                        <div class="flex justify-between text-[10px] font-mono text-gray-400"><span>STAKE</span> <span class="text-signal text-right">50k AIF (~$3k)</span></div>
+                        <h3 class="text-xl font-bold mb-4 text-white" data-i18n="card2_title">資產存儲與分發</h3>
+                        <p class="text-sm text-dim leading-relaxed" data-i18n="card2_desc">
+                            利用 IPFS 協議存儲海量 3D 電影資產。購買節點即可獲得與存儲空間掛鉤的 NFT，實現「數據即資產」。
+                        </p>
                     </div>
 
-                    <div class="mt-auto">
-                        <div class="flex justify-between items-end border-b border-white/10 pb-2 mb-4">
-                            <span class="text-xs text-gray-500">ENTRY COST</span>
-                            <span class="text-xl font-bold font-mono">$5,000</span>
+                    <!-- Card 3 -->
+                    <div class="p-8 border border-concrete bg-void hover:border-signal/50 transition-all group">
+                        <div class="w-12 h-12 bg-concrete/50 flex items-center justify-center rounded mb-6 group-hover:bg-signal group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-chart-line text-xl"></i>
                         </div>
-                        <button onclick="openJoinModal('B')" class="w-full border border-white/20 text-white py-3 font-bold text-sm hover:bg-white hover:text-black transition-colors">INITIALIZE</button>
+                        <h3 class="text-xl font-bold mb-4 text-white" data-i18n="card3_title">DePIN 激勵模型</h3>
+                        <p class="text-sm text-dim leading-relaxed" data-i18n="card3_desc">
+                            設備在非電影節期間自動接入 AIF 全球網絡執行通用計算任務。收益通過智能合約自動分配至質押者錢包。
+                        </p>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <!-- Tier C -->
-                <div class="bg-concrete border border-white/5 p-6 flex flex-col hover:border-white transition-all">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="w-10 h-10 bg-concreteLight border border-white/20 flex items-center justify-center font-bold text-lg text-gray-400">C</div>
-                        <span class="text-[10px] text-signal border border-signal px-2 py-0.5 font-mono">OPEN</span>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-2">TIER C</h3>
-                    <p class="text-xs text-gray-500 font-mono mb-6 h-12 overflow-hidden" data-i18n="tier_c_desc">Edge: Cafes. Last-mile coverage.</p>
+        <!-- Genesis Fission Rules -->
+        <section id="fission-rules" class="py-20 relative overflow-hidden bg-void">
+            <div class="max-w-[1200px] mx-auto px-6 relative z-10">
+                <div class="bg-concrete/20 border border-signal/20 p-10 rounded-xl relative overflow-hidden backdrop-blur-sm">
+                    <div class="absolute -right-20 -top-20 text-[200px] font-bold text-white/5 select-none pointer-events-none">2x2</div>
                     
-                    <div class="bg-void p-3 mb-6 border border-white/5 space-y-2">
-                        <div class="flex justify-between text-[10px] font-mono text-gray-400"><span>HARDWARE</span> <span class="text-white text-right">i5 + 3060</span></div>
-                        <div class="flex justify-between text-[10px] font-mono text-gray-400"><span>STAKE</span> <span class="text-signal text-right">10k AIF (~$600)</span></div>
+                    <div class="flex items-center gap-4 mb-8">
+                        <div class="w-16 h-1 bg-signal"></div>
+                        <h2 class="text-2xl font-mono font-bold" data-i18n="rules_title">GENESIS PROTOCOL: 二二複製</h2>
                     </div>
 
-                    <div class="mt-auto">
-                        <div class="flex justify-between items-end border-b border-white/10 pb-2 mb-4">
-                            <span class="text-xs text-gray-500">ENTRY COST</span>
-                            <span class="text-xl font-bold font-mono">$1,000</span>
+                    <div class="grid md:grid-cols-2 gap-12">
+                        <div class="space-y-6">
+                            <div class="bg-concrete/10 border border-dim/20 p-6 rounded-lg">
+                                <h4 class="font-bold text-white text-lg mb-4 flex items-center"><i class="fa-solid fa-seedling text-terminal mr-3"></i><span data-i18n="reward_direct_title">生態推廣獎勵</span></h4>
+                                <ul class="space-y-4 text-sm text-dim">
+                                    <li class="flex justify-between items-center border-b border-dim/10 pb-2">
+                                        <span data-i18n="reward_1st">推薦第 1 個節點</span>
+                                        <span class="text-white font-mono font-bold" data-i18n="reward_20">20% 生態獎勵</span>
+                                    </li>
+                                    <li class="flex justify-between items-center border-b border-dim/10 pb-2">
+                                        <span data-i18n="reward_2nd">推薦第 2 個節點</span>
+                                        <span class="text-signal font-mono font-bold" data-i18n="reward_80">80% 生態獎勵</span>
+                                    </li>
+                                    <li class="flex justify-between items-center text-xs italic">
+                                        <span data-i18n="reward_loop">* 循環觸發 (1-2, 3-4, 5-6...)</span>
+                                        <span class="text-terminal" data-i18n="reward_inf">無限循環</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-concrete/10 border border-dim/20 p-6 rounded-lg">
+                                <h4 class="font-bold text-white text-lg mb-4 flex items-center"><i class="fa-solid fa-crown text-tierB mr-3"></i><span data-i18n="reward_perm_title">永久收益分成</span></h4>
+                                <p class="text-sm text-dim leading-relaxed" data-i18n="reward_perm_desc">
+                                    上級節點將<strong class="text-white">永久獲得</strong>其直推下級節點每日產出收益的 <span class="text-tierB font-bold text-lg">10%</span> 作為生態管理獎勵。
+                                </p>
+                                <div class="mt-4 h-1 w-full bg-dim/20 rounded overflow-hidden">
+                                    <div class="h-full bg-tierB w-[10%]"></div>
+                                </div>
+                            </div>
                         </div>
-                        <button onclick="openJoinModal('C')" class="w-full border border-white/20 text-white py-3 font-bold text-sm hover:bg-white hover:text-black transition-colors">INITIALIZE</button>
+
+                        <!-- Interactive Tree Visual -->
+                        <div class="bg-black/50 border border-dim/20 rounded p-6 flex items-center justify-center relative">
+                            <div class="text-center w-full">
+                                <div class="inline-block p-3 border-2 border-signal bg-signal/10 rounded mb-8 relative animate-pulse-fast">
+                                    <i class="fa-solid fa-server"></i> ROOT (YOU)
+                                    <div class="absolute -bottom-8 left-1/2 w-px h-8 bg-dim"></div>
+                                </div>
+                                <div class="flex justify-around relative w-full">
+                                    <div class="absolute top-0 w-1/2 h-px bg-dim -translate-y-[1px]"></div>
+                                    <div class="text-center relative">
+                                        <div class="w-px h-4 bg-dim mx-auto"></div>
+                                        <div class="p-2 border border-white/30 rounded text-xs text-dim mt-1 group hover:border-terminal transition-colors">
+                                            <div>NODE 1</div>
+                                            <div class="text-terminal font-bold">20%</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center relative">
+                                        <div class="w-px h-4 bg-dim mx-auto"></div>
+                                        <div class="p-2 border border-white/30 rounded text-xs text-dim mt-1 group hover:border-signal transition-colors">
+                                            <div>NODE 2</div>
+                                            <div class="text-signal font-bold">80%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Deep Dive Analysis Section -->
+        <section id="deep-dive" class="py-24 bg-concrete/5 border-t border-concrete">
+            <div class="max-w-[1200px] mx-auto px-6">
+                <div class="mb-16">
+                    <span class="text-signal font-mono text-xs uppercase tracking-widest">// DEEP DIVE ANALYSIS</span>
+                    <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-6" data-i18n="analysis_title">項目深度解析與商業價值報告</h2>
+                    <p class="text-dim max-w-3xl leading-relaxed" data-i18n="analysis_subtitle">
+                        AIF.WTF 不僅僅是一個區塊鏈項目，它是物理基礎設施與空間計算的完美結合。以下是關於技術架構及市場價值的視覺化分析。
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                    <!-- Tech Architecture -->
+                    <div class="bg-void border border-dim/20 p-8 rounded-xl relative overflow-hidden group hover:border-tierC transition-colors">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <i class="fa-solid fa-microchip text-9xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-6" data-i18n="arch_title">1. DePIN + 邊緣計算架構</h3>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-concrete rounded flex items-center justify-center text-tierC shrink-0">
+                                    <i class="fa-solid fa-bolt"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-bold mb-1" data-i18n="arch_pain_title">傳統雲痛點</h4>
+                                    <p class="text-sm text-dim" data-i18n="arch_pain_desc">AWS/Google Cloud 遠離終端，延遲 >100ms，無法滿足 VR/AR 空間計算的即時性需求。</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-concrete rounded flex items-center justify-center text-terminal shrink-0">
+                                    <i class="fa-solid fa-network-wired"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-bold mb-1" data-i18n="arch_sol_title">AIF 邊緣方案</h4>
+                                    <p class="text-sm text-dim" data-i18n="arch_sol_desc">在城市核心 (Tier S/A) 部署高密度節點。HKAIIFF 用戶自動匹配 <5km 節點，實現 <20ms 超低延遲渲染，解決暈動症。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Market Value -->
+                    <div class="bg-void border border-dim/20 p-8 rounded-xl relative overflow-hidden group hover:border-signal transition-colors">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <i class="fa-solid fa-chart-pie text-9xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-6" data-i18n="market_title">2. 空間互聯網的「數字地產」</h3>
+                        
+                        <div class="grid grid-cols-2 gap-4 mt-8">
+                            <div class="bg-concrete/20 p-4 rounded text-center">
+                                <div class="text-3xl font-bold text-white mb-1">1T+</div>
+                                <div class="text-xs text-dim" data-i18n="market_stat1">2030 市場規模 (USD)</div>
+                            </div>
+                            <div class="bg-concrete/20 p-4 rounded text-center">
+                                <div class="text-3xl font-bold text-white mb-1">3D</div>
+                                <div class="text-xs text-dim" data-i18n="market_stat2">內容爆發式增長</div>
+                            </div>
+                        </div>
+
+                        <ul class="mt-8 space-y-3 text-sm text-dim">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-signal"></i> <strong data-i18n="val_1">算力租賃：</strong><span data-i18n="val_1_d">為開發者提供低成本渲染。</span></li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-signal"></i> <strong data-i18n="val_2">流量變現：</strong><span data-i18n="val_2_d">基於 LBS 的精準廣告投放。</span></li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-signal"></i> <strong data-i18n="val_3">資產增值：</strong><span data-i18n="val_3_d">節點 NFT 具備稀缺性與交易屬性。</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Node Matrix Section -->
+        <section id="node-matrix" class="py-12 min-h-screen bg-bg">
+            <div class="max-w-[1600px] mx-auto px-6">
+                <!-- Toolbar -->
+                <div class="sticky top-20 z-30 bg-bg/95 backdrop-blur-xl border-y border-concrete py-4 mb-8">
+                    <div class="flex flex-col gap-4">
+                        <div class="flex items-center gap-4 justify-between">
+                            <h2 class="text-2xl font-bold font-mono text-white">NODE MATRIX</h2>
+                            <span class="text-xs font-mono text-terminal border border-terminal/30 px-2 py-0.5 rounded bg-terminal/5 animate-pulse">● SYSTEM ONLINE (500 GENESIS)</span>
+                        </div>
+
+                        <!-- Filters -->
+                        <div class="flex flex-wrap gap-4 items-center">
+                            <!-- TIER FILTERS -->
+                            <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                                <button onclick="filterManager.setTier('all')" class="px-3 py-1 text-xs font-mono rounded bg-white text-black hover:opacity-80 transition-opacity whitespace-nowrap">ALL</button>
+                                <button onclick="filterManager.setTier('S')" class="px-3 py-1 text-xs font-mono rounded bg-signal/20 text-signal border border-signal hover:opacity-80 transition-opacity whitespace-nowrap">TIER S (CITY)</button>
+                                <button onclick="filterManager.setTier('A')" class="px-3 py-1 text-xs font-mono rounded bg-tierA/20 text-tierA border border-tierA hover:opacity-80 transition-opacity whitespace-nowrap">TIER A</button>
+                                <button onclick="filterManager.setTier('B')" class="px-3 py-1 text-xs font-mono rounded bg-tierB/20 text-tierB border border-tierB hover:opacity-80 transition-opacity whitespace-nowrap">TIER B</button>
+                                <button onclick="filterManager.setTier('C')" class="px-3 py-1 text-xs font-mono rounded bg-tierC/20 text-tierC border border-tierC hover:opacity-80 transition-opacity whitespace-nowrap">TIER C</button>
+                            </div>
+                            
+                            <div class="w-px h-6 bg-dim/20 hidden md:block"></div>
+
+                            <!-- CITY FILTERS -->
+                            <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide flex-1" id="city-filters">
+                                <!-- JS Injected City Buttons -->
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-            </div>
-        </div>
-    </section>
-
-    <!-- Roadmap -->
-    <section id="roadmap" class="py-24 bg-concrete border-b border-white/5 overflow-hidden">
-        <h2 class="text-3xl font-bold text-center mb-16" data-i18n="roadmap_title">EXECUTION PLAN</h2>
-        <div class="max-w-4xl mx-auto relative px-6">
-            <div class="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-white/10 md:-translate-x-1/2"></div>
-            
-            <!-- Item 1 -->
-            <div class="relative flex flex-col md:flex-row items-center justify-between mb-12">
-                <div class="md:w-1/2 pr-0 md:pr-12 pl-12 md:pl-0 w-full text-left md:text-right">
-                    <span class="text-signal font-bold text-xs mb-1 block">FEB 2026</span>
-                    <h3 class="text-xl font-bold text-white mb-2">GENESIS</h3>
-                    <p class="text-gray-500 text-sm font-mono" data-i18n="rm_1_d">Official Mainnet Launch. Deployment of initial 500 validator nodes in 5 key cities.</p>
-                </div>
-                <div class="absolute left-6 md:left-1/2 w-3 h-3 bg-signal -translate-x-1.5"></div>
-                <div class="md:w-1/2"></div>
-            </div>
-
-            <!-- Item 2 -->
-            <div class="relative flex flex-col md:flex-row items-center justify-between mb-12">
-                <div class="md:w-1/2"></div>
-                <div class="absolute left-6 md:left-1/2 w-3 h-3 bg-white -translate-x-1.5"></div>
-                <div class="md:w-1/2 pl-12 w-full">
-                    <span class="text-gray-500 font-bold text-xs mb-1 block">AUG 2026</span>
-                    <h3 class="text-xl font-bold text-white mb-2">COMMERCIALIZATION</h3>
-                    <p class="text-gray-500 text-sm font-mono" data-i18n="rm_2_d">Expanding to 3,000 nodes. Launch of Tier B/C public registration.</p>
+                <!-- Grid -->
+                <div id="grid-container" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 min-h-[500px]">
+                    <!-- JS Injected Nodes -->
                 </div>
             </div>
+        </section>
 
-            <!-- Item 3 -->
-            <div class="relative flex flex-col md:flex-row items-center justify-between mb-12">
-                <div class="md:w-1/2 pr-0 md:pr-12 pl-12 md:pl-0 w-full text-left md:text-right">
-                    <span class="text-gray-500 font-bold text-xs mb-1 block">FEB 2027</span>
-                    <h3 class="text-xl font-bold text-white mb-2">EXPANSION</h3>
-                    <p class="text-gray-500 text-sm font-mono" data-i18n="rm_3_d">Target: 50,000 Active Nodes. Launch of 404GLASS hardware.</p>
-                </div>
-                <div class="absolute left-6 md:left-1/2 w-3 h-3 bg-white -translate-x-1.5"></div>
-                <div class="md:w-1/2"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ -->
-    <section class="py-24 bg-void border-b border-white/5">
-        <div class="max-w-3xl mx-auto px-6 space-y-6">
-            <h2 class="text-3xl font-bold text-center mb-12" data-i18n="faq_title">FAQ</h2>
-            <div class="border border-white/10 p-6 bg-concrete">
-                <h4 class="font-bold text-white mb-2" data-i18n="faq_1_q">What is the return on staking?</h4>
-                <p class="text-sm text-gray-500 font-mono" data-i18n="faq_1_a">Returns vary by Tier. Tier S/A nodes earn 12-24% APY plus fees.</p>
-            </div>
-            <div class="border border-white/10 p-6 bg-concrete">
-                <h4 class="font-bold text-white mb-2" data-i18n="faq_3_q">Why is there a lock-up period?</h4>
-                <p class="text-sm text-gray-500 font-mono" data-i18n="faq_3_a">To ensure network stability for enterprise clients, nodes must commit to 12 months.</p>
-            </div>
-        </div>
-    </section>
+    </main>
 
     <!-- Footer -->
-    <footer class="py-20 bg-void border-t border-white/10 text-gray-600 text-sm font-mono px-6">
-        <div class="max-w-[1920px] mx-auto flex flex-col md:flex-row justify-between items-center">
-            <div class="mb-4 md:mb-0">
-                <span class="text-white font-bold font-sans text-xl block mb-2">AIF.WTF</span>
-                <p data-i18n="footer_desc">Building the physical infrastructure for spatial internet.</p>
+    <footer class="bg-concrete/10 border-t border-concrete pt-16 pb-8">
+        <div class="max-w-[1600px] mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="font-bold text-2xl mb-4 tracking-tighter">AIF<span class="text-signal">.WTF</span></div>
+                    <p class="text-dim text-sm max-w-md mb-6" data-i18n="footer_desc">
+                        致力於構建全球最大的去中心化空間計算網絡。通過 HKAIIFF 賦能實體經濟，利用 DePIN 技術重塑算力分配。
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 border border-dim/30 flex items-center justify-center hover:bg-white hover:text-black transition-colors rounded-full"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#" class="w-10 h-10 border border-dim/30 flex items-center justify-center hover:bg-white hover:text-black transition-colors rounded-full"><i class="fa-brands fa-discord"></i></a>
+                        <a href="#" class="w-10 h-10 border border-dim/30 flex items-center justify-center hover:bg-white hover:text-black transition-colors rounded-full"><i class="fa-brands fa-github"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-mono text-signal font-bold mb-6">RESOURCES</h4>
+                    <ul class="space-y-3 text-sm text-dim font-mono">
+                        <li><a href="#" class="hover:text-white transition-colors" data-i18n="link_whitepaper">白皮書 Whitepaper</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors" data-i18n="link_eco">生態報告 Ecosystem</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors" data-i18n="link_explorer">區塊瀏覽器 Explorer</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors" data-i18n="link_audit">合約審計 Audit</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-mono text-signal font-bold mb-6">LIVE FEED</h4>
+                    <div id="footer-ticker" class="h-32 overflow-hidden text-[10px] font-mono space-y-2 relative mask-gradient">
+                        <!-- JS injected -->
+                    </div>
+                </div>
             </div>
-            <div class="flex gap-6">
-                <a href="#" class="hover:text-white">TWITTER</a>
-                <a href="#" class="hover:text-white">DISCORD</a>
-                <a href="#" class="hover:text-white">GITHUB</a>
+            
+            <div class="border-t border-dim/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-dim font-mono">
+                <div>&copy; 2026 AIF FOUNDATION. HONG KONG AI INTERNATIONAL FILM FESTIVAL.</div>
+                <div class="mt-2 md:mt-0 flex gap-4">
+                    <a href="#">PRIVACY</a>
+                    <a href="#">TERMS</a>
+                    <a href="mailto:depin@aif.wtf">DEPIN@AIF.WTF</a>
+                </div>
             </div>
         </div>
     </footer>
 
-    <!-- JOIN MODAL -->
-    <div id="joinModal" class="fixed inset-0 z-[100] bg-void/90 hidden flex items-center justify-center p-4">
-        <div class="bg-concrete w-full max-w-2xl border border-white/10 shadow-2xl relative flex flex-col max-h-[90vh]" id="joinModalContent">
-            <div class="p-6 border-b border-white/10 flex justify-between items-center bg-concreteLight">
-                <h3 class="text-xl font-bold text-white"><span data-i18n="modal_join_title">INITIALIZE NODE</span> <span id="modalTierBadge" class="ml-2 bg-white text-black px-2 text-sm">TIER S</span></h3>
-                <button onclick="closeJoinModal()" class="text-gray-500 hover:text-white"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="p-6 overflow-y-auto font-mono text-sm space-y-6">
-                <div class="border border-signal/50 bg-signal/10 p-3 text-signal text-xs">
-                    <i class="fas fa-exclamation-triangle mr-2"></i> <span data-i18n="modal_notice">Limited Availability. Stake AIF required.</span>
+    <!-- WIZARD MODAL -->
+    <div id="modal-backdrop" class="fixed inset-0 bg-black/90 backdrop-blur-md z-[100] hidden transition-opacity duration-300 opacity-0"></div>
+
+    <div id="node-wizard" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[101] w-full max-w-5xl h-[90vh] max-h-[700px] bg-void border border-dim/30 shadow-[0_0_100px_rgba(255,51,0,0.2)] hidden flex overflow-hidden rounded-xl">
+        <div class="absolute inset-0 z-[102] crt-overlay pointer-events-none"></div>
+
+        <!-- Sidebar -->
+        <div class="w-20 md:w-64 bg-concrete/30 border-r border-dim/20 flex flex-col justify-between relative z-[103]">
+            <div class="p-6">
+                <div class="font-bold text-xl tracking-tighter mb-8 md:block hidden">AIF<span class="text-signal">.WTF</span></div>
+                <div class="flex flex-col gap-6">
+                    <div id="step-nav-1" class="flex items-center gap-4 text-signal transition-colors">
+                        <div class="w-8 h-8 rounded border border-current flex items-center justify-center font-mono text-sm">01</div>
+                        <span class="font-mono text-xs hidden md:block" data-i18n="step_1">詳情 DETAILS</span>
+                    </div>
+                    <div id="step-nav-2" class="flex items-center gap-4 text-dim transition-colors">
+                        <div class="w-8 h-8 rounded border border-current flex items-center justify-center font-mono text-sm">02</div>
+                        <span class="font-mono text-xs hidden md:block" data-i18n="step_2">支付 PAYMENT</span>
+                    </div>
+                    <div id="step-nav-3" class="flex items-center gap-4 text-dim transition-colors">
+                        <div class="w-8 h-8 rounded border border-current flex items-center justify-center font-mono text-sm">03</div>
+                        <span class="font-mono text-xs hidden md:block" data-i18n="step_3">代碼 CODE</span>
+                    </div>
+                    <div id="step-nav-4" class="flex items-center gap-4 text-dim transition-colors">
+                        <div class="w-8 h-8 rounded border border-current flex items-center justify-center font-mono text-sm">04</div>
+                        <span class="font-mono text-xs hidden md:block" data-i18n="step_4">驗證 VERIFY</span>
+                    </div>
                 </div>
+            </div>
+            <div class="p-6 border-t border-dim/10">
+                <div class="text-[10px] text-dim font-mono hidden md:block">SESSION ID:</div>
+                <div class="text-xs font-mono text-white hidden md:block" id="session-id">---</div>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="flex-1 relative bg-void z-[103] flex flex-col">
+            <button onclick="wizard.close()" class="absolute top-6 right-6 text-dim hover:text-white z-50 transition-colors">
+                <i class="fa-solid fa-xmark text-2xl"></i>
+            </button>
+
+            <!-- STEP 1: DETAILS -->
+            <div id="step-1" class="wizard-step flex-1 p-8 md:p-12 overflow-y-auto">
+                <div class="flex items-end gap-4 mb-6 border-b border-dim/20 pb-6">
+                    <div>
+                        <div class="text-xs font-mono text-dim mb-1 flex items-center gap-2">
+                            <span id="detail-id">ID: ---</span>
+                            <span class="bg-concrete px-2 rounded text-[9px] border border-dim/30 text-white" id="detail-hash">HASH: 0x...</span>
+                        </div>
+                        <h2 class="text-3xl md:text-4xl font-bold leading-tight text-white" id="detail-loc">LOCATION</h2>
+                    </div>
+                    <span class="px-3 py-1 rounded bg-dim/20 text-xs font-mono border border-dim/30 whitespace-nowrap" id="detail-tier">TIER X</span>
+                    <span class="ml-auto text-2xl md:text-3xl font-mono text-signal whitespace-nowrap" id="detail-price">$0</span>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <h3 class="text-xs font-mono text-dim uppercase tracking-widest mb-4">/// GEOSPATIAL VALUE METRICS</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-concrete/20 p-3 rounded border border-dim/10">
+                                <div class="text-[10px] text-dim">COORDINATES</div>
+                                <div class="font-mono text-xs text-white" id="d-coords">---</div>
+                            </div>
+                            <div class="bg-concrete/20 p-3 rounded border border-dim/10">
+                                <div class="text-[10px] text-dim">H3 INDEX</div>
+                                <div class="font-mono text-xs text-white" id="d-h3">---</div>
+                            </div>
+                            <div class="bg-concrete/20 p-3 rounded border border-dim/10">
+                                <div class="text-[10px] text-dim">COMMERCIAL HEAT</div>
+                                <div class="font-mono text-xs text-white" id="d-heat">---</div>
+                            </div>
+                            <div class="bg-concrete/20 p-3 rounded border border-dim/10">
+                                <div class="text-[10px] text-dim">EST. DAILY TRAFFIC</div>
+                                <div class="font-mono text-xs text-terminal" id="d-traffic">---</div>
+                            </div>
+                        </div>
+                        
+                        <!-- New Technical Metrics -->
+                        <div class="grid grid-cols-3 gap-2 mt-2">
+                            <div class="text-center bg-black/40 p-2 rounded border border-dim/20">
+                                <div class="text-[9px] text-dim">LATENCY</div>
+                                <div class="text-xs text-terminal font-mono"><15ms</div>
+                            </div>
+                            <div class="text-center bg-black/40 p-2 rounded border border-dim/20">
+                                <div class="text-[9px] text-dim">UPTIME</div>
+                                <div class="text-xs text-white font-mono">99.99%</div>
+                            </div>
+                            <div class="text-center bg-black/40 p-2 rounded border border-dim/20">
+                                <div class="text-[9px] text-dim">STAKE X</div>
+                                <div class="text-xs text-tierB font-mono">1.2x</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-concrete/10 p-4 border border-dim/20 text-xs text-gray-400 mt-4 leading-relaxed" data-i18n="detail_desc">
+                            該節點位於城市核心或重要樞紐，具備極高的商業流量價值。根據歷史數據模型，預計在 HKAIIFF 期間流量將增加 300%。
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Visual / Heatmap -->
+                    <div class="bg-concrete/10 border border-dim/20 rounded-lg p-4 relative overflow-hidden flex flex-col justify-end group min-h-[250px]">
+                        <!-- Canvas for local heatmap -->
+                        <canvas id="localHeatmap" class="absolute inset-0 w-full h-full opacity-60"></canvas>
+                        <div class="absolute inset-0 bg-gradient-to-t from-void via-transparent to-transparent pointer-events-none"></div>
+                        
+                        <div class="relative z-10">
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <div class="text-signal font-mono text-xs mb-1 flex items-center">
+                                        <i class="fa-solid fa-satellite-dish animate-pulse mr-2"></i>
+                                        <span data-i18n="detail_signal">LIVE SIGNAL</span>
+                                    </div>
+                                    <div class="text-[10px] text-dim mt-1">COVERAGE RADIUS: <span class="text-white font-bold" id="d-radius-val">500m</span></div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-[10px] text-dim">CONTRACT</div>
+                                    <div class="text-[9px] font-mono text-dim break-all">0x7a2...3f9</div>
+                                </div>
+                            </div>
+                            
+                            <div class="w-full h-1 bg-dim/30 rounded overflow-hidden mt-2"><div class="h-full bg-signal w-[85%]"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-8 border-t border-dim/20 flex justify-end">
+                    <button onclick="wizard.next()" class="bg-white text-black px-8 py-3 font-bold font-mono hover:bg-signal hover:text-white transition-all flex items-center gap-2">
+                        <span data-i18n="btn_next">下一步 / NEXT</span> <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 2: PAYMENT METHOD -->
+            <div id="step-2" class="wizard-step flex-1 p-8 md:p-12 hidden">
+                <h2 class="text-2xl font-bold mb-8 text-white" data-i18n="pay_title">選擇支付方式 / SELECT PAYMENT</h2>
                 
-                <div class="bg-void p-4 border border-white/10">
-                    <div class="text-[10px] text-gray-500 mb-1">HARDWARE CONFIG</div>
-                    <div class="text-white font-bold" id="modalHardwareSpec">Dual EPYC + H100</div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- USDT -->
+                    <label class="cursor-pointer group">
+                        <input type="radio" name="pay-method" value="crypto" class="peer hidden" checked onchange="wizard.updatePaymentUI()">
+                        <div class="h-full border border-dim/30 bg-concrete/10 p-6 rounded-xl peer-checked:border-signal peer-checked:bg-signal/5 transition-all group-hover:border-dim">
+                            <i class="fa-brands fa-ethereum text-3xl mb-4 text-dim peer-checked:text-signal"></i>
+                            <div class="font-bold text-lg mb-1 text-white">Crypto (USDT)</div>
+                            <div class="text-xs text-dim">SOLANA / BSC</div>
+                            <div class="text-xs text-terminal mt-2">Instant Verify</div>
+                        </div>
+                    </label>
+
+                    <!-- Fiat -->
+                    <label class="cursor-pointer group">
+                        <input type="radio" name="pay-method" value="fiat" class="peer hidden" onchange="wizard.updatePaymentUI()">
+                        <div class="h-full border border-dim/30 bg-concrete/10 p-6 rounded-xl peer-checked:border-signal peer-checked:bg-signal/5 transition-all group-hover:border-dim">
+                            <i class="fa-regular fa-credit-card text-3xl mb-4 text-dim peer-checked:text-signal"></i>
+                            <div class="font-bold text-lg mb-1 text-white">Fiat Currency</div>
+                            <div class="text-xs text-dim">Wise / Credit Card</div>
+                            <div class="text-xs text-dim mt-2">USD / HKD / JPY / EUR</div>
+                        </div>
+                    </label>
+
+                    <!-- AIF -->
+                    <label class="cursor-pointer group">
+                        <input type="radio" name="pay-method" value="aif" class="peer hidden" onchange="wizard.updatePaymentUI()">
+                        <div class="h-full border border-dim/30 bg-concrete/10 p-6 rounded-xl peer-checked:border-signal peer-checked:bg-signal/5 transition-all group-hover:border-dim">
+                            <div class="text-3xl mb-4 font-bold text-dim peer-checked:text-signal">AIF</div>
+                            <div class="font-bold text-lg mb-1 text-white">AIF Token</div>
+                            <div class="text-xs text-dim">Solana Chain</div>
+                            <div class="text-xs text-dim mt-2">Native Payment</div>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="mt-auto flex justify-between pt-8 border-t border-dim/20">
+                    <button onclick="wizard.prev()" class="text-dim hover:text-white px-4" data-i18n="btn_back">返回 / BACK</button>
+                    <button onclick="wizard.generateCode()" class="bg-white text-black px-8 py-3 font-bold font-mono hover:bg-signal hover:text-white transition-all" data-i18n="btn_get_code">
+                        獲取節點代碼 / GET CODE
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 3: CODE & PAY -->
+            <div id="step-3" class="wizard-step flex-1 p-8 md:p-12 hidden flex flex-col">
+                <div class="text-center mb-6">
+                    <div class="text-dim text-xs font-mono mb-2" data-i18n="code_label">YOUR UNIQUE NODE IDENTIFIER</div>
+                    <div class="text-4xl md:text-5xl font-mono font-bold text-signal tracking-widest select-all cursor-pointer bg-black/50 p-4 border border-signal/20 rounded inline-block" id="generated-code" onclick="copyText(this.innerText)">
+                        ---
+                    </div>
+                    <div class="text-[10px] text-dim mt-2" data-i18n="click_copy">CLICK TO COPY</div>
+                </div>
+
+                <div class="flex justify-center mb-6">
+                    <div class="bg-concrete/40 px-4 py-2 rounded-full border border-dim/30 flex items-center gap-2">
+                        <div class="w-2 h-2 bg-terminal rounded-full animate-blink"></div>
+                        <span class="font-mono text-terminal text-sm" id="countdown">05:00</span>
+                        <span class="text-xs text-dim" data-i18n="timer_label">TO LOCK NODE</span>
+                    </div>
+                </div>
+
+                <!-- Payment Details Container (Dynamic) -->
+                <div id="payment-details-container" class="bg-concrete/20 border border-dim/20 rounded-xl p-4 md:p-6 max-w-3xl mx-auto w-full overflow-y-auto max-h-[300px] custom-scrollbar">
+                    <!-- Injected via JS based on selection -->
+                </div>
+
+                <div class="mt-auto flex justify-between pt-6 border-t border-dim/20 items-center">
+                    <span class="text-xs text-dim italic hidden md:block" data-i18n="pay_note">請在支付完成後保存截圖。</span>
+                    <button onclick="wizard.next()" class="bg-signal text-white px-8 py-3 font-bold font-mono hover:bg-white hover:text-black transition-all" data-i18n="btn_paid">
+                        我已支付 / I HAVE PAID
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 4: VERIFY -->
+            <div id="step-4" class="wizard-step flex-1 p-8 md:p-12 hidden flex flex-col items-center justify-center text-center">
+                <div class="w-16 h-16 rounded-full border-2 border-terminal flex items-center justify-center mb-6">
+                    <i class="fa-solid fa-lock text-2xl text-terminal"></i>
+                </div>
+                <h2 class="text-3xl font-bold mb-4 text-white" data-i18n="verify_title">鎖定申請已發起</h2>
+                
+                <div class="max-w-xl w-full bg-concrete/20 border border-dim/20 p-6 rounded-xl text-left mb-8">
+                    <p class="text-sm text-dim mb-4" data-i18n="verify_desc">請複製以下內容並發送郵件至 <strong class="text-white select-all">depin@aif.wtf</strong>，同時附上您的支付截圖。</p>
+                    
+                    <div class="bg-black p-4 rounded border border-dim/30 font-mono text-xs text-white break-all whitespace-pre-wrap relative group" id="receipt-text">
+                        <!-- JS Generated Receipt -->
+                    </div>
+                    <button onclick="copyReceipt()" class="mt-2 w-full bg-dim/20 hover:bg-dim/40 text-xs py-2 rounded transition-colors text-white border border-dim/30">
+                        <i class="fa-regular fa-copy mr-2"></i> <span data-i18n="btn_copy_tpl">複製郵件模板 / COPY TEMPLATE</span>
+                    </button>
                 </div>
 
                 <div class="flex gap-4">
-                    <div class="flex-1 bg-void p-4 border border-white/10">
-                        <div class="text-[10px] text-gray-500 mb-1">PRICE (USD)</div>
-                        <div class="text-2xl text-white font-bold" id="modalPriceUsd">$500,000</div>
-                    </div>
-                    <div class="flex-1 bg-void p-4 border border-white/10">
-                        <div class="text-[10px] text-gray-500 mb-1">STAKE (AIF)</div>
-                        <div class="text-2xl text-signal font-bold" id="modalStakeAmount">8.33M</div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="text-[10px] text-gray-500 mb-2">OPTION A: FIAT (WISE)</div>
-                    <div class="grid grid-cols-4 gap-2">
-                        <a id="pay-usd" href="#" target="_blank" class="bg-white text-black py-2 text-center font-bold hover:bg-gray-200">USD</a>
-                        <a id="pay-hkd" href="#" target="_blank" class="bg-white text-black py-2 text-center font-bold hover:bg-gray-200">HKD</a>
-                        <a id="pay-jpy" href="#" target="_blank" class="bg-white text-black py-2 text-center font-bold hover:bg-gray-200">JPY</a>
-                        <a id="pay-eur" href="#" target="_blank" class="bg-white text-black py-2 text-center font-bold hover:bg-gray-200">EUR</a>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="text-[10px] text-gray-500 mb-2">OPTION B: CRYPTO TRANSFER</div>
-                    <div class="space-y-2">
-                        <div class="bg-void border border-white/10 p-3 flex justify-between items-center cursor-pointer hover:border-signal transition-colors group" onclick="copyToClipboard('3QBgQiHC743ER9beX74bp8K7xrURQR2t5myfcG6tSTLv')">
-                            <div>
-                                <div class="text-[10px] text-gray-500">SOLANA (USDT/USDC)</div>
-                                <div class="text-xs text-white break-all">3QBgQiHC743ER9beX74bp8K7xrURQR2t5myfcG6tSTLv</div>
-                            </div>
-                            <i class="fas fa-copy text-gray-500 group-hover:text-white"></i>
-                        </div>
-                        <div class="bg-void border border-white/10 p-3 flex justify-between items-center cursor-pointer hover:border-signal transition-colors group" onclick="copyToClipboard('0xc059dc798ec9f31e765d9cccffd2c62b993857c9')">
-                            <div>
-                                <div class="text-[10px] text-gray-500">BSC (USDT)</div>
-                                <div class="text-xs text-white break-all">0xc059dc798ec9f31e765d9cccffd2c62b993857c9</div>
-                            </div>
-                            <i class="fas fa-copy text-gray-500 group-hover:text-white"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-void p-4 text-[10px] text-center text-gray-500">
-                    After payment, send proof to <a href="mailto:depin@aif.wtf" class="text-white underline">depin@aif.wtf</a> for verification.
+                    <a href="mailto:depin@aif.wtf" id="mailto-btn" class="bg-white text-black px-6 py-3 font-bold text-sm hover:bg-dim transition-colors" data-i18n="btn_email">
+                        打開郵箱 / OPEN EMAIL
+                    </a>
+                    <button onclick="wizard.close()" class="border border-dim/50 text-dim px-6 py-3 font-bold text-sm hover:border-white hover:text-white transition-colors" data-i18n="btn_close">
+                        關閉 / CLOSE
+                    </button>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Toast -->
-    <div id="toast" class="fixed bottom-8 right-8 bg-concrete border border-signal text-white px-6 py-4 shadow-2xl transform translate-y-40 transition-transform duration-500 z-[200] flex items-center gap-4">
-        <div class="text-signal"><i class="fas fa-check"></i></div>
-        <div>
-            <h4 class="font-bold text-sm">COPIED</h4>
-            <p class="text-xs text-gray-400 font-mono">Address copied to clipboard.</p>
         </div>
     </div>
 
     <script>
-        // --- DATA & LOGIC ---
-        const translations = {
+        // --- MULTILINGUAL SUPPORT (EXPANDED) ---
+        const LANG = {
             en: {
-                nav_vision: "VISION", nav_problem: "CONTEXT", nav_tech: "TECH", nav_nodes: "NODES", nav_roadmap: "ROADMAP", nav_heatmap: "[ LIVE GRID ]",
-                hero_status: "/// SYSTEM STATUS: ONLINE", hero_title1: "DROP CONTENT", hero_title2: "NOT HARDWARE",
-                hero_desc: "The world's first decentralized physical infrastructure network (DePIN) optimized for AI-native interactive content. We transform idle computing power into \"digital anchors\".",
-                hero_cta_primary: "INITIATE NODE", hero_cta_heatmap: "VIEW LIVE GRID",
-                trust_audit: "AUDIT: CERTIK", trust_chain: "SOLANA SVM",
-                stat_nodes: "ACTIVE NODES", stat_latency: "LATENCY", stat_compute: "COMPUTE",
-                prob_label: "THE BOTTLENECK", prob_title: "PHYSICS IS THE ENEMY",
-                prob_p1: "The speed of light is finite. Connecting to a cloud server 2,000km away introduces unavoidable physical latency (20-100ms) that breaks immersion.",
-                prob_p2: "Traditional cloud rendering is economically unsustainable. AIF.WTF solves this by moving computation to the Edge.",
-                comp_title: "WHY EDGE MATTERS", comp_note: "*Based on P2P caching efficiency vs AWS egress fees.",
-                map_title: "GLOBAL GRID", map_desc: "Real-time visualization of Cloud-Fog-Edge transmission.", map_status_live: "LIVE_NET_V3.0.EXE",
-                tech_label_main: "CORE INNOVATION", tech_title_main: "3 PILLARS OF VIABILITY",
-                bk_1_t: "Sub-20ms Latency", bk_1_d: "Bypassing public internet via WiFi 7 / 60GHz Fog Nodes reduces latency to 19ms, eliminating motion sickness.",
-                bk_2_t: "Predictive Pre-Caching", bk_2_d: "AI predicts user movement to pre-load heavy 3D assets to local NVMe. Content loads in < 3s.",
-                bk_3_t: "TEE Privacy Compute", bk_3_d: "Camera data processed inside CPU/GPU TEE. Only anonymous metadata is verified on-chain.",
-                flow_title: "ECOSYSTEM WORKFLOW",
-                step_1_t: "Content Creation", step_1_d: "Creators upload AR assets to cloud.",
-                step_2_t: "Fog Distribution", step_2_d: "Nodes pre-cache based on demand.",
-                step_3_t: "User Experience", step_3_d: "Zero-latency streaming via WiFi 7.",
-                node_title: "JOIN THE NETWORK", node_subtitle: "Stake AIF to become a node operator. Provide compute, earn rewards.",
-                tier_s_desc: "Global Core: NYC, Tokyo. High-density coverage for 100k+ daily users.",
-                tier_a_desc: "Urban Centers: Malls, Stadiums. Regional backbone.",
-                tier_b_desc: "Residential: Condos. Local caching for 1k-10k traffic.",
-                tier_c_desc: "Edge: Cafes. Last-mile coverage for <1k traffic.",
-                roadmap_title: "EXECUTION PLAN",
-                rm_1_d: "Mainnet Launch. 500 validator nodes in key cities.",
-                rm_2_d: "Expanding to 3,000 nodes. B2B contracts.",
-                rm_3_d: "Target: 50,000 Active Nodes. 404GLASS Launch.",
-                modal_join_title: "INITIALIZE NODE", modal_notice: "Limited Availability. Stake AIF required.",
-                faq_title: "FAQ", faq_1_q: "Return on staking?", faq_1_a: "Tier S/A nodes earn 12-24% APY + fees.", faq_3_q: "Lock-up period?", faq_3_a: "12 months commitment for stability.",
-                footer_desc: "Building the physical infrastructure for spatial internet.",
-                disc_title: "IMPORTANT DISCLAIMER", disc_p1: "Entering AIF.WTF Node Service Area.", disc_p2: "Involves digital assets.",
-                disc_confirm: "PLEASE CONFIRM:", disc_c1: "Not a resident of Mainland China", disc_c2: "Not a U.S. citizen/resident", disc_c3: "Using own offshore assets", disc_c4: "Acknowledge risks", disc_c5: "Voluntarily assume risks",
-                disc_agree: "I agree to User Agreement & Risk Disclosure.", disc_enter: "ENTER PROTOCOL"
+                nav_eco: "ECOSYSTEM", nav_rules: "GENESIS PROTOCOL", nav_analysis: "ANALYSIS", nav_buy: "BUY NODES",
+                hero_badge: "Live Deployment Phase 1",
+                hero_desc: "The world's first DePIN optimized for AI-native interactive content. We transform idle compute into spatial anchors.\n\nHKAIIFF Official Physical Infrastructure.\nAcquire 500 Genesis Nodes and become a digital landlord in the spatial computing era.\nSupports USDT / AIF / Fiat.",
+                stat_remaining: "REMAINING", stat_apy: "CURRENT APY", stat_timer: "SALE ENDS IN",
+                map_status: "LIVE NETWORK STATUS",
+                eco_title: "Ecosystem Backing", eco_subtitle: "AIF.WTF nodes are edge compute units powering the HKAIIFF spatial computing layer.",
+                card1_title: "Spatial Compute Layer", card1_desc: "Distributed rendering for HKAIIFF. Ensures <20ms latency for XR/VR content.",
+                card2_title: "Asset Storage", card2_desc: "IPFS storage for massive 3D assets. Node ownership includes storage NFTs.",
+                card3_title: "DePIN Incentives", card3_desc: "Earn passive income by handling general compute tasks when not supporting the festival.",
+                rules_title: "GENESIS PROTOCOL: 2x2",
+                reward_direct_title: "Referral Rewards", reward_1st: "Refer 1st Node", reward_20: "20% Reward", reward_2nd: "Refer 2nd Node", reward_80: "80% Reward", reward_loop: "* Cyclic Trigger", reward_inf: "Infinite Loop",
+                reward_perm_title: "Permanent Revenue Share", reward_perm_desc: "Uplines permanently receive 10% of direct downline daily mining yields.",
+                analysis_title: "Deep Dive Analysis", analysis_subtitle: "Visual analysis of technical architecture and market value.",
+                arch_title: "1. DePIN + Edge Architecture", arch_pain_title: "Traditional Cloud Pain", arch_pain_desc: "AWS/Google latency >100ms, unfit for realtime VR/AR.", arch_sol_title: "AIF Edge Solution", arch_sol_desc: "High density in Tier S/A cities. <5km matching, <20ms latency.",
+                market_title: "2. Digital Real Estate", market_stat1: "2030 Market Size (USD)", market_stat2: "3D Content Explosion",
+                val_1: "Compute Rent:", val_1_d: "Low cost rendering for devs.", val_2: "Traffic Ads:", val_2_d: "LBS based precision ads.", val_3: "Asset Value:", val_3_d: "NFTs are tradable & scarce.",
+                footer_desc: "Building the world's largest decentralized spatial computing network. Powering the real economy via HKAIIFF.",
+                link_whitepaper: "Whitepaper", link_eco: "Ecosystem", link_explorer: "Explorer", link_audit: "Audit",
+                step_1: "DETAILS", step_2: "PAYMENT", step_3: "CODE", step_4: "VERIFY",
+                detail_desc: "Located in a prime urban hub. Expected traffic increase of 300% during HKAIIFF based on historical models.",
+                detail_signal: "LIVE SIGNAL", btn_next: "NEXT",
+                pay_title: "SELECT PAYMENT METHOD", btn_back: "BACK", btn_get_code: "GET CODE",
+                code_label: "YOUR UNIQUE NODE IDENTIFIER", click_copy: "CLICK TO COPY", timer_label: "TO LOCK NODE", pay_note: "Please save a screenshot after payment.", btn_paid: "I HAVE PAID",
+                verify_title: "LOCK REQUEST INITIATED", verify_desc: "Please copy the text below and email depin@aif.wtf with your payment screenshot.", btn_copy_tpl: "COPY TEMPLATE", btn_email: "OPEN EMAIL", btn_close: "CLOSE"
             },
             zh: {
-                nav_vision: "願景", nav_problem: "背景", nav_tech: "技術", nav_nodes: "節點", nav_roadmap: "路線圖", nav_heatmap: "[ 實時網格 ]",
-                hero_status: "/// 系統狀態：在線", hero_title1: "投放內容", hero_title2: "而非硬件",
-                hero_desc: "全球首個專為 AI 原生互動內容優化的去中心化物理基礎設施網絡 (DePIN)。我們將閒置算力轉化為空間網絡的「數字錨點」。",
-                hero_cta_primary: "啟動節點", hero_cta_heatmap: "查看實時網格",
-                trust_audit: "審計: CERTIK", trust_chain: "SOLANA SVM",
-                stat_nodes: "活躍節點", stat_latency: "延遲", stat_compute: "算力",
-                prob_label: "當前痛點", prob_title: "物理定律是最大敵人",
-                prob_p1: "光速是有限的。連接到 2000 公里外的雲服務器會產生不可避免的物理延遲（20-100ms），破壞沉浸感。",
-                prob_p2: "傳統雲渲染成本高昂。AIF.WTF 通過將計算移動到「邊緣」解決此問題。",
-                comp_title: "為何邊緣計算至關重要", comp_note: "*基於 P2P 緩存效率對比 AWS 流量費用。",
-                map_title: "全球網格", map_desc: "雲-霧-端數據傳輸實時可視化。", map_status_live: "主網實時狀態",
-                tech_label_main: "核心創新", tech_title_main: "三大生存支柱",
-                bk_1_t: "低於 20ms 延遲", bk_1_d: "通過 WiFi 7 / 60GHz 本地霧節點處理數據，將延遲從 110ms 降至 19ms，消除暈動症。",
-                bk_2_t: "預測性預緩存", bk_2_d: "AI 預測用戶移動，預加載 3D 資產到本地 NVMe。加載時間 < 3秒。",
-                bk_3_t: "TEE 隱私計算", bk_3_d: "攝像頭數據在本地 TEE 環境內處理，僅匿名元數據上鏈。",
-                flow_title: "生態運作流程",
-                step_1_t: "內容創作", step_1_d: "創作者上傳資產至雲端。",
-                step_2_t: "霧端分發", step_2_d: "節點按需預緩存內容。",
-                step_3_t: "用戶體驗", step_3_d: "WiFi 7 零延遲流式傳輸。",
-                node_title: "加入網絡", node_subtitle: "質押 AIF 成為節點運營商。提供算力，賺取收益。",
-                tier_s_desc: "全球核心：紐約、東京。覆蓋 10 萬+ 用戶的高密度區。",
-                tier_a_desc: "城市樞紐：商場、體育館。區域骨幹網。",
-                tier_b_desc: "高密住宅：公寓。本地緩存加速。",
-                tier_c_desc: "邊緣覆蓋：咖啡廳。最後一公里連接。",
-                roadmap_title: "執行計劃",
-                rm_1_d: "主網啟動。500 個驗證節點。",
-                rm_2_d: "擴展至 3000 節點。B2B 合作。",
-                rm_3_d: "目標 50,000 節點。發佈 404GLASS。",
-                modal_join_title: "初始化節點", modal_notice: "名額有限。需質押 AIF。",
-                faq_title: "常見問題", faq_1_q: "質押收益？", faq_1_a: "Tier S/A 節點預計 12-24% APY + 手續費。", faq_3_q: "鎖定期？", faq_3_a: "需承諾 12 個月以確保網絡穩定。",
-                footer_desc: "構建空間互聯網的物理基礎設施。",
-                disc_title: "重要免責聲明", disc_p1: "即將進入節點服務區。", disc_p2: "涉及數字資產。",
-                disc_confirm: "請確認：", disc_c1: "非中國大陸居民", disc_c2: "非美國公民/居民", disc_c3: "使用自有境外資產", disc_c4: "知悉風險", disc_c5: "自願承擔風險",
-                disc_agree: "我已閱讀並同意用戶協議與風險披露。", disc_enter: "進入協議"
+                nav_eco: "生態系統", nav_rules: "創世協議", nav_analysis: "價值分析", nav_buy: "搶購節點",
+                hero_badge: "第一階段部署中",
+                hero_desc: "全球首個專為 AI原生互動內容 優化的去中心化物理基礎設施網絡 (DePIN)。我們將閒置算力轉化為空間網絡的「數字錨點」。\n\n香港AI國際電影節 (HKAIIFF) 官方指定物理基礎設施。\n搶購 500 個創世節點，成為空間計算時代的數字地主。\n支持 USDT / AIF / 法幣支付，即刻開啟 DePIN 被動收益。",
+                stat_remaining: "剩餘數量", stat_apy: "當前 APY", stat_timer: "銷售倒計時",
+                map_status: "實時網絡狀態",
+                eco_title: "生態背書", eco_subtitle: "AIF.WTF 節點不僅是礦機，更是支撐 HKAIIFF 空間計算的邊緣算力單元。",
+                card1_title: "空間計算渲染層", card1_desc: "為 HKAIIFF 電影節提供分佈式渲染算力。確保觀影體驗 <20ms 延遲。",
+                card2_title: "資產存儲與分發", card2_desc: "利用 IPFS 協議存儲海量 3D 電影資產。購買節點即可獲得與存儲空間掛鉤的 NFT。",
+                card3_title: "DePIN 激勵模型", card3_desc: "設備在非電影節期間自動接入 AIF 全球網絡執行通用計算任務。收益自動分配。",
+                rules_title: "GENESIS PROTOCOL: 二二複製",
+                reward_direct_title: "生態推廣獎勵", reward_1st: "推薦第 1 個節點", reward_20: "20% 生態獎勵", reward_2nd: "推薦第 2 個節點", reward_80: "80% 生態獎勵", reward_loop: "* 循環觸發", reward_inf: "無限循環",
+                reward_perm_title: "永久收益分成", reward_perm_desc: "上級節點將永久獲得其直推下級節點每日產出收益的 10% 作為生態管理獎勵。",
+                analysis_title: "項目深度解析與商業價值報告", analysis_subtitle: "AIF.WTF 不僅僅是一個區塊鏈項目，它是物理基礎設施與空間計算的完美結合。",
+                arch_title: "1. DePIN + 邊緣計算架構", arch_pain_title: "傳統雲痛點", arch_pain_desc: "AWS/Google 延遲 >100ms，無法滿足 VR/AR 即時需求。", arch_sol_title: "AIF 邊緣方案", arch_sol_desc: "核心城市高密度部署。匹配 <5km 節點，<20ms 超低延遲。",
+                market_title: "2. 空間互聯網的「數字地產」", market_stat1: "2030 市場規模 (USD)", market_stat2: "內容爆發式增長",
+                val_1: "算力租賃：", val_1_d: "為開發者提供低成本渲染。", val_2: "流量變現：", val_2_d: "基於 LBS 的精準廣告投放。", val_3: "資產增值：", val_3_d: "節點 NFT 具備稀缺性與交易屬性。",
+                footer_desc: "致力於構建全球最大的去中心化空間計算網絡。通過 HKAIIFF 賦能實體經濟，利用 DePIN 技術重塑算力分配。",
+                link_whitepaper: "白皮書 Whitepaper", link_eco: "生態報告 Ecosystem", link_explorer: "區塊瀏覽器 Explorer", link_audit: "合約審計 Audit",
+                step_1: "詳情", step_2: "支付", step_3: "代碼", step_4: "驗證",
+                detail_desc: "該節點位於城市核心或重要樞紐，具備極高的商業流量價值。根據歷史數據模型，預計在 HKAIIFF 期間流量將增加 300%。",
+                detail_signal: "實時信號", btn_next: "下一步",
+                pay_title: "選擇支付方式", btn_back: "返回", btn_get_code: "獲取節點代碼",
+                code_label: "您的唯一節點標識", click_copy: "點擊複製", timer_label: "鎖定倒計時", pay_note: "請在支付完成後保存截圖。", btn_paid: "我已支付",
+                verify_title: "鎖定申請已發起", verify_desc: "請複製以下內容並發送郵件至 depin@aif.wtf，同時附上您的支付截圖。", btn_copy_tpl: "複製郵件模板", btn_email: "打開郵箱", btn_close: "關閉"
             }
         };
+        let currentLang = 'zh';
 
-        const tierData = {
-            'S': { priceUsd: 500000, specs: "Dual EPYC + H100", links: { usd: "https://wise.com/pay/r/TKd7H0jWkGfYtXA", hkd: "https://wise.com/pay/r/_SAbzYfsbUa7_B4", jpy: "https://wise.com/pay/r/1RLsGBodVQPd2uw", eur: "https://wise.com/pay/r/RjB5UhU_eoaBpeI" } },
-            'A': { priceUsd: 50000, specs: "Ryzen 9 + RTX 4090", links: { usd: "https://wise.com/pay/r/IRtmk09zM77UbSM", hkd: "https://wise.com/pay/r/-gs62w4WtMqVb8M", jpy: "https://wise.com/pay/r/HVYNmSohCUr-CJA", eur: "https://wise.com/pay/r/dRh1RaB-L1xUjSY" } },
-            'B': { priceUsd: 5000, specs: "Ryzen 7 + RTX 4070", links: { usd: "https://wise.com/pay/r/35AfjeaYres5XnA", hkd: "https://wise.com/pay/r/J4J7X7Fh9g0107g", jpy: "https://wise.com/pay/r/skF_hZAFD9PTzpU", eur: "https://wise.com/pay/r/qQ8u57yWrn4MvrM" } },
-            'C': { priceUsd: 1000, specs: "i5 + RTX 3060", links: { usd: "https://wise.com/pay/r/EovksT-aTrcxRyc", hkd: "https://wise.com/pay/r/hx1h7jdRhafhF40", jpy: "https://wise.com/pay/r/f1nV8o9JthcpBf0", eur: "https://wise.com/pay/r/3KQoHUA77HELlbY" } }
-        };
-
-        let currentLang = 'en';
-        let currentTier = 'S';
-
-        // Core Functions
-        function toggleLanguage() {
+        function toggleLang() {
             currentLang = currentLang === 'en' ? 'zh' : 'en';
+            document.getElementById('lang-btn').innerText = currentLang === 'en' ? 'EN' : '中文';
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                if (translations[currentLang][key]) el.innerText = translations[currentLang][key];
+                if(LANG[currentLang][key]) {
+                    // Handle line breaks in hero desc
+                    if(key === 'hero_desc') {
+                        el.innerHTML = LANG[currentLang][key].replace(/\n/g, '<br>');
+                    } else {
+                        el.innerText = LANG[currentLang][key];
+                    }
+                }
             });
-            document.querySelectorAll('.lang-text').forEach(el => el.innerText = currentLang === 'en' ? 'EN / 中文' : '中 / EN');
-            updateCalc();
+            // Re-render grid to update dynamic content
+            renderFilters(); // Update city filter names
+            renderGrid(getCurrentFilteredNodes());
         }
 
-        function toggleMobileMenu() {
-            document.getElementById('mobileMenu').classList.toggle('translate-x-full');
-        }
-
-        function copyToClipboard(text) {
-            const el = document.createElement('textarea');
-            el.value = text;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
-            
-            const toast = document.getElementById('toast');
-            toast.classList.remove('translate-y-40');
-            setTimeout(() => {
-                toast.classList.add('translate-y-40');
-            }, 3000);
-        }
-
-        // Disclaimer
-        function checkDisclaimer() {
-            const checks = document.querySelectorAll('.disclaimer-check');
-            const btn = document.getElementById('disclaimer-submit');
-            let allChecked = Array.from(checks).every(c => c.checked);
-            
-            if(allChecked) {
-                btn.removeAttribute('disabled');
-                btn.classList.remove('bg-concreteLight', 'text-gray-500', 'cursor-not-allowed');
-                btn.classList.add('bg-signal', 'text-white');
-            } else {
-                btn.setAttribute('disabled', 'true');
-                btn.classList.add('bg-concreteLight', 'text-gray-500', 'cursor-not-allowed');
-                btn.classList.remove('bg-signal', 'text-white');
+        // --- CONFIGURATION ---
+        const TIERS = {
+            S: { 
+                id: 'S', price: 500000, aif: "8.33M", name: "CITY NODE", color: "bg-signal", border: "border-signal", text: "text-signal", 
+                traffic: "100k+", compute: "Dual EPYC + H100", storage: "100TB", network: "100Gbps",
+                links: { usd: "https://wise.com/pay/r/TKd7H0jWkGfYtXA", hkd: "https://wise.com/pay/r/_SAbzYfsbUa7_B4", jpy: "https://wise.com/pay/r/1RLsGBodVQPd2uw", eur: "https://wise.com/pay/r/RjB5UhU_eoaBpeI" }
+            },
+            A: { 
+                id: 'A', price: 50000, aif: "833.3k", name: "DISTRICT NODE", color: "bg-tierA", border: "border-tierA", text: "text-tierA", 
+                traffic: "50k+", compute: "Ryzen 9 + 4090", storage: "20TB", network: "10Gbps",
+                links: { usd: "https://wise.com/pay/r/IRtmk09zM77UbSM", hkd: "https://wise.com/pay/r/-gs62w4WtMqVb8M", jpy: "https://wise.com/pay/r/HVYNmSohCUr-CJA", eur: "https://wise.com/pay/r/dRh1RaB-L1xUjSY" }
+            },
+            B: { 
+                id: 'B', price: 5000, aif: "83.3k", name: "STREET NODE", color: "bg-tierB", border: "border-tierB", text: "text-tierB", 
+                traffic: "10k+", compute: "Ryzen 7 + 4070", storage: "4TB", network: "1Gbps",
+                links: { usd: "https://wise.com/pay/r/35AfjeaYres5XnA", hkd: "https://wise.com/pay/r/J4J7X7Fh9g0107g", jpy: "https://wise.com/pay/r/skF_hZAFD9PTzpU", eur: "https://wise.com/pay/r/qQ8u57yWrn4MvrM" }
+            },
+            C: { 
+                id: 'C', price: 1000, aif: "16.7k", name: "BUILDING NODE", color: "bg-tierC", border: "border-tierC", text: "text-tierC", 
+                traffic: "<5k", compute: "i5 + 3060", storage: "1TB", network: "500Mbps",
+                links: { usd: "https://wise.com/pay/r/EovksT-aTrcxRyc", hkd: "https://wise.com/pay/r/hx1h7jdRhafhF40", jpy: "https://wise.com/pay/r/f1nV8o9JthcpBf0", eur: "https://wise.com/pay/r/3KQoHUA77HELlbY" }
             }
-        }
+        };
 
-        function acceptDisclaimer() {
-            gsap.to("#disclaimer-modal", { opacity: 0, duration: 0.5, onComplete: () => {
-                document.getElementById('disclaimer-modal').style.display = 'none';
-                document.body.classList.remove('overflow-hidden');
-            }});
-        }
-
-        // Modals
-        function openJoinModal(tier) {
-            currentTier = tier;
-            document.getElementById('modalTierBadge').innerText = `TIER ${tier}`;
-            updateCalc();
-            document.getElementById('joinModal').classList.remove('hidden');
-        }
-
-        function closeJoinModal() {
-            document.getElementById('joinModal').classList.add('hidden');
-        }
-
-        function updateCalc() {
-            const data = tierData[currentTier];
-            if (!data) return;
-            
-            const aifAmount = data.priceUsd / 0.06;
-            const fmtAif = aifAmount >= 1000000 ? (aifAmount/1000000).toFixed(2)+"M" : (aifAmount/1000).toFixed(1)+"k";
-
-            document.getElementById('modalPriceUsd').innerText = `$${data.priceUsd.toLocaleString()}`;
-            document.getElementById('modalStakeAmount').innerText = fmtAif;
-            document.getElementById('modalHardwareSpec').innerText = data.specs;
-
-            // Links
-            document.getElementById('pay-usd').href = data.links.usd;
-            document.getElementById('pay-hkd').href = data.links.hkd;
-            document.getElementById('pay-jpy').href = data.links.jpy;
-            document.getElementById('pay-eur').href = data.links.eur;
-        }
-
-        // FIDS Data Logic (Enhanced)
-        const realCities = [
-            { name: "TOKYO", coords: "35.67°N 139.65°E" }, { name: "NEW YORK", coords: "40.71°N 74.00°W" },
-            { name: "LONDON", coords: "51.50°N 0.12°W" }, { name: "SINGAPORE", coords: "1.35°N 103.81°E" },
-            { name: "SHANGHAI", coords: "31.23°N 121.47°E" }, { name: "BERLIN", coords: "52.52°N 13.40°E" }
+        const CITIES = [
+            { name: "Beijing", zh: "北京", lat: 39.9042, lng: 116.4074, landmarks: ["王府井", "三里屯", "國貿CBD", "798藝術區", "海澱科技園", "朝陽公園"] },
+            { name: "Shanghai", zh: "上海", lat: 31.2304, lng: 121.4737, landmarks: ["外灘", "陸家嘴", "新天地", "南京路", "靜安寺", "武康路"] },
+            { name: "Shenzhen", zh: "深圳", lat: 22.5431, lng: 114.0579, landmarks: ["南山科技園", "Coco Park", "華強北", "深圳灣", "人才公園"] },
+            { name: "Hong Kong", zh: "香港", lat: 22.3193, lng: 114.1694, landmarks: ["尖沙咀", "IFC國際金融中心", "銅鑼灣", "旺角", "西九龍", "數碼港"] },
+            { name: "Macau", zh: "澳門", lat: 22.1987, lng: 113.5439, landmarks: ["金光大道", "大三巴", "澳門塔", "議事亭前地", "官也街"] },
+            { name: "Hangzhou", zh: "杭州", lat: 30.2741, lng: 120.1551, landmarks: ["西湖", "阿里巴巴園區", "西溪濕地", "錢江新城", "湖濱路"] }
         ];
 
-        function generateRow() {
-            const city = realCities[Math.floor(Math.random() * realCities.length)];
-            const tiers = ['TIER S', 'TIER A', 'TIER B', 'TIER C'];
-            const statuses = ['ONLINE', 'SYNCING', 'MINTING', 'ONLINE'];
+        const FUTURE_CITIES = [
+            { name: "New York", zh: "紐約", lat: 40.7128, lng: -74.0060 },
+            { name: "London", zh: "倫敦", lat: 51.5074, lng: -0.1278 },
+            { name: "Tokyo", zh: "東京", lat: 35.6762, lng: 139.6503 },
+            { name: "Seoul", zh: "首爾", lat: 37.5665, lng: 126.9780 },
+            { name: "Bangkok", zh: "曼谷", lat: 13.7563, lng: 100.5018 },
+            { name: "Paris", zh: "巴黎", lat: 48.8566, lng: 2.3522 }
+        ];
+
+        const WALLETS = {
+            solana: "3QBgQiHC743ER9beX74bp8K7xrURQR2t5myfcG6tSTLv",
+            bsc: "0xc059dc798ec9f31e765d9cccffd2c62b993857c9"
+        };
+
+        let allNodes = [];
+        let currentFilter = { tier: 'all', city: 'all' };
+
+        // --- DATA GENERATION ---
+        function initData() {
+            let idCounter = 1001;
+            allNodes = [];
+
+            // 1. Generate 500 active Genesis nodes (Cities A-List)
+            // Strategy: S-Tier (Reserved) -> Top priority
+            const totalNodes = 500;
             
-            return {
-                id: `ND-${Math.floor(Math.random()*9000)+1000}-${Math.floor(Math.random()*9000)+1000}`,
-                city: city.name,
-                coords: city.coords,
-                tier: tiers[Math.floor(Math.random()*tiers.length)],
-                latency: Math.floor(Math.random()*20+5) + 'ms',
-                status: statuses[Math.floor(Math.random()*statuses.length)]
-            };
-        }
-
-        function updateFids() {
-            const tbody = document.getElementById('fids-body');
-            if(tbody.children.length > 11) tbody.lastElementChild.remove();
-            
-            const data = generateRow();
-            const tr = document.createElement('tr');
-            tr.className = 'fids-row';
-            tr.innerHTML = `
-                <td class="fids-cell text-signal font-bold">${data.id}</td>
-                <td class="fids-cell text-white">${data.city}</td>
-                <td class="fids-cell text-gray-500">${data.coords}</td>
-                <td class="fids-cell font-bold">${data.tier}</td>
-                <td class="fids-cell text-emerald-400 font-mono">${data.latency}</td>
-                <td class="fids-cell text-white font-bold">${data.status}</td>
-            `;
-            tbody.prepend(tr);
-        }
-
-        function startTickers() {
-            const container = document.getElementById('liveTickerContainer');
-            setInterval(() => {
-                const acts = ["NODE_JOIN", "COMPUTE_VERIFIED", "TOKEN_STAKED", "ASSET_CACHED"];
-                const el = document.createElement('div');
-                el.className = "flex justify-between font-mono text-[10px] text-gray-500 border-l-2 border-signal pl-2 mb-1 animate-pulse";
-                el.innerHTML = `<span>0x${Math.floor(Math.random()*9999)}...</span> <span class="text-white">${acts[Math.floor(Math.random()*acts.length)]}</span>`;
-                container.prepend(el);
-                if(container.children.length > 4) container.lastElementChild.remove();
-            }, 1200);
-        }
-
-        // --- MAP ANIMATION FIX ---
-        const canvas = document.getElementById('globalCanvas');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        let particles = [];
-
-        class Particle {
-            constructor() {
-                this.reset();
-            }
-            reset() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.size = Math.random() * 2 + 0.5; // Slightly larger for visibility
-                this.speedX = (Math.random() - 0.5) * 0.5;
-                this.speedY = (Math.random() - 0.5) * 0.5;
-                this.life = Math.random() * 100 + 50;
-                this.maxLife = this.life;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.life--;
+            for (let i = 0; i < totalNodes; i++) {
+                const city = CITIES[Math.floor(Math.random() * CITIES.length)];
                 
-                // Wrap around edges
-                if(this.x < 0) this.x = width;
-                if(this.x > width) this.x = 0;
-                if(this.y < 0) this.y = height;
-                if(this.y > height) this.y = 0;
+                // Determine Tier
+                let tier = 'C';
+                const r = Math.random();
+                if (r < 0.05) tier = 'S';
+                else if (r < 0.20) tier = 'A';
+                else if (r < 0.50) tier = 'B';
+                
+                // Generate Node
+                const latOff = (Math.random() - 0.5) * 0.05;
+                const lngOff = (Math.random() - 0.5) * 0.05;
+                const locName = city.landmarks[Math.floor(Math.random() * city.landmarks.length)];
+                const blockNum = Math.floor(Math.random() * 900 + 100);
+                
+                let status = 'available';
+                if (tier === 'S') status = 'reserved'; // All S are reserved/invite
 
-                if (this.life < 0) this.reset();
-            }
-            draw() {
-                const opacity = this.life / this.maxLife;
-                ctx.fillStyle = `rgba(239, 68, 68, ${opacity * 0.8})`; // Signal Red
-                ctx.fillRect(this.x, this.y, this.size, this.size);
-            }
-        }
-
-        function animateMap() {
-            ctx.clearRect(0, 0, width, height);
-            
-            // Draw grid lines for effect
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
-            ctx.lineWidth = 1;
-            const gridSize = 100;
-            
-            for(let x = 0; x < width; x += gridSize) {
-                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke();
-            }
-            for(let y = 0; y < height; y += gridSize) {
-                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
+                allNodes.push({
+                    id: `${city.name.substring(0,2).toUpperCase()}-${tier}-${idCounter++}`,
+                    city: city.name,
+                    cityZh: city.zh,
+                    tier: tier,
+                    status: status,
+                    lat: (city.lat + latOff).toFixed(4), 
+                    lng: (city.lng + lngOff).toFixed(4),
+                    location: `${locName} Block ${blockNum}`,
+                    h3: Math.random().toString(36).substring(2, 9).toUpperCase(),
+                    heat: Math.floor(Math.random() * 40 + 60),
+                    hash: "0x" + Array.from({length: 40}, () => Math.floor(Math.random()*16).toString(16)).join(''),
+                    mx: Math.random(), my: Math.random() // Map coords
+                });
             }
 
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            
-            // Draw connection lines between nearby particles
-            ctx.strokeStyle = 'rgba(239, 68, 68, 0.15)';
-            for(let i = 0; i < particles.length; i++) {
-                for(let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx*dx + dy*dy);
-                    if(dist < 100) {
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
+            // 2. Mark Sold Nodes (8 Random)
+            const availableIndices = allNodes.map((n, i) => n.status === 'available' ? i : -1).filter(i => i !== -1);
+            for(let k=0; k<8; k++) {
+                if(availableIndices.length > 0) {
+                    const idx = availableIndices.splice(Math.floor(Math.random() * availableIndices.length), 1)[0];
+                    allNodes[idx].status = 'sold';
                 }
             }
 
-            requestAnimationFrame(animateMap);
-        }
-
-        function resizeCanvas() {
-            const container = document.getElementById('heatmap');
-            width = container.offsetWidth;
-            height = container.offsetHeight;
-            canvas.width = width;
-            canvas.height = height;
-            // Re-init particles on resize to ensure distribution
-            particles = Array(80).fill().map(() => new Particle());
-        }
-
-        window.addEventListener('load', () => {
-            gsap.to("#loader", { yPercent: -100, duration: 0.8, ease: "power4.inOut", delay: 0.5 });
-            
-            resizeCanvas();
-            animateMap();
-
-            // Loops
-            startTickers();
-            setInterval(updateFids, 800);
-            for(let i=0; i<12; i++) updateFids();
-
-            // Mini Graph
-            const mg = document.getElementById('mini-graph');
-            for(let i=0; i<20; i++) {
-                let bar = document.createElement('div');
-                bar.className = 'absolute bottom-0 bg-signal opacity-50';
-                bar.style.width = '4px';
-                bar.style.left = (i * 5) + '%';
-                bar.style.height = Math.random() * 100 + '%';
-                mg.appendChild(bar);
+            // 3. Generate Future/International Nodes (Visual Only)
+            // Add ~30 future nodes
+            for(let i=0; i<30; i++) {
+                const city = FUTURE_CITIES[Math.floor(Math.random() * FUTURE_CITIES.length)];
+                const r = Math.random();
+                let tier = r < 0.1 ? 'S' : (r < 0.3 ? 'A' : 'B');
+                
+                allNodes.push({
+                    id: `INT-${city.name.substring(0,3).toUpperCase()}-${Math.floor(Math.random()*9000)+1000}`,
+                    city: city.name,
+                    cityZh: city.zh,
+                    tier: tier,
+                    status: 'future', // Special status
+                    lat: city.lat, lng: city.lng,
+                    location: "Global Expansion Zone",
+                    h3: "PENDING",
+                    heat: 0,
+                    hash: "WAITING_FOR_GENESIS",
+                    mx: Math.random(), my: Math.random()
+                });
             }
+
+            // Initial Render
+            renderFilters();
+            renderGrid(getCurrentFilteredNodes());
+            startLiveFeed();
+            initHeatmap(); 
+        }
+
+        function getCurrentFilteredNodes() {
+            // Apply current filters
+            return allNodes.filter(n => {
+                const tierMatch = currentFilter.tier === 'all' || n.tier === currentFilter.tier;
+                const cityMatch = currentFilter.city === 'all' || n.city === currentFilter.city;
+                return tierMatch && cityMatch;
+            });
+        }
+
+        // --- GLOBAL RENDER FUNCTION ---
+        function renderGrid(nodes) {
+            const grid = document.getElementById('grid-container');
+            grid.innerHTML = '';
+            
+            // SORTING LOGIC:
+            // 1. Tier S (Genesis) - Always Top
+            // 2. Genesis Nodes (A, B, C) - Active
+            // 3. Future Nodes - Bottom
+            
+            const sortedNodes = nodes.sort((a, b) => {
+                // Tier S Priority
+                if (a.tier === 'S' && b.tier !== 'S') return -1;
+                if (b.tier === 'S' && a.tier !== 'S') return 1;
+                
+                // Genesis vs Future
+                if (a.status !== 'future' && b.status === 'future') return -1;
+                if (b.status !== 'future' && a.status === 'future') return 1;
+                
+                // Tier Order (A->B->C) within same group
+                const tierRank = { S:0, A:1, B:2, C:3 };
+                return tierRank[a.tier] - tierRank[b.tier];
+            });
+
+            sortedNodes.forEach(node => {
+                const conf = TIERS[node.tier] || TIERS['C']; // Fallback
+                const el = document.createElement('div');
+                
+                let statusClasses = `node-${node.tier}`;
+                let statusText = `$${conf.price.toLocaleString()}`;
+                let clickAction = `wizard.open('${node.id}')`;
+                let statusIcon = '<i class="fa-solid fa-signal text-terminal animate-pulse"></i>';
+                // Tag Logic Change: Use City Name instead of HOT/LOCKED
+                let cityDisplayName = node.city.toUpperCase();
+                let tagLabel = cityDisplayName; 
+                let tagColor = 'bg-signal text-black';
+
+                // Status Handling
+                if(node.status === 'sold') {
+                    statusClasses += ' sold';
+                    statusText = 'SOLD OUT';
+                    clickAction = '';
+                    statusIcon = '<i class="fa-solid fa-check text-dim"></i>';
+                    tagLabel = 'SOLD';
+                    tagColor = 'bg-dim text-black';
+                } else if (node.status === 'reserved') {
+                    statusClasses += ' reserved';
+                    statusText = currentLang === 'en' ? 'INVITE ONLY' : '邀請開通';
+                    clickAction = ''; 
+                    statusIcon = '<i class="fa-solid fa-lock text-dim"></i>';
+                    // Even if reserved, show city name or locked status? 
+                    // User asked to replace HOT/LOCKED with City Name. 
+                    // But for S tier, maybe GENESIS is still good, or city name. Let's stick to City Name for consistency as requested.
+                    tagLabel = cityDisplayName;
+                    tagColor = 'bg-signal text-black';
+                } else if (node.status === 'future') {
+                    statusClasses = 'node-future';
+                    statusText = currentLang === 'en' ? 'COMING SOON' : '陸續開放';
+                    clickAction = '';
+                    statusIcon = '<i class="fa-solid fa-hourglass-start text-future"></i>';
+                    tagLabel = cityDisplayName; // Show City Name for future too
+                    tagColor = 'bg-future text-black';
+                } else {
+                    // Available nodes
+                    tagLabel = cityDisplayName;
+                    // Vary tag color by tier for better visual? Or keep uniform. 
+                    // Let's use tier color for tag background
+                    if(node.tier === 'A') tagColor = 'bg-tierA text-white';
+                    else if(node.tier === 'B') tagColor = 'bg-tierB text-black';
+                    else if(node.tier === 'C') tagColor = 'bg-tierC text-white';
+                }
+
+                el.className = `node-card ${statusClasses} bg-concrete/10 border h-44 flex flex-col justify-between cursor-pointer group p-4 border-concrete relative overflow-hidden`;
+                if(clickAction) el.setAttribute('onclick', clickAction);
+
+                // Add Tag
+                if(tagLabel) {
+                    el.innerHTML += `<div class="node-tag ${tagColor}">${tagLabel}</div>`;
+                }
+
+                if(node.status === 'available') el.classList.add(conf.border);
+
+                const cityDisplay = currentLang === 'zh' ? node.cityZh : node.city;
+
+                el.innerHTML += `
+                    <div class="flex justify-between items-start mt-4">
+                        <div>
+                            <div class="text-[10px] text-dim font-mono tracking-widest mb-1 flex items-center gap-2">
+                                <span class="bg-white/10 px-1 rounded text-white">${node.id}</span>
+                            </div>
+                            <div class="text-sm font-bold text-white truncate max-w-[140px]">${node.location}</div>
+                            <div class="text-[10px] text-dim">${cityDisplay}</div>
+                        </div>
+                        <div class="flex flex-col items-end gap-1">
+                            <div class="w-2 h-2 rounded-full ${node.status==='future'?'bg-future':conf.color} shadow-[0_0_8px_currentColor]"></div>
+                            <div class="text-[9px] ${node.status==='future'?'text-future':conf.text} font-bold">${node.tier}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-1 my-1">
+                        <div class="w-full h-px bg-white/5"></div>
+                        <div class="flex justify-between items-center text-[10px] font-mono text-dim">
+                            <span>IDX: ${node.h3}</span>
+                            <span class="${node.heat > 80 ? 'text-signal' : 'text-yellow-500'}">HEAT: ${node.heat}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-end mt-1">
+                        <div class="text-lg font-bold font-mono ${node.status === 'available' ? 'text-white' : 'text-dim'}">${statusText}</div>
+                        <div class="bg-black/40 border border-white/10 rounded px-2 py-1 text-xs">
+                            ${statusIcon}
+                        </div>
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                `;
+                grid.appendChild(el);
+            });
+        }
+
+        const filterManager = {
+            setTier(t) { 
+                currentFilter.tier = t; 
+                renderGrid(getCurrentFilteredNodes());
+            },
+            setCity(c) {
+                currentFilter.city = c;
+                renderGrid(getCurrentFilteredNodes());
+            }
+        };
+
+        function renderFilters() {
+            const container = document.getElementById('city-filters');
+            container.innerHTML = '';
+
+            // Combine Active and Future cities for filter list
+            const allCities = [...CITIES, ...FUTURE_CITIES];
+            
+            allCities.forEach(c => {
+                const btn = document.createElement('button');
+                const displayName = currentLang === 'zh' ? c.zh : c.name;
+                const isFuture = FUTURE_CITIES.some(fc => fc.name === c.name);
+                
+                // Style based on type
+                let baseClass = "px-3 py-1 text-xs font-mono rounded transition-opacity whitespace-nowrap border";
+                let colorClass = isFuture 
+                    ? "bg-future/10 text-future border-future/50 hover:bg-future/20" 
+                    : "bg-concrete text-dim border-dim/30 hover:text-white hover:border-white";
+                
+                btn.className = `${baseClass} ${colorClass}`;
+                btn.innerText = displayName;
+                btn.onclick = () => filterManager.setCity(c.name);
+                container.appendChild(btn);
+            });
+        }
+
+        // --- WIZARD ---
+        const wizard = {
+            el: document.getElementById('node-wizard'),
+            bd: document.getElementById('modal-backdrop'),
+            currentNode: null,
+            currentStep: 1,
+            paymentType: 'crypto',
+            nodeCode: '',
+            
+            open(nodeId) {
+                this.currentNode = allNodes.find(n => n.id == nodeId);
+                if(!this.currentNode) return;
+                
+                const conf = TIERS[this.currentNode.tier] || TIERS['C'];
+                
+                document.getElementById('detail-id').innerText = `ID: ${this.currentNode.id}`;
+                document.getElementById('detail-hash').innerText = `HASH: ${this.currentNode.hash.substring(0,10)}...`;
+                document.getElementById('detail-loc').innerText = this.currentNode.location.toUpperCase();
+                document.getElementById('detail-tier').innerText = `${conf.name} (${this.currentNode.tier})`;
+                document.getElementById('detail-tier').className = `px-3 py-1 rounded bg-dim/20 text-xs font-mono border border-dim/30 ${conf.text} whitespace-nowrap`;
+                document.getElementById('detail-price').innerText = `$${conf.price.toLocaleString()}`;
+                document.getElementById('d-coords').innerText = `${this.currentNode.lat}, ${this.currentNode.lng}`;
+                document.getElementById('d-h3').innerText = this.currentNode.h3;
+                document.getElementById('d-heat').innerText = `${this.currentNode.heat}/100`;
+                document.getElementById('d-traffic').innerText = conf.traffic;
+                
+                // Radius Logic
+                let radVal = "200m";
+                if(this.currentNode.tier === 'S') radVal = "ADMIN";
+                else if(this.currentNode.tier === 'A') radVal = "5 KM";
+                else if(this.currentNode.tier === 'B') radVal = "1 KM";
+                document.getElementById('d-radius-val').innerText = radVal;
+
+                document.getElementById('session-id').innerText = Math.random().toString(36).substring(7).toUpperCase();
+
+                this.drawLocalHeatmap();
+                this.show();
+                this.goto(1);
+            },
+
+            drawLocalHeatmap() {
+                const cvs = document.getElementById('localHeatmap');
+                const ctx = cvs.getContext('2d');
+                cvs.width = cvs.offsetWidth; cvs.height = cvs.offsetHeight;
+                
+                // Draw fake heatmap
+                ctx.clearRect(0,0,cvs.width,cvs.height);
+                for(let i=0; i<30; i++) {
+                    const x = Math.random() * cvs.width;
+                    const y = cvs.height - (Math.random() * cvs.height * 0.6); // Bottom focused
+                    const r = Math.random() * 40 + 20;
+                    const grd = ctx.createRadialGradient(x, y, 0, x, y, r);
+                    grd.addColorStop(0, "rgba(255, 51, 0, 0.4)");
+                    grd.addColorStop(1, "rgba(255, 51, 0, 0)");
+                    ctx.fillStyle = grd;
+                    ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+                }
+                
+                // Draw Signal Waves from center bottom
+                const cx = cvs.width/2;
+                const cy = cvs.height;
+                ctx.strokeStyle = "rgba(255,255,255,0.2)";
+                ctx.lineWidth = 1;
+                for(let j=1; j<5; j++) {
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, j*40, Math.PI, 0); 
+                    ctx.stroke();
+                }
+            },
+
+            show() {
+                this.el.classList.remove('hidden');
+                this.bd.classList.remove('hidden');
+                setTimeout(() => this.bd.classList.remove('opacity-0'), 10);
+            },
+
+            close() {
+                this.bd.classList.add('opacity-0');
+                setTimeout(() => {
+                    this.el.classList.add('hidden');
+                    this.bd.classList.add('hidden');
+                    this.goto(1);
+                }, 300);
+            },
+
+            goto(step) {
+                this.currentStep = step;
+                document.querySelectorAll('.wizard-step').forEach(el => el.classList.add('hidden'));
+                document.getElementById(`step-${step}`).classList.remove('hidden');
+                
+                for(let i=1; i<=4; i++) {
+                    const nav = document.getElementById(`step-nav-${i}`);
+                    if(i === step) {
+                        nav.classList.remove('text-dim'); nav.classList.add('text-signal', 'font-bold');
+                    } else if (i < step) {
+                        nav.classList.remove('text-dim'); nav.classList.add('text-terminal');
+                    } else {
+                        nav.classList.remove('text-signal', 'text-terminal', 'font-bold'); nav.classList.add('text-dim');
+                    }
+                }
+                if(step === 2) this.updatePaymentUI();
+            },
+
+            next() { this.goto(this.currentStep + 1); },
+            prev() { this.goto(this.currentStep - 1); },
+
+            updatePaymentUI() {
+                const options = document.getElementsByName('pay-method');
+                for(let op of options) if(op.checked) this.paymentType = op.value;
+            },
+
+            generateCode() {
+                this.updatePaymentUI();
+                this.nodeCode = `${this.currentNode.id}-${Math.floor(Date.now()/1000).toString().slice(-4)}`;
+                document.getElementById('generated-code').innerText = this.nodeCode;
+                this.startTimer();
+                this.renderPaymentDetailsInStep3();
+                this.next();
+            },
+
+            renderPaymentDetailsInStep3() {
+                const container = document.getElementById('payment-details-container');
+                const conf = TIERS[this.currentNode.tier];
+                
+                container.innerHTML = ''; 
+
+                if (this.paymentType === 'crypto' || this.paymentType === 'aif') {
+                    const isAif = this.paymentType === 'aif';
+                    const title = isAif ? "TRANSFER AIF (Pegged)" : "TRANSFER USDT/USDC";
+                    const amount = isAif ? `${conf.aif} AIF` : `${conf.price.toLocaleString()} USDT`;
+                    const chain = isAif ? "SOLANA ONLY" : "SOLANA / BSC";
+                    
+                    let html = `
+                        <div class="text-center mb-6">
+                            <div class="text-sm font-bold text-white mb-2">${title}</div>
+                            <div class="text-4xl font-mono text-signal font-bold tracking-tight">${amount}</div>
+                            <div class="text-xs text-dim mt-1">${chain} NETWORK</div>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="bg-black p-4 rounded border border-dim/30 relative group cursor-pointer hover:border-signal/50 transition-colors" onclick="copyText('${WALLETS.solana}')">
+                                <div class="text-[10px] text-dim mb-1 flex justify-between"><span>SOLANA ADDRESS (USDT/USDC/AIF)</span> <span class="text-terminal">ACTIVE</span></div>
+                                <div class="font-mono text-xs md:text-sm text-white break-all">${WALLETS.solana}</div>
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 text-dim group-hover:text-white"><i class="fa-regular fa-copy"></i></div>
+                            </div>
+                    `;
+
+                    if(!isAif) {
+                        html += `
+                            <div class="bg-black p-4 rounded border border-dim/30 relative group cursor-pointer hover:border-signal/50 transition-colors" onclick="copyText('${WALLETS.bsc}')">
+                                <div class="text-[10px] text-dim mb-1 flex justify-between"><span>BSC ADDRESS (USDT)</span> <span class="text-terminal">ACTIVE</span></div>
+                                <div class="font-mono text-xs md:text-sm text-white break-all">${WALLETS.bsc}</div>
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 text-dim group-hover:text-white"><i class="fa-regular fa-copy"></i></div>
+                            </div>
+                        `;
+                    }
+                    html += `</div>`;
+                    container.innerHTML = html;
+
+                } else {
+                    container.innerHTML = `
+                        <div class="text-center mb-6">
+                            <div class="text-sm font-bold text-white mb-2">SECURE FIAT GATEWAY (WISE)</div>
+                            <div class="text-4xl font-mono text-signal">$${conf.price.toLocaleString()} USD</div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <a href="${conf.links.usd}" target="_blank" class="bg-zinc-800 hover:bg-white hover:text-black text-white p-4 rounded border border-dim/30 text-center transition-all group">
+                                <div class="font-bold text-lg mb-1">USD</div>
+                                <div class="text-[10px] text-dim group-hover:text-black">Wire / ACH</div>
+                            </a>
+                            <a href="${conf.links.hkd}" target="_blank" class="bg-zinc-800 hover:bg-white hover:text-black text-white p-4 rounded border border-dim/30 text-center transition-all group">
+                                <div class="font-bold text-lg mb-1">HKD</div>
+                                <div class="text-[10px] text-dim group-hover:text-black">FPS / Bank</div>
+                            </a>
+                            <a href="${conf.links.jpy}" target="_blank" class="bg-zinc-800 hover:bg-white hover:text-black text-white p-4 rounded border border-dim/30 text-center transition-all group">
+                                <div class="font-bold text-lg mb-1">JPY</div>
+                                <div class="text-[10px] text-dim group-hover:text-black">Bank Transfer</div>
+                            </a>
+                            <a href="${conf.links.eur}" target="_blank" class="bg-zinc-800 hover:bg-white hover:text-black text-white p-4 rounded border border-dim/30 text-center transition-all group">
+                                <div class="font-bold text-lg mb-1">EUR</div>
+                                <div class="text-[10px] text-dim group-hover:text-black">SEPA</div>
+                            </a>
+                        </div>
+                        <p class="text-[10px] text-dim text-center mt-4">
+                            *Important: Enter <strong>${this.nodeCode}</strong> in the transfer reference field.
+                        </p>
+                    `;
+                }
+                this.prepareReceipt();
+            },
+
+            prepareReceipt() {
+                const conf = TIERS[this.currentNode.tier];
+                const date = new Date().toISOString().split('T')[0];
+                const text = `
+To: depin@aif.wtf
+Subject: PAYMENT PROOF: ${this.nodeCode}
+
+--- ACQUISITION REQUEST ---
+Date: ${date}
+Node ID: ${this.nodeCode}
+Hash: ${this.currentNode.hash}
+Location: ${this.currentNode.location} (${this.currentNode.city})
+Tier: ${this.currentNode.tier}
+Payment Type: ${this.paymentType.toUpperCase()}
+Amount: ${this.paymentType === 'aif' ? conf.aif + ' AIF' : '$'+conf.price}
+
+[PLEASE ATTACH PAYMENT SCREENSHOT HERE]
+                `.trim();
+                document.getElementById('receipt-text').innerText = text;
+            },
+
+            startTimer() {
+                let seconds = 300;
+                const el = document.getElementById('countdown');
+                if(this.timer) clearInterval(this.timer);
+                this.timer = setInterval(() => {
+                    seconds--;
+                    const m = Math.floor(seconds / 60);
+                    const s = seconds % 60;
+                    el.innerText = `0${m}:${s < 10 ? '0'+s : s}`;
+                    if(seconds <= 0) {
+                        clearInterval(this.timer);
+                        el.innerText = "EXPIRED";
+                    }
+                }, 1000);
+            }
+        };
+
+        // --- UTILS ---
+        function copyText(txt) {
+            navigator.clipboard.writeText(txt).then(() => alert("Copied!"));
+        }
+        function copyReceipt() {
+            const txt = document.getElementById('receipt-text').innerText;
+            navigator.clipboard.writeText(txt).then(() => alert("Email template copied!"));
+        }
+
+        // --- VISUALS ---
+        function startLiveFeed() {
+            const container = document.getElementById('footer-ticker');
+            const actions = ["NODE ACTIVATED", "AIF STAKED", "NFT MINTED", "COMPUTE VERIFIED"];
+            
+            setInterval(() => {
+                const div = document.createElement('div');
+                div.className = "flex justify-between text-dim border-l-2 border-signal pl-2 animate-pulse";
+                const addr = "0x" + Math.random().toString(16).substr(2, 4);
+                const act = actions[Math.floor(Math.random() * actions.length)];
+                div.innerHTML = `<span>${addr}...</span> <span>${act}</span>`;
+                container.prepend(div);
+                if(container.children.length > 5) container.lastElementChild.remove();
+            }, 1800);
+        }
+
+        function initHeatmap() {
+            const canvas = document.getElementById('heatmapCanvas');
+            const ctx = canvas.getContext('2d');
+            let w, h;
+            
+            const resize = () => { w = canvas.width = canvas.parentElement.offsetWidth; h = canvas.height = canvas.parentElement.offsetHeight; };
+            window.addEventListener('resize', resize);
+            resize();
+
+            // Approximate relative positions for effect
+            const mapCities = [
+                {name:"HK", x:0.82, y:0.45}, {name:"BJ", x:0.80, y:0.35}, {name:"SH", x:0.84, y:0.40}, 
+                {name:"NY", x:0.25, y:0.38}, {name:"LDN", x:0.48, y:0.32}, {name:"TKY", x:0.88, y:0.39}
+            ];
+
+            let particles = [];
+            for(let i=0; i<30; i++) {
+                particles.push({
+                    x: Math.random()*w, y: Math.random()*h, 
+                    tx: Math.random()*w, ty: Math.random()*h,
+                    speed: 0.005 + Math.random()*0.01, progress: 0
+                });
+            }
+
+            function draw() {
+                ctx.fillStyle = 'rgba(5,5,5,0.2)'; 
+                ctx.fillRect(0,0,w,h);
+
+                // Draw Nodes
+                allNodes.forEach(n => {
+                    const nx = n.mx * w; 
+                    const ny = n.my * h;
+                    
+                    ctx.beginPath();
+                    ctx.arc(nx, ny, 1.5, 0, Math.PI*2);
+                    if (n.status === 'future') ctx.fillStyle = '#00FFFF';
+                    else if (n.tier === 'S') ctx.fillStyle = '#FF3300';
+                    else ctx.fillStyle = '#444';
+                    
+                    if(Math.random() < 0.01) ctx.fillStyle = '#FFF'; 
+                    ctx.fill();
+                });
+
+                // Labels
+                ctx.fillStyle = '#888';
+                ctx.font = '10px monospace';
+                mapCities.forEach(c => {
+                    ctx.fillText(c.name, c.x*w, c.y*h - 5);
+                    ctx.fillStyle = '#FF3300';
+                    ctx.beginPath(); ctx.arc(c.x*w, c.y*h, 2, 0, Math.PI*2); ctx.fill();
+                    ctx.fillStyle = '#888';
+                });
+
+                // Lines
+                particles.forEach(p => {
+                    p.progress += p.speed;
+                    if(p.progress >= 1) {
+                        p.x = p.tx; p.y = p.ty;
+                        p.tx = Math.random()*w; p.ty = Math.random()*h;
+                        p.progress = 0;
+                    }
+                    const curX = p.x + (p.tx - p.x) * p.progress;
+                    const curY = p.y + (p.ty - p.y) * p.progress;
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${1-p.progress})`;
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(curX, curY);
+                    ctx.lineTo(curX - (p.tx-p.x)*0.05, curY - (p.ty-p.y)*0.05);
+                    ctx.stroke();
+                });
+
+                requestAnimationFrame(draw);
+            }
+            draw();
+        }
+
+        // --- BOOT ---
+        window.addEventListener('load', () => {
+            initData();
+            toggleLang(); // Init lang logic
+            
+            gsap.to('#loader-progress', { width: '100%', duration: 1.5, ease: "power2.inOut", onComplete: () => {
+                gsap.to('#boot-sequence', { y: '-100%', duration: 0.8, ease: "power4.inOut" });
+            }});
+            
+            let time = 48 * 60 * 60;
+            setInterval(() => {
+                time--;
+                const h = Math.floor(time / 3600);
+                const m = Math.floor((time % 3600) / 60);
+                const s = Math.floor(time % 60);
+                document.getElementById('hero-timer').innerText = `00:${h}:${m}:${s}`;
+            }, 1000);
         });
-        window.addEventListener('resize', resizeCanvas);
 
     </script>
 </body>
