@@ -2,7 +2,7 @@
 <html lang="zh-Hant" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AIF.WTF | SPATIAL COMPUTING GENESIS NODE SALE</title>
     
     <!-- External Resources -->
@@ -21,6 +21,9 @@
         tailwind.config = {
             theme: {
                 extend: {
+                    screens: {
+                        'xs': '375px',
+                    },
                     colors: {
                         void: '#050505',
                         concrete: '#1F1F1F',
@@ -62,14 +65,17 @@
             background-color: var(--bg);
             color: #EAEAEA;
             overflow-x: hidden;
-            cursor: crosshair;
+            -webkit-tap-highlight-color: transparent;
         }
         
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: #000; }
-        ::-webkit-scrollbar-thumb { background: #333; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
         /* Glitch Effect */
         .glitch-text { position: relative; }
@@ -100,7 +106,7 @@
 
         /* Node Card Styles */
         .node-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s;
             backdrop-filter: blur(4px);
             position: relative;
             overflow: hidden;
@@ -109,81 +115,92 @@
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
             background: currentColor; opacity: 0.5;
         }
-        .node-card:hover {
-            transform: translateY(-4px) scale(1.02);
-            z-index: 10;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        @media (hover: hover) {
+            .node-card:hover {
+                transform: translateY(-4px) scale(1.02);
+                z-index: 10;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            }
+            .node-S:hover { box-shadow: 0 0 40px rgba(255, 51, 0, 0.4); z-index: 20; }
         }
         
-        /* Tier Specific Styling */
-        .node-S { border-color: #FF3300; background: rgba(255, 51, 0, 0.05); }
-        .node-S:hover { box-shadow: 0 0 30px rgba(255, 51, 0, 0.6); background: rgba(255, 51, 0, 0.15); }
-        
+        .node-S { border-color: #FF3300; background: rgba(255, 51, 0, 0.08); }
         .node-A { border-color: rgba(168, 85, 247, 0.4); background: rgba(168, 85, 247, 0.05); }
-        .node-A:hover { box-shadow: 0 0 25px rgba(168, 85, 247, 0.5); border-color: #A855F7; }
-        
         .node-B { border-color: rgba(234, 179, 8, 0.4); background: rgba(234, 179, 8, 0.05); }
-        .node-B:hover { box-shadow: 0 0 25px rgba(234, 179, 8, 0.5); border-color: #EAB308; }
-        
         .node-C { border-color: rgba(59, 130, 246, 0.4); background: rgba(59, 130, 246, 0.05); }
-        .node-C:hover { box-shadow: 0 0 25px rgba(59, 130, 246, 0.5); border-color: #3B82F6; }
-
-        .node-future { border-color: #00FFFF; background: rgba(0, 255, 255, 0.02); opacity: 0.7; border-style: dashed; }
-        .node-future:hover { opacity: 1; box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); }
+        .node-future { border-color: #00FFFF; background: rgba(0, 255, 255, 0.05); border-style: dashed; }
 
         .node-card.sold {
-            opacity: 0.4;
+            opacity: 0.5;
             filter: grayscale(100%);
             border-style: dashed;
-            border-color: #333;
+            border-color: #444;
             background: repeating-linear-gradient(45deg, #111, #111 10px, #1a1a1a 10px, #1a1a1a 20px);
-            pointer-events: none;
         }
         
-        /* Node Tag */
+        /* City Invite Overlay */
+        .city-invite-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(2px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 30;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .node-S:hover .city-invite-overlay {
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
         .node-tag {
             position: absolute;
-            top: 0;
-            left: 0;
-            padding: 2px 6px;
-            font-size: 9px;
-            font-weight: bold;
+            top: 0; left: 0;
+            padding: 2px 8px;
+            font-size: 10px;
+            font-weight: 800;
             font-family: 'Space Mono', monospace;
             z-index: 20;
             clip-path: polygon(0 0, 100% 0, 100% 70%, 90% 100%, 0 100%);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
         }
 
-        /* Typography improvements */
-        .content-block p { margin-bottom: 1.5rem; line-height: 1.8; color: #bbb; }
-        .content-block h3 { color: #fff; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.25rem; }
-        .content-block ul { list-style: disc; padding-left: 1.5rem; color: #999; margin-bottom: 1.5rem; }
-        .content-block li { margin-bottom: 0.5rem; }
+        .crt-overlay {
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
     </style>
 </head>
-<body class="font-sans antialiased">
+<body class="font-sans antialiased text-sm md:text-base">
 
     <!-- Loading Screen -->
     <div id="boot-sequence" class="fixed inset-0 z-[9999] bg-void flex flex-col items-center justify-center font-mono">
-        <div class="w-[300px] text-xs text-dim mb-4">
+        <div class="w-[300px] text-xs text-dim mb-4 px-4">
             > INITIALIZING SPATIAL MATRIX...<br>
             > LOADING GLOBAL NODE DATA...<br>
             > SYNCING HKAIIFF PROTOCOL...<br>
             > ESTABLISHING SECURE UPLINK...
         </div>
-        <div class="text-6xl font-bold text-signal mb-2 tracking-tighter">AIF<span class="text-white">.WTF</span></div>
-        <div class="w-64 h-1 bg-concrete overflow-hidden relative">
+        <div class="text-4xl md:text-6xl font-bold text-signal mb-2 tracking-tighter">AIF<span class="text-white">.WTF</span></div>
+        <div class="w-48 md:w-64 h-1 bg-concrete overflow-hidden relative">
             <div id="loader-progress" class="h-full bg-signal w-0 absolute top-0 left-0"></div>
         </div>
     </div>
 
     <!-- Navigation -->
-    <nav class="fixed w-full z-50 top-0 left-0 border-b border-concrete/60 bg-void/90 backdrop-blur-md">
-        <div class="max-w-[1600px] mx-auto px-6 h-20 flex items-center justify-between">
+    <nav class="fixed w-full z-50 top-0 left-0 border-b border-concrete/60 bg-void/95 backdrop-blur-md">
+        <div class="max-w-[1600px] mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between">
             <div class="flex items-center gap-3 group cursor-pointer" onclick="window.scrollTo(0,0)">
                 <div class="w-8 h-8 bg-signal flex items-center justify-center font-bold text-black font-mono group-hover:animate-pulse">A</div>
                 <div class="leading-none">
-                    <div class="font-mono font-bold text-lg tracking-tight text-white">AIF.WTF</div>
-                    <div class="text-[10px] text-dim tracking-widest">SPATIAL DEPIN MATRIX</div>
+                    <div class="font-mono font-bold text-base md:text-lg tracking-tight text-white">AIF.WTF</div>
+                    <div class="text-[9px] md:text-[10px] text-dim tracking-widest">SPATIAL DEPIN MATRIX</div>
                 </div>
             </div>
             
@@ -194,57 +211,57 @@
                 <a href="#node-matrix" class="hover:text-signal transition-colors flex items-center gap-2 text-white border border-signal/50 px-3 py-1 bg-signal/10 rounded" data-i18n="nav_buy">BUY NODES</a>
             </div>
 
-            <div class="flex items-center gap-4">
-                <button onclick="toggleLang()" class="border border-dim/50 px-3 py-1 text-xs font-mono text-dim hover:text-white hover:border-white transition-colors flex items-center gap-2">
+            <div class="flex items-center gap-3">
+                <button onclick="toggleLang()" class="border border-dim/50 px-3 py-1.5 text-[10px] md:text-xs font-mono text-dim hover:text-white hover:border-white transition-colors flex items-center gap-2 rounded">
                     <i class="fa-solid fa-globe"></i> <span id="lang-btn">EN/中文</span>
                 </button>
             </div>
         </div>
     </nav>
 
-    <main class="relative z-10 pt-20">
+    <main class="relative z-10 pt-16 md:pt-20">
 
         <!-- Hero Section -->
-        <section class="max-w-[1600px] mx-auto px-6 py-20 relative">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <section class="max-w-[1600px] mx-auto px-4 md:px-6 py-12 md:py-20 relative">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
                 <!-- Text Content -->
-                <div class="z-20">
-                    <div class="inline-flex items-center gap-2 border border-signal/30 bg-signal/5 px-3 py-1 rounded-sm mb-6">
+                <div class="z-20 order-2 lg:order-1">
+                    <div class="inline-flex items-center gap-2 border border-signal/30 bg-signal/5 px-3 py-1 rounded-sm mb-4 md:mb-6">
                         <span class="w-2 h-2 rounded-full bg-signal animate-pulse"></span>
-                        <span class="text-xs font-mono text-signal uppercase" data-i18n="hero_badge">Live Deployment Phase 1</span>
+                        <span class="text-[10px] md:text-xs font-mono text-signal uppercase" data-i18n="hero_badge">Live Deployment Phase 1</span>
                     </div>
                     
-                    <h1 class="text-5xl xl:text-8xl font-bold tracking-tighter leading-[0.9] mb-8">
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl xl:text-8xl font-bold tracking-tighter leading-[0.95] mb-6 md:mb-8 break-words">
                         <span class="block glitch-text" data-text="DROP CONTENT">DROP CONTENT</span>
                         <span class="block text-transparent bg-clip-text bg-gradient-to-r from-white to-dim">NOT HARDWARE</span>
                     </h1>
                     
-                    <p class="text-lg text-dim max-w-xl font-light leading-relaxed mb-8 border-l-2 border-signal pl-4" data-i18n="hero_desc">
+                    <p class="text-sm md:text-lg text-dim max-w-xl font-light leading-relaxed mb-8 border-l-2 border-signal pl-4" data-i18n="hero_desc">
                         全球首個專為 AI原生互動內容 優化的去中心化物理基礎設施網絡 (DePIN)。我們將閒置算力轉化為空間網絡的「數字錨點」。<br><br>
                         香港AI國際電影節 (HKAIIFF) 官方指定物理基礎設施。<br>
                         搶購 500 個創世節點，成為空間計算時代的數字地主。<br>
                         支持 USDT / AIF / 法幣支付，即刻開啟 DePIN 被動收益。
                     </p>
 
-                    <div class="flex flex-wrap gap-4 font-mono">
-                        <div class="bg-concrete/40 border border-concrete p-4 w-40 hover:border-signal transition-colors">
-                            <div class="text-[10px] text-dim mb-1" data-i18n="stat_remaining">REMAINING</div>
-                            <div class="text-2xl font-bold text-white" id="hero-count">492</div>
+                    <div class="grid grid-cols-2 sm:flex sm:flex-wrap gap-3 md:gap-4 font-mono">
+                        <div class="bg-concrete/40 border border-concrete p-3 md:p-4 hover:border-signal transition-colors rounded md:rounded-none">
+                            <div class="text-[9px] md:text-[10px] text-dim mb-1" data-i18n="stat_remaining">REMAINING</div>
+                            <div class="text-xl md:text-2xl font-bold text-white" id="hero-count">492</div>
                         </div>
-                        <div class="bg-concrete/40 border border-concrete p-4 w-40 hover:border-terminal transition-colors">
-                            <div class="text-[10px] text-dim mb-1" data-i18n="stat_apy">CURRENT APY</div>
-                            <div class="text-2xl font-bold text-terminal">342%</div>
+                        <div class="bg-concrete/40 border border-concrete p-3 md:p-4 hover:border-terminal transition-colors rounded md:rounded-none">
+                            <div class="text-[9px] md:text-[10px] text-dim mb-1" data-i18n="stat_apy">CURRENT APY</div>
+                            <div class="text-xl md:text-2xl font-bold text-terminal">342%</div>
                         </div>
-                        <div class="bg-concrete/40 border border-concrete p-4 min-w-[200px] hover:border-white transition-colors">
-                            <div class="text-[10px] text-dim mb-1" data-i18n="stat_timer">SALE ENDS IN</div>
-                            <div class="text-2xl font-bold text-white tabular-nums" id="hero-timer">00:00:00:00</div>
+                        <div class="col-span-2 sm:col-span-1 bg-concrete/40 border border-concrete p-3 md:p-4 min-w-[200px] hover:border-white transition-colors rounded md:rounded-none">
+                            <div class="text-[9px] md:text-[10px] text-dim mb-1" data-i18n="stat_timer">SALE ENDS IN</div>
+                            <div class="text-xl md:text-2xl font-bold text-white tabular-nums" id="hero-timer">00:00:00:00</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Visual / Ecosystem Map -->
-                <div id="heatmap-section" class="relative h-[600px] w-full bg-concrete/10 border border-concrete rounded-lg overflow-hidden group">
-                    <div class="absolute top-4 left-4 z-10 bg-black/80 backdrop-blur px-3 py-1 text-xs font-mono text-terminal border border-terminal/30">
+                <div id="heatmap-section" class="relative h-[350px] md:h-[600px] w-full bg-concrete/10 border border-concrete rounded-lg overflow-hidden group order-1 lg:order-2 mb-8 lg:mb-0">
+                    <div class="absolute top-4 left-4 z-10 bg-black/80 backdrop-blur px-3 py-1 text-[10px] md:text-xs font-mono text-terminal border border-terminal/30 rounded">
                         <i class="fa-solid fa-satellite-dish mr-2 animate-pulse"></i><span data-i18n="map_status">LIVE NETWORK STATUS</span>
                     </div>
                     <!-- The Canvas Map -->
@@ -255,45 +272,45 @@
         </section>
 
         <!-- Ecosystem & Backing -->
-        <section id="ecosystem" class="py-20 bg-concrete/5 border-y border-concrete">
-            <div class="max-w-[1600px] mx-auto px-6">
-                <div class="flex flex-col md:flex-row justify-between items-end mb-12">
+        <section id="ecosystem" class="py-12 md:py-20 bg-concrete/5 border-y border-concrete">
+            <div class="max-w-[1600px] mx-auto px-4 md:px-6">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-8 md:mb-12">
                     <div>
-                        <h2 class="text-3xl font-bold mb-2"><span data-i18n="eco_title">生態背書</span> <span class="text-dim font-mono text-lg">// ECOSYSTEM</span></h2>
-                        <p class="text-dim max-w-2xl" data-i18n="eco_subtitle">AIF.WTF 節點不僅是礦機，更是支撐 HKAIIFF 空間計算的邊緣算力單元。</p>
+                        <h2 class="text-2xl md:text-3xl font-bold mb-2"><span data-i18n="eco_title">生態背書</span> <span class="text-dim font-mono text-base md:text-lg">// ECOSYSTEM</span></h2>
+                        <p class="text-sm md:text-base text-dim max-w-2xl" data-i18n="eco_subtitle">AIF.WTF 節點不僅是礦機，更是支撐 HKAIIFF 空間計算的邊緣算力單元。</p>
                     </div>
                 </div>
 
-                <div class="grid md:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                     <!-- Card 1 -->
-                    <div class="p-8 border border-concrete bg-void hover:border-signal/50 transition-all group">
-                        <div class="w-12 h-12 bg-concrete/50 flex items-center justify-center rounded mb-6 group-hover:bg-signal group-hover:text-white transition-colors">
-                            <i class="fa-solid fa-vr-cardboard text-xl"></i>
+                    <div class="p-6 md:p-8 border border-concrete bg-void hover:border-signal/50 transition-all group rounded-lg">
+                        <div class="w-10 h-10 md:w-12 md:h-12 bg-concrete/50 flex items-center justify-center rounded mb-4 md:mb-6 group-hover:bg-signal group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-vr-cardboard text-lg md:text-xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold mb-4 text-white" data-i18n="card1_title">空間計算渲染層</h3>
-                        <p class="text-sm text-dim leading-relaxed" data-i18n="card1_desc">
+                        <h3 class="text-lg md:text-xl font-bold mb-3 md:mb-4 text-white" data-i18n="card1_title">空間計算渲染層</h3>
+                        <p class="text-xs md:text-sm text-dim leading-relaxed" data-i18n="card1_desc">
                             為 HKAIIFF 電影節提供分佈式渲染算力。節點負責處理 XR/VR 內容的邊緣計算，確保觀影體驗 <20ms 延遲。
                         </p>
                     </div>
 
                     <!-- Card 2 -->
-                    <div class="p-8 border border-concrete bg-void hover:border-signal/50 transition-all group">
-                        <div class="w-12 h-12 bg-concrete/50 flex items-center justify-center rounded mb-6 group-hover:bg-signal group-hover:text-white transition-colors">
-                            <i class="fa-solid fa-database text-xl"></i>
+                    <div class="p-6 md:p-8 border border-concrete bg-void hover:border-signal/50 transition-all group rounded-lg">
+                        <div class="w-10 h-10 md:w-12 md:h-12 bg-concrete/50 flex items-center justify-center rounded mb-4 md:mb-6 group-hover:bg-signal group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-database text-lg md:text-xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold mb-4 text-white" data-i18n="card2_title">資產存儲與分發</h3>
-                        <p class="text-sm text-dim leading-relaxed" data-i18n="card2_desc">
+                        <h3 class="text-lg md:text-xl font-bold mb-3 md:mb-4 text-white" data-i18n="card2_title">資產存儲與分發</h3>
+                        <p class="text-xs md:text-sm text-dim leading-relaxed" data-i18n="card2_desc">
                             利用 IPFS 協議存儲海量 3D 電影資產。購買節點即可獲得與存儲空間掛鉤的 NFT，實現「數據即資產」。
                         </p>
                     </div>
 
                     <!-- Card 3 -->
-                    <div class="p-8 border border-concrete bg-void hover:border-signal/50 transition-all group">
-                        <div class="w-12 h-12 bg-concrete/50 flex items-center justify-center rounded mb-6 group-hover:bg-signal group-hover:text-white transition-colors">
-                            <i class="fa-solid fa-chart-line text-xl"></i>
+                    <div class="p-6 md:p-8 border border-concrete bg-void hover:border-signal/50 transition-all group rounded-lg">
+                        <div class="w-10 h-10 md:w-12 md:h-12 bg-concrete/50 flex items-center justify-center rounded mb-4 md:mb-6 group-hover:bg-signal group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-chart-line text-lg md:text-xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold mb-4 text-white" data-i18n="card3_title">DePIN 激勵模型</h3>
-                        <p class="text-sm text-dim leading-relaxed" data-i18n="card3_desc">
+                        <h3 class="text-lg md:text-xl font-bold mb-3 md:mb-4 text-white" data-i18n="card3_title">DePIN 激勵模型</h3>
+                        <p class="text-xs md:text-sm text-dim leading-relaxed" data-i18n="card3_desc">
                             設備在非電影節期間自動接入 AIF 全球網絡執行通用計算任務。收益通過智能合約自動分配至質押者錢包。
                         </p>
                     </div>
@@ -302,21 +319,21 @@
         </section>
 
         <!-- Genesis Fission Rules -->
-        <section id="fission-rules" class="py-20 relative overflow-hidden bg-void">
-            <div class="max-w-[1200px] mx-auto px-6 relative z-10">
-                <div class="bg-concrete/20 border border-signal/20 p-10 rounded-xl relative overflow-hidden backdrop-blur-sm">
-                    <div class="absolute -right-20 -top-20 text-[200px] font-bold text-white/5 select-none pointer-events-none">2x2</div>
+        <section id="fission-rules" class="py-12 md:py-20 relative overflow-hidden bg-void">
+            <div class="max-w-[1200px] mx-auto px-4 md:px-6 relative z-10">
+                <div class="bg-concrete/20 border border-signal/20 p-6 md:p-10 rounded-xl relative overflow-hidden backdrop-blur-sm">
+                    <div class="absolute -right-20 -top-20 text-[120px] md:text-[200px] font-bold text-white/5 select-none pointer-events-none">2x2</div>
                     
-                    <div class="flex items-center gap-4 mb-8">
-                        <div class="w-16 h-1 bg-signal"></div>
-                        <h2 class="text-2xl font-mono font-bold" data-i18n="rules_title">GENESIS PROTOCOL: 二二複製</h2>
+                    <div class="flex items-center gap-4 mb-6 md:mb-8">
+                        <div class="w-10 md:w-16 h-1 bg-signal"></div>
+                        <h2 class="text-xl md:text-2xl font-mono font-bold" data-i18n="rules_title">GENESIS PROTOCOL: 二二複製</h2>
                     </div>
 
-                    <div class="grid md:grid-cols-2 gap-12">
-                        <div class="space-y-6">
-                            <div class="bg-concrete/10 border border-dim/20 p-6 rounded-lg">
-                                <h4 class="font-bold text-white text-lg mb-4 flex items-center"><i class="fa-solid fa-seedling text-terminal mr-3"></i><span data-i18n="reward_direct_title">生態推廣獎勵</span></h4>
-                                <ul class="space-y-4 text-sm text-dim">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                        <div class="space-y-4 md:space-y-6">
+                            <div class="bg-concrete/10 border border-dim/20 p-4 md:p-6 rounded-lg">
+                                <h4 class="font-bold text-white text-base md:text-lg mb-3 md:mb-4 flex items-center"><i class="fa-solid fa-seedling text-terminal mr-3"></i><span data-i18n="reward_direct_title">生態推廣獎勵</span></h4>
+                                <ul class="space-y-3 md:space-y-4 text-xs md:text-sm text-dim">
                                     <li class="flex justify-between items-center border-b border-dim/10 pb-2">
                                         <span data-i18n="reward_1st">推薦第 1 個節點</span>
                                         <span class="text-white font-mono font-bold" data-i18n="reward_20">20% 生態獎勵</span>
@@ -325,17 +342,17 @@
                                         <span data-i18n="reward_2nd">推薦第 2 個節點</span>
                                         <span class="text-signal font-mono font-bold" data-i18n="reward_80">80% 生態獎勵</span>
                                     </li>
-                                    <li class="flex justify-between items-center text-xs italic">
+                                    <li class="flex justify-between items-center text-[10px] md:text-xs italic">
                                         <span data-i18n="reward_loop">* 循環觸發 (1-2, 3-4, 5-6...)</span>
                                         <span class="text-terminal" data-i18n="reward_inf">無限循環</span>
                                     </li>
                                 </ul>
                             </div>
 
-                            <div class="bg-concrete/10 border border-dim/20 p-6 rounded-lg">
-                                <h4 class="font-bold text-white text-lg mb-4 flex items-center"><i class="fa-solid fa-crown text-tierB mr-3"></i><span data-i18n="reward_perm_title">永久收益分成</span></h4>
-                                <p class="text-sm text-dim leading-relaxed" data-i18n="reward_perm_desc">
-                                    上級節點將<strong class="text-white">永久獲得</strong>其直推下級節點每日產出收益的 <span class="text-tierB font-bold text-lg">10%</span> 作為生態管理獎勵。
+                            <div class="bg-concrete/10 border border-dim/20 p-4 md:p-6 rounded-lg">
+                                <h4 class="font-bold text-white text-base md:text-lg mb-3 md:mb-4 flex items-center"><i class="fa-solid fa-crown text-tierB mr-3"></i><span data-i18n="reward_perm_title">永久收益分成</span></h4>
+                                <p class="text-xs md:text-sm text-dim leading-relaxed" data-i18n="reward_perm_desc">
+                                    上級節點將<strong class="text-white">永久獲得</strong>其直推下級節點每日產出收益的 <span class="text-tierB font-bold text-base md:text-lg">10%</span> 作為生態管理獎勵。
                                 </p>
                                 <div class="mt-4 h-1 w-full bg-dim/20 rounded overflow-hidden">
                                     <div class="h-full bg-tierB w-[10%]"></div>
@@ -344,24 +361,24 @@
                         </div>
 
                         <!-- Interactive Tree Visual -->
-                        <div class="bg-black/50 border border-dim/20 rounded p-6 flex items-center justify-center relative">
+                        <div class="bg-black/50 border border-dim/20 rounded p-6 flex items-center justify-center relative min-h-[200px]">
                             <div class="text-center w-full">
-                                <div class="inline-block p-3 border-2 border-signal bg-signal/10 rounded mb-8 relative animate-pulse-fast">
+                                <div class="inline-block p-2 md:p-3 border-2 border-signal bg-signal/10 rounded mb-6 md:mb-8 relative animate-pulse-fast text-xs md:text-sm">
                                     <i class="fa-solid fa-server"></i> ROOT (YOU)
-                                    <div class="absolute -bottom-8 left-1/2 w-px h-8 bg-dim"></div>
+                                    <div class="absolute -bottom-6 md:-bottom-8 left-1/2 w-px h-6 md:h-8 bg-dim"></div>
                                 </div>
                                 <div class="flex justify-around relative w-full">
                                     <div class="absolute top-0 w-1/2 h-px bg-dim -translate-y-[1px]"></div>
                                     <div class="text-center relative">
                                         <div class="w-px h-4 bg-dim mx-auto"></div>
-                                        <div class="p-2 border border-white/30 rounded text-xs text-dim mt-1 group hover:border-terminal transition-colors">
+                                        <div class="p-1.5 md:p-2 border border-white/30 rounded text-[10px] md:text-xs text-dim mt-1 group hover:border-terminal transition-colors">
                                             <div>NODE 1</div>
                                             <div class="text-terminal font-bold">20%</div>
                                         </div>
                                     </div>
                                     <div class="text-center relative">
                                         <div class="w-px h-4 bg-dim mx-auto"></div>
-                                        <div class="p-2 border border-white/30 rounded text-xs text-dim mt-1 group hover:border-signal transition-colors">
+                                        <div class="p-1.5 md:p-2 border border-white/30 rounded text-[10px] md:text-xs text-dim mt-1 group hover:border-signal transition-colors">
                                             <div>NODE 2</div>
                                             <div class="text-signal font-bold">80%</div>
                                         </div>
@@ -375,66 +392,66 @@
         </section>
 
         <!-- Deep Dive Analysis Section -->
-        <section id="deep-dive" class="py-24 bg-concrete/5 border-t border-concrete">
-            <div class="max-w-[1200px] mx-auto px-6">
-                <div class="mb-16">
-                    <span class="text-signal font-mono text-xs uppercase tracking-widest">// DEEP DIVE ANALYSIS</span>
-                    <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-6" data-i18n="analysis_title">項目深度解析與商業價值報告</h2>
-                    <p class="text-dim max-w-3xl leading-relaxed" data-i18n="analysis_subtitle">
+        <section id="deep-dive" class="py-12 md:py-24 bg-concrete/5 border-t border-concrete">
+            <div class="max-w-[1200px] mx-auto px-4 md:px-6">
+                <div class="mb-8 md:mb-16">
+                    <span class="text-signal font-mono text-[10px] md:text-xs uppercase tracking-widest">// DEEP DIVE ANALYSIS</span>
+                    <h2 class="text-2xl md:text-4xl font-bold mt-2 mb-4 md:mb-6" data-i18n="analysis_title">項目深度解析與商業價值報告</h2>
+                    <p class="text-sm md:text-base text-dim max-w-3xl leading-relaxed" data-i18n="analysis_subtitle">
                         AIF.WTF 不僅僅是一個區塊鏈項目，它是物理基礎設施與空間計算的完美結合。以下是關於技術架構及市場價值的視覺化分析。
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-8 md:mb-12">
                     <!-- Tech Architecture -->
-                    <div class="bg-void border border-dim/20 p-8 rounded-xl relative overflow-hidden group hover:border-tierC transition-colors">
+                    <div class="bg-void border border-dim/20 p-6 md:p-8 rounded-xl relative overflow-hidden group hover:border-tierC transition-colors">
                         <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                            <i class="fa-solid fa-microchip text-9xl"></i>
+                            <i class="fa-solid fa-microchip text-8xl md:text-9xl"></i>
                         </div>
-                        <h3 class="text-2xl font-bold text-white mb-6" data-i18n="arch_title">1. DePIN + 邊緣計算架構</h3>
+                        <h3 class="text-xl md:text-2xl font-bold text-white mb-4 md:mb-6" data-i18n="arch_title">1. DePIN + 邊緣計算架構</h3>
                         
-                        <div class="space-y-6">
+                        <div class="space-y-4 md:space-y-6">
                             <div class="flex items-start gap-4">
-                                <div class="w-12 h-12 bg-concrete rounded flex items-center justify-center text-tierC shrink-0">
-                                    <i class="fa-solid fa-bolt"></i>
+                                <div class="w-10 h-10 md:w-12 md:h-12 bg-concrete rounded flex items-center justify-center text-tierC shrink-0">
+                                    <i class="fa-solid fa-bolt text-lg md:text-xl"></i>
                                 </div>
                                 <div>
-                                    <h4 class="text-white font-bold mb-1" data-i18n="arch_pain_title">傳統雲痛點</h4>
-                                    <p class="text-sm text-dim" data-i18n="arch_pain_desc">AWS/Google Cloud 遠離終端，延遲 >100ms，無法滿足 VR/AR 空間計算的即時性需求。</p>
+                                    <h4 class="text-white font-bold mb-1 text-sm md:text-base" data-i18n="arch_pain_title">傳統雲痛點</h4>
+                                    <p class="text-xs md:text-sm text-dim" data-i18n="arch_pain_desc">AWS/Google Cloud 遠離終端，延遲 >100ms，無法滿足 VR/AR 空間計算的即時性需求。</p>
                                 </div>
                             </div>
                             
                             <div class="flex items-start gap-4">
-                                <div class="w-12 h-12 bg-concrete rounded flex items-center justify-center text-terminal shrink-0">
-                                    <i class="fa-solid fa-network-wired"></i>
+                                <div class="w-10 h-10 md:w-12 md:h-12 bg-concrete rounded flex items-center justify-center text-terminal shrink-0">
+                                    <i class="fa-solid fa-network-wired text-lg md:text-xl"></i>
                                 </div>
                                 <div>
-                                    <h4 class="text-white font-bold mb-1" data-i18n="arch_sol_title">AIF 邊緣方案</h4>
-                                    <p class="text-sm text-dim" data-i18n="arch_sol_desc">在城市核心 (Tier S/A) 部署高密度節點。HKAIIFF 用戶自動匹配 <5km 節點，實現 <20ms 超低延遲渲染，解決暈動症。</p>
+                                    <h4 class="text-white font-bold mb-1 text-sm md:text-base" data-i18n="arch_sol_title">AIF 邊緣方案</h4>
+                                    <p class="text-xs md:text-sm text-dim" data-i18n="arch_sol_desc">在城市核心 (Tier S/A) 部署高密度節點。HKAIIFF 用戶自動匹配 <5km 節點，實現 <20ms 超低延遲渲染，解決暈動症。</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Market Value -->
-                    <div class="bg-void border border-dim/20 p-8 rounded-xl relative overflow-hidden group hover:border-signal transition-colors">
+                    <div class="bg-void border border-dim/20 p-6 md:p-8 rounded-xl relative overflow-hidden group hover:border-signal transition-colors">
                         <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                            <i class="fa-solid fa-chart-pie text-9xl"></i>
+                            <i class="fa-solid fa-chart-pie text-8xl md:text-9xl"></i>
                         </div>
-                        <h3 class="text-2xl font-bold text-white mb-6" data-i18n="market_title">2. 空間互聯網的「數字地產」</h3>
+                        <h3 class="text-xl md:text-2xl font-bold text-white mb-4 md:mb-6" data-i18n="market_title">2. 空間互聯網的「數字地產」</h3>
                         
-                        <div class="grid grid-cols-2 gap-4 mt-8">
-                            <div class="bg-concrete/20 p-4 rounded text-center">
-                                <div class="text-3xl font-bold text-white mb-1">1T+</div>
-                                <div class="text-xs text-dim" data-i18n="market_stat1">2030 市場規模 (USD)</div>
+                        <div class="grid grid-cols-2 gap-4 mt-6 md:mt-8">
+                            <div class="bg-concrete/20 p-3 md:p-4 rounded text-center">
+                                <div class="text-2xl md:text-3xl font-bold text-white mb-1">1T+</div>
+                                <div class="text-[10px] md:text-xs text-dim" data-i18n="market_stat1">2030 市場規模 (USD)</div>
                             </div>
-                            <div class="bg-concrete/20 p-4 rounded text-center">
-                                <div class="text-3xl font-bold text-white mb-1">3D</div>
-                                <div class="text-xs text-dim" data-i18n="market_stat2">內容爆發式增長</div>
+                            <div class="bg-concrete/20 p-3 md:p-4 rounded text-center">
+                                <div class="text-2xl md:text-3xl font-bold text-white mb-1">3D</div>
+                                <div class="text-[10px] md:text-xs text-dim" data-i18n="market_stat2">內容爆發式增長</div>
                             </div>
                         </div>
 
-                        <ul class="mt-8 space-y-3 text-sm text-dim">
+                        <ul class="mt-6 md:mt-8 space-y-2 md:space-y-3 text-xs md:text-sm text-dim">
                             <li class="flex items-center gap-2"><i class="fa-solid fa-check text-signal"></i> <strong data-i18n="val_1">算力租賃：</strong><span data-i18n="val_1_d">為開發者提供低成本渲染。</span></li>
                             <li class="flex items-center gap-2"><i class="fa-solid fa-check text-signal"></i> <strong data-i18n="val_2">流量變現：</strong><span data-i18n="val_2_d">基於 LBS 的精準廣告投放。</span></li>
                             <li class="flex items-center gap-2"><i class="fa-solid fa-check text-signal"></i> <strong data-i18n="val_3">資產增值：</strong><span data-i18n="val_3_d">節點 NFT 具備稀缺性與交易屬性。</span></li>
@@ -446,30 +463,28 @@
 
         <!-- Node Matrix Section -->
         <section id="node-matrix" class="py-12 min-h-screen bg-bg">
-            <div class="max-w-[1600px] mx-auto px-6">
+            <div class="max-w-[1600px] mx-auto px-4 md:px-6">
                 <!-- Toolbar -->
-                <div class="sticky top-20 z-30 bg-bg/95 backdrop-blur-xl border-y border-concrete py-4 mb-8">
+                <div class="sticky top-16 md:top-20 z-30 bg-bg/95 backdrop-blur-xl border-y border-concrete py-4 mb-6 md:mb-8 -mx-4 md:mx-0 px-4 md:px-0">
                     <div class="flex flex-col gap-4">
                         <div class="flex items-center gap-4 justify-between">
-                            <h2 class="text-2xl font-bold font-mono text-white">NODE MATRIX</h2>
-                            <span class="text-xs font-mono text-terminal border border-terminal/30 px-2 py-0.5 rounded bg-terminal/5 animate-pulse">● SYSTEM ONLINE (500 GENESIS)</span>
+                            <h2 class="text-xl md:text-2xl font-bold font-mono text-white">NODE MATRIX</h2>
+                            <span class="text-[10px] md:text-xs font-mono text-terminal border border-terminal/30 px-2 py-0.5 rounded bg-terminal/5 animate-pulse whitespace-nowrap">● SYSTEM ONLINE (500 GENESIS)</span>
                         </div>
 
                         <!-- Filters -->
-                        <div class="flex flex-wrap gap-4 items-center">
+                        <div class="flex flex-col gap-3">
                             <!-- TIER FILTERS -->
-                            <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-                                <button onclick="filterManager.setTier('all')" class="px-3 py-1 text-xs font-mono rounded bg-white text-black hover:opacity-80 transition-opacity whitespace-nowrap">ALL</button>
-                                <button onclick="filterManager.setTier('S')" class="px-3 py-1 text-xs font-mono rounded bg-signal/20 text-signal border border-signal hover:opacity-80 transition-opacity whitespace-nowrap">TIER S (CITY)</button>
-                                <button onclick="filterManager.setTier('A')" class="px-3 py-1 text-xs font-mono rounded bg-tierA/20 text-tierA border border-tierA hover:opacity-80 transition-opacity whitespace-nowrap">TIER A</button>
-                                <button onclick="filterManager.setTier('B')" class="px-3 py-1 text-xs font-mono rounded bg-tierB/20 text-tierB border border-tierB hover:opacity-80 transition-opacity whitespace-nowrap">TIER B</button>
-                                <button onclick="filterManager.setTier('C')" class="px-3 py-1 text-xs font-mono rounded bg-tierC/20 text-tierC border border-tierC hover:opacity-80 transition-opacity whitespace-nowrap">TIER C</button>
+                            <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide w-full">
+                                <button onclick="filterManager.setTier('all')" class="flex-shrink-0 px-3 py-1.5 text-[10px] md:text-xs font-mono rounded bg-white text-black hover:opacity-80 transition-opacity whitespace-nowrap">ALL</button>
+                                <button onclick="filterManager.setTier('S')" class="flex-shrink-0 px-3 py-1.5 text-[10px] md:text-xs font-mono rounded bg-signal/20 text-signal border border-signal hover:opacity-80 transition-opacity whitespace-nowrap">TIER S (CITY)</button>
+                                <button onclick="filterManager.setTier('A')" class="flex-shrink-0 px-3 py-1.5 text-[10px] md:text-xs font-mono rounded bg-tierA/20 text-tierA border border-tierA hover:opacity-80 transition-opacity whitespace-nowrap">TIER A</button>
+                                <button onclick="filterManager.setTier('B')" class="flex-shrink-0 px-3 py-1.5 text-[10px] md:text-xs font-mono rounded bg-tierB/20 text-tierB border border-tierB hover:opacity-80 transition-opacity whitespace-nowrap">TIER B</button>
+                                <button onclick="filterManager.setTier('C')" class="flex-shrink-0 px-3 py-1.5 text-[10px] md:text-xs font-mono rounded bg-tierC/20 text-tierC border border-tierC hover:opacity-80 transition-opacity whitespace-nowrap">TIER C</button>
                             </div>
                             
-                            <div class="w-px h-6 bg-dim/20 hidden md:block"></div>
-
                             <!-- CITY FILTERS -->
-                            <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide flex-1" id="city-filters">
+                            <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide w-full" id="city-filters">
                                 <!-- JS Injected City Buttons -->
                             </div>
                         </div>
@@ -477,7 +492,7 @@
                 </div>
 
                 <!-- Grid -->
-                <div id="grid-container" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 min-h-[500px]">
+                <div id="grid-container" class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4 min-h-[500px]">
                     <!-- JS Injected Nodes -->
                 </div>
             </div>
@@ -486,9 +501,9 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-concrete/10 border-t border-concrete pt-16 pb-8">
-        <div class="max-w-[1600px] mx-auto px-6">
-            <div class="grid md:grid-cols-4 gap-12 mb-12">
+    <footer class="bg-concrete/10 border-t border-concrete pt-12 md:pt-16 pb-8">
+        <div class="max-w-[1600px] mx-auto px-4 md:px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12 mb-12">
                 <div class="col-span-1 md:col-span-2">
                     <div class="font-bold text-2xl mb-4 tracking-tighter">AIF<span class="text-signal">.WTF</span></div>
                     <p class="text-dim text-sm max-w-md mb-6" data-i18n="footer_desc">
@@ -519,9 +534,9 @@
                 </div>
             </div>
             
-            <div class="border-t border-dim/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-dim font-mono">
-                <div>&copy; 2026 AIF FOUNDATION. HONG KONG AI INTERNATIONAL FILM FESTIVAL.</div>
-                <div class="mt-2 md:mt-0 flex gap-4">
+            <div class="border-t border-dim/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-dim font-mono gap-4 md:gap-0">
+                <div class="text-center md:text-left">&copy; 2026 AIF FOUNDATION. HONG KONG AI INTERNATIONAL FILM FESTIVAL.</div>
+                <div class="flex gap-4">
                     <a href="#">PRIVACY</a>
                     <a href="#">TERMS</a>
                     <a href="mailto:depin@aif.wtf">DEPIN@AIF.WTF</a>
@@ -530,79 +545,97 @@
         </div>
     </footer>
 
-    <!-- WIZARD MODAL -->
+    <!-- WIZARD MODAL (Full Screen on Mobile) -->
     <div id="modal-backdrop" class="fixed inset-0 bg-black/90 backdrop-blur-md z-[100] hidden transition-opacity duration-300 opacity-0"></div>
 
-    <div id="node-wizard" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[101] w-full max-w-5xl h-[90vh] max-h-[700px] bg-void border border-dim/30 shadow-[0_0_100px_rgba(255,51,0,0.2)] hidden flex overflow-hidden rounded-xl">
+    <div id="node-wizard" class="fixed top-0 left-0 md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 z-[101] w-full h-full md:h-[90vh] md:max-w-5xl md:max-h-[700px] bg-void border-none md:border md:border-dim/30 md:shadow-[0_0_100px_rgba(255,51,0,0.2)] hidden flex flex-col md:flex-row overflow-hidden md:rounded-xl">
         <div class="absolute inset-0 z-[102] crt-overlay pointer-events-none"></div>
 
-        <!-- Sidebar -->
-        <div class="w-20 md:w-64 bg-concrete/30 border-r border-dim/20 flex flex-col justify-between relative z-[103]">
-            <div class="p-6">
-                <div class="font-bold text-xl tracking-tighter mb-8 md:block hidden">AIF<span class="text-signal">.WTF</span></div>
-                <div class="flex flex-col gap-6">
-                    <div id="step-nav-1" class="flex items-center gap-4 text-signal transition-colors">
-                        <div class="w-8 h-8 rounded border border-current flex items-center justify-center font-mono text-sm">01</div>
-                        <span class="font-mono text-xs hidden md:block" data-i18n="step_1">詳情 DETAILS</span>
-                    </div>
-                    <div id="step-nav-2" class="flex items-center gap-4 text-dim transition-colors">
-                        <div class="w-8 h-8 rounded border border-current flex items-center justify-center font-mono text-sm">02</div>
-                        <span class="font-mono text-xs hidden md:block" data-i18n="step_2">支付 PAYMENT</span>
-                    </div>
-                    <div id="step-nav-3" class="flex items-center gap-4 text-dim transition-colors">
-                        <div class="w-8 h-8 rounded border border-current flex items-center justify-center font-mono text-sm">03</div>
-                        <span class="font-mono text-xs hidden md:block" data-i18n="step_3">代碼 CODE</span>
-                    </div>
-                    <div id="step-nav-4" class="flex items-center gap-4 text-dim transition-colors">
-                        <div class="w-8 h-8 rounded border border-current flex items-center justify-center font-mono text-sm">04</div>
-                        <span class="font-mono text-xs hidden md:block" data-i18n="step_4">驗證 VERIFY</span>
-                    </div>
+        <!-- Sidebar (Horizontal on Mobile, Vertical on Desktop) -->
+        <div class="w-full md:w-64 bg-concrete/30 border-b md:border-b-0 md:border-r border-dim/20 flex flex-row md:flex-col justify-between relative z-[103] p-4 md:p-6 shrink-0">
+            <div class="flex items-center md:block justify-between w-full">
+                <div class="font-bold text-lg md:text-xl tracking-tighter md:mb-8">AIF<span class="text-signal">.WTF</span></div>
+                
+                <!-- Close Button Mobile -->
+                <button onclick="wizard.close()" class="md:hidden text-dim hover:text-white transition-colors p-2">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <div class="hidden md:flex flex-col gap-6">
+                <div id="step-nav-1" class="flex items-center gap-4 text-signal transition-colors">
+                    <div class="w-8 h-8 rounded border border-current flex items-center justify-center font-mono text-sm">01</div>
+                    <span class="font-mono text-xs" data-i18n="step_1">詳情 DETAILS</span>
+                </div>
+                <div id="step-nav-2" class="flex items-center gap-4 text-dim transition-colors">
+                    <div class="w-8 h-8 rounded border border-current flex items-center justify-center font-mono text-sm">02</div>
+                    <span class="font-mono text-xs" data-i18n="step_2">支付 PAYMENT</span>
+                </div>
+                <div id="step-nav-3" class="flex items-center gap-4 text-dim transition-colors">
+                    <div class="w-8 h-8 rounded border border-current flex items-center justify-center font-mono text-sm">03</div>
+                    <span class="font-mono text-xs" data-i18n="step_3">代碼 CODE</span>
+                </div>
+                <div id="step-nav-4" class="flex items-center gap-4 text-dim transition-colors">
+                    <div class="w-8 h-8 rounded border border-current flex items-center justify-center font-mono text-sm">04</div>
+                    <span class="font-mono text-xs" data-i18n="step_4">驗證 VERIFY</span>
                 </div>
             </div>
-            <div class="p-6 border-t border-dim/10">
-                <div class="text-[10px] text-dim font-mono hidden md:block">SESSION ID:</div>
-                <div class="text-xs font-mono text-white hidden md:block" id="session-id">---</div>
+            
+            <div class="hidden md:block pt-6 border-t border-dim/10">
+                <div class="text-[10px] text-dim font-mono">SESSION ID:</div>
+                <div class="text-xs font-mono text-white" id="session-id">---</div>
             </div>
         </div>
 
+        <!-- Mobile Stepper -->
+        <div class="md:hidden flex justify-around border-b border-dim/20 bg-void p-2 relative z-[103]">
+            <div id="m-step-1" class="w-2 h-2 rounded-full bg-signal"></div>
+            <div id="m-step-2" class="w-2 h-2 rounded-full bg-concrete"></div>
+            <div id="m-step-3" class="w-2 h-2 rounded-full bg-concrete"></div>
+            <div id="m-step-4" class="w-2 h-2 rounded-full bg-concrete"></div>
+        </div>
+
         <!-- Content Area -->
-        <div class="flex-1 relative bg-void z-[103] flex flex-col">
-            <button onclick="wizard.close()" class="absolute top-6 right-6 text-dim hover:text-white z-50 transition-colors">
+        <div class="flex-1 relative bg-void z-[103] flex flex-col overflow-hidden">
+            <!-- Close Button Desktop -->
+            <button onclick="wizard.close()" class="absolute top-6 right-6 text-dim hover:text-white z-50 transition-colors hidden md:block">
                 <i class="fa-solid fa-xmark text-2xl"></i>
             </button>
 
             <!-- STEP 1: DETAILS -->
-            <div id="step-1" class="wizard-step flex-1 p-8 md:p-12 overflow-y-auto">
-                <div class="flex items-end gap-4 mb-6 border-b border-dim/20 pb-6">
-                    <div>
-                        <div class="text-xs font-mono text-dim mb-1 flex items-center gap-2">
+            <div id="step-1" class="wizard-step flex-1 p-4 md:p-12 overflow-y-auto">
+                <div class="flex flex-col md:flex-row md:items-end gap-2 md:gap-4 mb-6 border-b border-dim/20 pb-6">
+                    <div class="flex-1">
+                        <div class="text-[10px] md:text-xs font-mono text-dim mb-1 flex items-center gap-2">
                             <span id="detail-id">ID: ---</span>
-                            <span class="bg-concrete px-2 rounded text-[9px] border border-dim/30 text-white" id="detail-hash">HASH: 0x...</span>
+                            <span class="bg-concrete px-2 rounded text-[9px] border border-dim/30 text-white truncate max-w-[150px]" id="detail-hash">HASH: 0x...</span>
                         </div>
-                        <h2 class="text-3xl md:text-4xl font-bold leading-tight text-white" id="detail-loc">LOCATION</h2>
+                        <h2 class="text-2xl md:text-4xl font-bold leading-tight text-white break-words" id="detail-loc">LOCATION</h2>
                     </div>
-                    <span class="px-3 py-1 rounded bg-dim/20 text-xs font-mono border border-dim/30 whitespace-nowrap" id="detail-tier">TIER X</span>
-                    <span class="ml-auto text-2xl md:text-3xl font-mono text-signal whitespace-nowrap" id="detail-price">$0</span>
+                    <div class="flex items-center justify-between md:flex-col md:items-end gap-2">
+                        <span class="px-2 md:px-3 py-1 rounded bg-dim/20 text-[10px] md:text-xs font-mono border border-dim/30 whitespace-nowrap" id="detail-tier">TIER X</span>
+                        <span class="text-xl md:text-3xl font-mono text-signal whitespace-nowrap" id="detail-price">$0</span>
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
                     <div class="space-y-4">
-                        <h3 class="text-xs font-mono text-dim uppercase tracking-widest mb-4">/// GEOSPATIAL VALUE METRICS</h3>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-concrete/20 p-3 rounded border border-dim/10">
-                                <div class="text-[10px] text-dim">COORDINATES</div>
+                        <h3 class="text-xs font-mono text-dim uppercase tracking-widest mb-2 md:mb-4">/// GEOSPATIAL VALUE METRICS</h3>
+                        <div class="grid grid-cols-2 gap-3 md:gap-4">
+                            <div class="bg-concrete/20 p-2 md:p-3 rounded border border-dim/10">
+                                <div class="text-[9px] md:text-[10px] text-dim">COORDINATES</div>
                                 <div class="font-mono text-xs text-white" id="d-coords">---</div>
                             </div>
-                            <div class="bg-concrete/20 p-3 rounded border border-dim/10">
-                                <div class="text-[10px] text-dim">H3 INDEX</div>
+                            <div class="bg-concrete/20 p-2 md:p-3 rounded border border-dim/10">
+                                <div class="text-[9px] md:text-[10px] text-dim">H3 INDEX</div>
                                 <div class="font-mono text-xs text-white" id="d-h3">---</div>
                             </div>
-                            <div class="bg-concrete/20 p-3 rounded border border-dim/10">
-                                <div class="text-[10px] text-dim">COMMERCIAL HEAT</div>
+                            <div class="bg-concrete/20 p-2 md:p-3 rounded border border-dim/10">
+                                <div class="text-[9px] md:text-[10px] text-dim">COMMERCIAL HEAT</div>
                                 <div class="font-mono text-xs text-white" id="d-heat">---</div>
                             </div>
-                            <div class="bg-concrete/20 p-3 rounded border border-dim/10">
-                                <div class="text-[10px] text-dim">EST. DAILY TRAFFIC</div>
+                            <div class="bg-concrete/20 p-2 md:p-3 rounded border border-dim/10">
+                                <div class="text-[9px] md:text-[10px] text-dim">EST. DAILY TRAFFIC</div>
                                 <div class="font-mono text-xs text-terminal" id="d-traffic">---</div>
                             </div>
                         </div>
@@ -610,26 +643,26 @@
                         <!-- New Technical Metrics -->
                         <div class="grid grid-cols-3 gap-2 mt-2">
                             <div class="text-center bg-black/40 p-2 rounded border border-dim/20">
-                                <div class="text-[9px] text-dim">LATENCY</div>
+                                <div class="text-[8px] md:text-[9px] text-dim">LATENCY</div>
                                 <div class="text-xs text-terminal font-mono"><15ms</div>
                             </div>
                             <div class="text-center bg-black/40 p-2 rounded border border-dim/20">
-                                <div class="text-[9px] text-dim">UPTIME</div>
+                                <div class="text-[8px] md:text-[9px] text-dim">UPTIME</div>
                                 <div class="text-xs text-white font-mono">99.99%</div>
                             </div>
                             <div class="text-center bg-black/40 p-2 rounded border border-dim/20">
-                                <div class="text-[9px] text-dim">STAKE X</div>
+                                <div class="text-[8px] md:text-[9px] text-dim">STAKE X</div>
                                 <div class="text-xs text-tierB font-mono">1.2x</div>
                             </div>
                         </div>
 
-                        <div class="bg-concrete/10 p-4 border border-dim/20 text-xs text-gray-400 mt-4 leading-relaxed" data-i18n="detail_desc">
+                        <div class="bg-concrete/10 p-3 md:p-4 border border-dim/20 text-xs text-gray-400 mt-4 leading-relaxed" data-i18n="detail_desc">
                             該節點位於城市核心或重要樞紐，具備極高的商業流量價值。根據歷史數據模型，預計在 HKAIIFF 期間流量將增加 300%。
                         </div>
                     </div>
 
                     <!-- Enhanced Visual / Heatmap -->
-                    <div class="bg-concrete/10 border border-dim/20 rounded-lg p-4 relative overflow-hidden flex flex-col justify-end group min-h-[250px]">
+                    <div class="bg-concrete/10 border border-dim/20 rounded-lg p-3 md:p-4 relative overflow-hidden flex flex-col justify-end group min-h-[200px] md:min-h-[250px]">
                         <!-- Canvas for local heatmap -->
                         <canvas id="localHeatmap" class="absolute inset-0 w-full h-full opacity-60"></canvas>
                         <div class="absolute inset-0 bg-gradient-to-t from-void via-transparent to-transparent pointer-events-none"></div>
@@ -641,11 +674,11 @@
                                         <i class="fa-solid fa-satellite-dish animate-pulse mr-2"></i>
                                         <span data-i18n="detail_signal">LIVE SIGNAL</span>
                                     </div>
-                                    <div class="text-[10px] text-dim mt-1">COVERAGE RADIUS: <span class="text-white font-bold" id="d-radius-val">500m</span></div>
+                                    <div class="text-[9px] md:text-[10px] text-dim mt-1">COVERAGE RADIUS: <span class="text-white font-bold" id="d-radius-val">500m</span></div>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-[10px] text-dim">CONTRACT</div>
-                                    <div class="text-[9px] font-mono text-dim break-all">0x7a2...3f9</div>
+                                    <div class="text-[9px] md:text-[10px] text-dim">CONTRACT</div>
+                                    <div class="text-[8px] md:text-[9px] font-mono text-dim break-all">0x7a2...3f9</div>
                                 </div>
                             </div>
                             
@@ -654,72 +687,75 @@
                     </div>
                 </div>
 
-                <div class="mt-8 pt-8 border-t border-dim/20 flex justify-end">
-                    <button onclick="wizard.next()" class="bg-white text-black px-8 py-3 font-bold font-mono hover:bg-signal hover:text-white transition-all flex items-center gap-2">
+                <div class="mt-6 md:mt-8 pt-6 md:pt-8 border-t border-dim/20 flex justify-end pb-8 md:pb-0">
+                    <button onclick="wizard.next()" class="w-full md:w-auto bg-white text-black px-6 md:px-8 py-3 font-bold font-mono hover:bg-signal hover:text-white transition-all flex items-center justify-center gap-2">
                         <span data-i18n="btn_next">下一步 / NEXT</span> <i class="fa-solid fa-arrow-right"></i>
                     </button>
                 </div>
             </div>
 
             <!-- STEP 2: PAYMENT METHOD -->
-            <div id="step-2" class="wizard-step flex-1 p-8 md:p-12 hidden">
-                <h2 class="text-2xl font-bold mb-8 text-white" data-i18n="pay_title">選擇支付方式 / SELECT PAYMENT</h2>
+            <div id="step-2" class="wizard-step flex-1 p-4 md:p-12 hidden flex flex-col">
+                <h2 class="text-xl md:text-2xl font-bold mb-6 md:mb-8 text-white" data-i18n="pay_title">選擇支付方式 / SELECT PAYMENT</h2>
                 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="grid grid-cols-1 gap-4 md:gap-6 mb-8 overflow-y-auto">
                     <!-- USDT -->
                     <label class="cursor-pointer group">
                         <input type="radio" name="pay-method" value="crypto" class="peer hidden" checked onchange="wizard.updatePaymentUI()">
-                        <div class="h-full border border-dim/30 bg-concrete/10 p-6 rounded-xl peer-checked:border-signal peer-checked:bg-signal/5 transition-all group-hover:border-dim">
-                            <i class="fa-brands fa-ethereum text-3xl mb-4 text-dim peer-checked:text-signal"></i>
-                            <div class="font-bold text-lg mb-1 text-white">Crypto (USDT)</div>
-                            <div class="text-xs text-dim">SOLANA / BSC</div>
-                            <div class="text-xs text-terminal mt-2">Instant Verify</div>
+                        <div class="h-full border border-dim/30 bg-concrete/10 p-4 md:p-6 rounded-xl peer-checked:border-signal peer-checked:bg-signal/5 transition-all group-hover:border-dim flex items-center gap-4">
+                            <i class="fa-brands fa-ethereum text-2xl md:text-3xl text-dim peer-checked:text-signal"></i>
+                            <div>
+                                <div class="font-bold text-base md:text-lg text-white">Crypto (USDT)</div>
+                                <div class="text-xs text-dim">SOLANA / BSC - <span class="text-terminal">Instant Verify</span></div>
+                            </div>
                         </div>
                     </label>
 
                     <!-- Fiat -->
                     <label class="cursor-pointer group">
                         <input type="radio" name="pay-method" value="fiat" class="peer hidden" onchange="wizard.updatePaymentUI()">
-                        <div class="h-full border border-dim/30 bg-concrete/10 p-6 rounded-xl peer-checked:border-signal peer-checked:bg-signal/5 transition-all group-hover:border-dim">
-                            <i class="fa-regular fa-credit-card text-3xl mb-4 text-dim peer-checked:text-signal"></i>
-                            <div class="font-bold text-lg mb-1 text-white">Fiat Currency</div>
-                            <div class="text-xs text-dim">Wise / Credit Card</div>
-                            <div class="text-xs text-dim mt-2">USD / HKD / JPY / EUR</div>
+                        <div class="h-full border border-dim/30 bg-concrete/10 p-4 md:p-6 rounded-xl peer-checked:border-signal peer-checked:bg-signal/5 transition-all group-hover:border-dim flex items-center gap-4">
+                            <i class="fa-regular fa-credit-card text-2xl md:text-3xl text-dim peer-checked:text-signal"></i>
+                            <div>
+                                <div class="font-bold text-base md:text-lg text-white">Fiat Currency</div>
+                                <div class="text-xs text-dim">Wise / Credit Card - <span class="text-white">USD / HKD / JPY / EUR</span></div>
+                            </div>
                         </div>
                     </label>
 
                     <!-- AIF -->
                     <label class="cursor-pointer group">
                         <input type="radio" name="pay-method" value="aif" class="peer hidden" onchange="wizard.updatePaymentUI()">
-                        <div class="h-full border border-dim/30 bg-concrete/10 p-6 rounded-xl peer-checked:border-signal peer-checked:bg-signal/5 transition-all group-hover:border-dim">
-                            <div class="text-3xl mb-4 font-bold text-dim peer-checked:text-signal">AIF</div>
-                            <div class="font-bold text-lg mb-1 text-white">AIF Token</div>
-                            <div class="text-xs text-dim">Solana Chain</div>
-                            <div class="text-xs text-dim mt-2">Native Payment</div>
+                        <div class="h-full border border-dim/30 bg-concrete/10 p-4 md:p-6 rounded-xl peer-checked:border-signal peer-checked:bg-signal/5 transition-all group-hover:border-dim flex items-center gap-4">
+                            <div class="text-2xl md:text-3xl font-bold text-dim peer-checked:text-signal">AIF</div>
+                            <div>
+                                <div class="font-bold text-base md:text-lg text-white">AIF Token</div>
+                                <div class="text-xs text-dim">Solana Chain - <span class="text-white">Native Payment</span></div>
+                            </div>
                         </div>
                     </label>
                 </div>
 
-                <div class="mt-auto flex justify-between pt-8 border-t border-dim/20">
+                <div class="mt-auto flex justify-between pt-6 border-t border-dim/20 pb-8 md:pb-0">
                     <button onclick="wizard.prev()" class="text-dim hover:text-white px-4" data-i18n="btn_back">返回 / BACK</button>
-                    <button onclick="wizard.generateCode()" class="bg-white text-black px-8 py-3 font-bold font-mono hover:bg-signal hover:text-white transition-all" data-i18n="btn_get_code">
+                    <button onclick="wizard.generateCode()" class="bg-white text-black px-6 md:px-8 py-3 font-bold font-mono hover:bg-signal hover:text-white transition-all" data-i18n="btn_get_code">
                         獲取節點代碼 / GET CODE
                     </button>
                 </div>
             </div>
 
             <!-- STEP 3: CODE & PAY -->
-            <div id="step-3" class="wizard-step flex-1 p-8 md:p-12 hidden flex flex-col">
+            <div id="step-3" class="wizard-step flex-1 p-4 md:p-12 hidden flex flex-col">
                 <div class="text-center mb-6">
                     <div class="text-dim text-xs font-mono mb-2" data-i18n="code_label">YOUR UNIQUE NODE IDENTIFIER</div>
-                    <div class="text-4xl md:text-5xl font-mono font-bold text-signal tracking-widest select-all cursor-pointer bg-black/50 p-4 border border-signal/20 rounded inline-block" id="generated-code" onclick="copyText(this.innerText)">
+                    <div class="text-3xl md:text-5xl font-mono font-bold text-signal tracking-widest select-all cursor-pointer bg-black/50 p-3 md:p-4 border border-signal/20 rounded inline-block break-all" id="generated-code" onclick="copyText(this.innerText)">
                         ---
                     </div>
                     <div class="text-[10px] text-dim mt-2" data-i18n="click_copy">CLICK TO COPY</div>
                 </div>
 
                 <div class="flex justify-center mb-6">
-                    <div class="bg-concrete/40 px-4 py-2 rounded-full border border-dim/30 flex items-center gap-2">
+                    <div class="bg-concrete/40 px-3 md:px-4 py-1.5 md:py-2 rounded-full border border-dim/30 flex items-center gap-2">
                         <div class="w-2 h-2 bg-terminal rounded-full animate-blink"></div>
                         <span class="font-mono text-terminal text-sm" id="countdown">05:00</span>
                         <span class="text-xs text-dim" data-i18n="timer_label">TO LOCK NODE</span>
@@ -727,29 +763,29 @@
                 </div>
 
                 <!-- Payment Details Container (Dynamic) -->
-                <div id="payment-details-container" class="bg-concrete/20 border border-dim/20 rounded-xl p-4 md:p-6 max-w-3xl mx-auto w-full overflow-y-auto max-h-[300px] custom-scrollbar">
+                <div id="payment-details-container" class="bg-concrete/20 border border-dim/20 rounded-xl p-4 md:p-6 max-w-3xl mx-auto w-full overflow-y-auto max-h-[40vh] md:max-h-[300px] custom-scrollbar mb-4">
                     <!-- Injected via JS based on selection -->
                 </div>
 
-                <div class="mt-auto flex justify-between pt-6 border-t border-dim/20 items-center">
-                    <span class="text-xs text-dim italic hidden md:block" data-i18n="pay_note">請在支付完成後保存截圖。</span>
-                    <button onclick="wizard.next()" class="bg-signal text-white px-8 py-3 font-bold font-mono hover:bg-white hover:text-black transition-all" data-i18n="btn_paid">
+                <div class="mt-auto flex flex-col md:flex-row justify-between pt-4 md:pt-6 border-t border-dim/20 items-center gap-4 pb-8 md:pb-0">
+                    <span class="text-xs text-dim italic text-center md:text-left" data-i18n="pay_note">請在支付完成後保存截圖。</span>
+                    <button onclick="wizard.next()" class="w-full md:w-auto bg-signal text-white px-8 py-3 font-bold font-mono hover:bg-white hover:text-black transition-all" data-i18n="btn_paid">
                         我已支付 / I HAVE PAID
                     </button>
                 </div>
             </div>
 
             <!-- STEP 4: VERIFY -->
-            <div id="step-4" class="wizard-step flex-1 p-8 md:p-12 hidden flex flex-col items-center justify-center text-center">
-                <div class="w-16 h-16 rounded-full border-2 border-terminal flex items-center justify-center mb-6">
-                    <i class="fa-solid fa-lock text-2xl text-terminal"></i>
+            <div id="step-4" class="wizard-step flex-1 p-4 md:p-12 hidden flex flex-col items-center justify-center text-center">
+                <div class="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-terminal flex items-center justify-center mb-4 md:mb-6">
+                    <i class="fa-solid fa-lock text-xl md:text-2xl text-terminal"></i>
                 </div>
-                <h2 class="text-3xl font-bold mb-4 text-white" data-i18n="verify_title">鎖定申請已發起</h2>
+                <h2 class="text-2xl md:text-3xl font-bold mb-4 text-white" data-i18n="verify_title">鎖定申請已發起</h2>
                 
-                <div class="max-w-xl w-full bg-concrete/20 border border-dim/20 p-6 rounded-xl text-left mb-8">
-                    <p class="text-sm text-dim mb-4" data-i18n="verify_desc">請複製以下內容並發送郵件至 <strong class="text-white select-all">depin@aif.wtf</strong>，同時附上您的支付截圖。</p>
+                <div class="max-w-xl w-full bg-concrete/20 border border-dim/20 p-4 md:p-6 rounded-xl text-left mb-6 md:mb-8">
+                    <p class="text-xs md:text-sm text-dim mb-4" data-i18n="verify_desc">請複製以下內容並發送郵件至 <strong class="text-white select-all">depin@aif.wtf</strong>，同時附上您的支付截圖。</p>
                     
-                    <div class="bg-black p-4 rounded border border-dim/30 font-mono text-xs text-white break-all whitespace-pre-wrap relative group" id="receipt-text">
+                    <div class="bg-black p-3 md:p-4 rounded border border-dim/30 font-mono text-[10px] md:text-xs text-white break-all whitespace-pre-wrap relative group" id="receipt-text">
                         <!-- JS Generated Receipt -->
                     </div>
                     <button onclick="copyReceipt()" class="mt-2 w-full bg-dim/20 hover:bg-dim/40 text-xs py-2 rounded transition-colors text-white border border-dim/30">
@@ -757,11 +793,11 @@
                     </button>
                 </div>
 
-                <div class="flex gap-4">
-                    <a href="mailto:depin@aif.wtf" id="mailto-btn" class="bg-white text-black px-6 py-3 font-bold text-sm hover:bg-dim transition-colors" data-i18n="btn_email">
+                <div class="flex flex-col md:flex-row gap-3 md:gap-4 w-full md:w-auto pb-8 md:pb-0">
+                    <a href="mailto:depin@aif.wtf" id="mailto-btn" class="bg-white text-black px-6 py-3 font-bold text-sm hover:bg-dim transition-colors block md:inline-block w-full md:w-auto" data-i18n="btn_email">
                         打開郵箱 / OPEN EMAIL
                     </a>
-                    <button onclick="wizard.close()" class="border border-dim/50 text-dim px-6 py-3 font-bold text-sm hover:border-white hover:text-white transition-colors" data-i18n="btn_close">
+                    <button onclick="wizard.close()" class="border border-dim/50 text-dim px-6 py-3 font-bold text-sm hover:border-white hover:text-white transition-colors w-full md:w-auto" data-i18n="btn_close">
                         關閉 / CLOSE
                     </button>
                 </div>
@@ -770,7 +806,7 @@
     </div>
 
     <script>
-        // --- MULTILINGUAL SUPPORT (EXPANDED) ---
+        // --- MULTILINGUAL SUPPORT ---
         const LANG = {
             en: {
                 nav_eco: "ECOSYSTEM", nav_rules: "GENESIS PROTOCOL", nav_analysis: "ANALYSIS", nav_buy: "BUY NODES",
@@ -796,7 +832,8 @@
                 detail_signal: "LIVE SIGNAL", btn_next: "NEXT",
                 pay_title: "SELECT PAYMENT METHOD", btn_back: "BACK", btn_get_code: "GET CODE",
                 code_label: "YOUR UNIQUE NODE IDENTIFIER", click_copy: "CLICK TO COPY", timer_label: "TO LOCK NODE", pay_note: "Please save a screenshot after payment.", btn_paid: "I HAVE PAID",
-                verify_title: "LOCK REQUEST INITIATED", verify_desc: "Please copy the text below and email depin@aif.wtf with your payment screenshot.", btn_copy_tpl: "COPY TEMPLATE", btn_email: "OPEN EMAIL", btn_close: "CLOSE"
+                verify_title: "LOCK REQUEST INITIATED", verify_desc: "Please copy the text below and email depin@aif.wtf with your payment screenshot.", btn_copy_tpl: "COPY TEMPLATE", btn_email: "OPEN EMAIL", btn_close: "CLOSE",
+                invite_only: "INVITE ONLY", coming_soon: "COMING SOON"
             },
             zh: {
                 nav_eco: "生態系統", nav_rules: "創世協議", nav_analysis: "價值分析", nav_buy: "搶購節點",
@@ -822,7 +859,8 @@
                 detail_signal: "實時信號", btn_next: "下一步",
                 pay_title: "選擇支付方式", btn_back: "返回", btn_get_code: "獲取節點代碼",
                 code_label: "您的唯一節點標識", click_copy: "點擊複製", timer_label: "鎖定倒計時", pay_note: "請在支付完成後保存截圖。", btn_paid: "我已支付",
-                verify_title: "鎖定申請已發起", verify_desc: "請複製以下內容並發送郵件至 depin@aif.wtf，同時附上您的支付截圖。", btn_copy_tpl: "複製郵件模板", btn_email: "打開郵箱", btn_close: "關閉"
+                verify_title: "鎖定申請已發起", verify_desc: "請複製以下內容並發送郵件至 depin@aif.wtf，同時附上您的支付截圖。", btn_copy_tpl: "複製郵件模板", btn_email: "打開郵箱", btn_close: "關閉",
+                invite_only: "邀請開通", coming_soon: "陸續開放"
             }
         };
         let currentLang = 'zh';
@@ -841,8 +879,8 @@
                     }
                 }
             });
-            // Re-render grid to update dynamic content
-            renderFilters(); // Update city filter names
+            // Re-render filters and grid
+            renderFilters();
             renderGrid(getCurrentFilteredNodes());
         }
 
@@ -871,21 +909,21 @@
         };
 
         const CITIES = [
-            { name: "Beijing", zh: "北京", lat: 39.9042, lng: 116.4074, landmarks: ["王府井", "三里屯", "國貿CBD", "798藝術區", "海澱科技園", "朝陽公園"] },
-            { name: "Shanghai", zh: "上海", lat: 31.2304, lng: 121.4737, landmarks: ["外灘", "陸家嘴", "新天地", "南京路", "靜安寺", "武康路"] },
-            { name: "Shenzhen", zh: "深圳", lat: 22.5431, lng: 114.0579, landmarks: ["南山科技園", "Coco Park", "華強北", "深圳灣", "人才公園"] },
-            { name: "Hong Kong", zh: "香港", lat: 22.3193, lng: 114.1694, landmarks: ["尖沙咀", "IFC國際金融中心", "銅鑼灣", "旺角", "西九龍", "數碼港"] },
-            { name: "Macau", zh: "澳門", lat: 22.1987, lng: 113.5439, landmarks: ["金光大道", "大三巴", "澳門塔", "議事亭前地", "官也街"] },
-            { name: "Hangzhou", zh: "杭州", lat: 30.2741, lng: 120.1551, landmarks: ["西湖", "阿里巴巴園區", "西溪濕地", "錢江新城", "湖濱路"] }
+            { name: "Beijing", zh: "北京", color: "bg-red-600", lat: 39.9042, lng: 116.4074, landmarks: ["Forbidden City", "Guomao"] },
+            { name: "Shanghai", zh: "上海", color: "bg-blue-600", lat: 31.2304, lng: 121.4737, landmarks: ["Shanghai Tower", "The Bund"] },
+            { name: "Shenzhen", zh: "深圳", color: "bg-teal-500", lat: 22.5431, lng: 114.0579, landmarks: ["Ping An Finance Center", "Nanshan"] },
+            { name: "Hong Kong", zh: "香港", color: "bg-purple-600", lat: 22.3193, lng: 114.1694, landmarks: ["ICC Tower", "Central IFC"] },
+            { name: "Macau", zh: "澳門", color: "bg-yellow-600", lat: 22.1987, lng: 113.5439, landmarks: ["Macau Tower", "Grand Lisboa"] },
+            { name: "Hangzhou", zh: "杭州", color: "bg-emerald-500", lat: 30.2741, lng: 120.1551, landmarks: ["West Lake", "Alibaba Campus"] }
         ];
 
         const FUTURE_CITIES = [
-            { name: "New York", zh: "紐約", lat: 40.7128, lng: -74.0060 },
-            { name: "London", zh: "倫敦", lat: 51.5074, lng: -0.1278 },
-            { name: "Tokyo", zh: "東京", lat: 35.6762, lng: 139.6503 },
-            { name: "Seoul", zh: "首爾", lat: 37.5665, lng: 126.9780 },
-            { name: "Bangkok", zh: "曼谷", lat: 13.7563, lng: 100.5018 },
-            { name: "Paris", zh: "巴黎", lat: 48.8566, lng: 2.3522 }
+            { name: "New York", zh: "紐約", color: "bg-indigo-600", lat: 40.7128, lng: -74.0060, landmarks: ["Times Square"] },
+            { name: "London", zh: "倫敦", color: "bg-rose-700", lat: 51.5074, lng: -0.1278, landmarks: ["The Shard"] },
+            { name: "Tokyo", zh: "東京", color: "bg-pink-600", lat: 35.6762, lng: 139.6503, landmarks: ["Tokyo Tower"] },
+            { name: "Seoul", zh: "首爾", color: "bg-cyan-600", lat: 37.5665, lng: 126.9780, landmarks: ["Lotte Tower"] },
+            { name: "Bangkok", zh: "曼谷", color: "bg-amber-600", lat: 13.7563, lng: 100.5018, landmarks: ["Mahanakhon"] },
+            { name: "Paris", zh: "巴黎", color: "bg-sky-600", lat: 48.8566, lng: 2.3522, landmarks: ["Eiffel Tower"] }
         ];
 
         const WALLETS = {
@@ -901,74 +939,88 @@
             let idCounter = 1001;
             allNodes = [];
 
-            // 1. Generate 500 active Genesis nodes (Cities A-List)
-            // Strategy: S-Tier (Reserved) -> Top priority
-            const totalNodes = 500;
+            // 1. Create EXACTLY ONE Tier S node per Active City (Top Priority)
+            CITIES.forEach(city => {
+                allNodes.push({
+                    id: `${city.name.substring(0,2).toUpperCase()}-S-001`,
+                    city: city.name,
+                    cityZh: city.zh,
+                    tier: 'S',
+                    status: 'reserved',
+                    color: city.color,
+                    lat: city.lat.toFixed(4), 
+                    lng: city.lng.toFixed(4),
+                    location: `${city.landmarks[0]} (Landmark)`,
+                    h3: "GENESIS-PRIME",
+                    heat: 100,
+                    hash: "0x" + Array.from({length: 40}, () => Math.floor(Math.random()*16).toString(16)).join(''),
+                    mx: Math.random(), my: Math.random(),
+                    isCityNode: true
+                });
+            });
+
+            // 2. Create Future City Nodes (Also Top Priority)
+            FUTURE_CITIES.forEach(city => {
+                allNodes.push({
+                    id: `${city.name.substring(0,3).toUpperCase()}-S-FUT`,
+                    city: city.name,
+                    cityZh: city.zh,
+                    tier: 'S',
+                    status: 'future',
+                    color: city.color,
+                    lat: city.lat.toFixed(4), 
+                    lng: city.lng.toFixed(4),
+                    location: `${city.landmarks[0]} (Future)`,
+                    h3: "PENDING-EXPANSION",
+                    heat: 0,
+                    hash: "WAITING_FOR_GENESIS",
+                    mx: Math.random(), my: Math.random(),
+                    isCityNode: true
+                });
+            });
+
+            // 3. Generate remaining nodes (Tier A, B, C only)
+            const remainingNodesCount = 500 - CITIES.length; 
             
-            for (let i = 0; i < totalNodes; i++) {
+            for (let i = 0; i < remainingNodesCount; i++) {
                 const city = CITIES[Math.floor(Math.random() * CITIES.length)];
                 
-                // Determine Tier
+                // Determine Tier (Weighted towards B and C)
                 let tier = 'C';
                 const r = Math.random();
-                if (r < 0.05) tier = 'S';
-                else if (r < 0.20) tier = 'A';
-                else if (r < 0.50) tier = 'B';
+                if (r < 0.25) tier = 'A';
+                else if (r < 0.60) tier = 'B';
                 
                 // Generate Node
-                const latOff = (Math.random() - 0.5) * 0.05;
-                const lngOff = (Math.random() - 0.5) * 0.05;
-                const locName = city.landmarks[Math.floor(Math.random() * city.landmarks.length)];
+                const latOff = (Math.random() - 0.5) * 0.08;
+                const lngOff = (Math.random() - 0.5) * 0.08;
+                const locName = city.landmarks[1] || city.landmarks[0]; // Secondary landmark or generic
                 const blockNum = Math.floor(Math.random() * 900 + 100);
                 
-                let status = 'available';
-                if (tier === 'S') status = 'reserved'; // All S are reserved/invite
-
                 allNodes.push({
                     id: `${city.name.substring(0,2).toUpperCase()}-${tier}-${idCounter++}`,
                     city: city.name,
                     cityZh: city.zh,
                     tier: tier,
-                    status: status,
+                    status: 'available',
+                    color: city.color,
                     lat: (city.lat + latOff).toFixed(4), 
                     lng: (city.lng + lngOff).toFixed(4),
-                    location: `${locName} Block ${blockNum}`,
+                    location: `${locName} Area Block ${blockNum}`,
                     h3: Math.random().toString(36).substring(2, 9).toUpperCase(),
-                    heat: Math.floor(Math.random() * 40 + 60),
+                    heat: Math.floor(Math.random() * 40 + 50),
                     hash: "0x" + Array.from({length: 40}, () => Math.floor(Math.random()*16).toString(16)).join(''),
-                    mx: Math.random(), my: Math.random() // Map coords
+                    mx: Math.random(), my: Math.random(),
+                    isCityNode: false
                 });
             }
 
-            // 2. Mark Sold Nodes (8 Random)
-            const availableIndices = allNodes.map((n, i) => n.status === 'available' ? i : -1).filter(i => i !== -1);
-            for(let k=0; k<8; k++) {
-                if(availableIndices.length > 0) {
-                    const idx = availableIndices.splice(Math.floor(Math.random() * availableIndices.length), 1)[0];
-                    allNodes[idx].status = 'sold';
-                }
-            }
-
-            // 3. Generate Future/International Nodes (Visual Only)
-            // Add ~30 future nodes
-            for(let i=0; i<30; i++) {
-                const city = FUTURE_CITIES[Math.floor(Math.random() * FUTURE_CITIES.length)];
-                const r = Math.random();
-                let tier = r < 0.1 ? 'S' : (r < 0.3 ? 'A' : 'B');
-                
-                allNodes.push({
-                    id: `INT-${city.name.substring(0,3).toUpperCase()}-${Math.floor(Math.random()*9000)+1000}`,
-                    city: city.name,
-                    cityZh: city.zh,
-                    tier: tier,
-                    status: 'future', // Special status
-                    lat: city.lat, lng: city.lng,
-                    location: "Global Expansion Zone",
-                    h3: "PENDING",
-                    heat: 0,
-                    hash: "WAITING_FOR_GENESIS",
-                    mx: Math.random(), my: Math.random()
-                });
+            // 4. Mark some A/B/C nodes as SOLD (randomly)
+            const standardNodes = allNodes.filter(n => !n.isCityNode && n.status !== 'future');
+            const soldCount = 12;
+            for(let k=0; k<soldCount; k++) {
+                const randomIdx = Math.floor(Math.random() * standardNodes.length);
+                if(standardNodes[randomIdx]) standardNodes[randomIdx].status = 'sold';
             }
 
             // Initial Render
@@ -979,7 +1031,6 @@
         }
 
         function getCurrentFilteredNodes() {
-            // Apply current filters
             return allNodes.filter(n => {
                 const tierMatch = currentFilter.tier === 'all' || n.tier === currentFilter.tier;
                 const cityMatch = currentFilter.city === 'all' || n.city === currentFilter.city;
@@ -993,110 +1044,122 @@
             grid.innerHTML = '';
             
             // SORTING LOGIC:
-            // 1. Tier S (Genesis) - Always Top
-            // 2. Genesis Nodes (A, B, C) - Active
-            // 3. Future Nodes - Bottom
+            // 1. Top Priority: Tier S (Reserve) AND Future Nodes (Coming Soon)
+            // 2. Everything else: Shuffled randomly (not by price)
             
-            const sortedNodes = nodes.sort((a, b) => {
-                // Tier S Priority
-                if (a.tier === 'S' && b.tier !== 'S') return -1;
-                if (b.tier === 'S' && a.tier !== 'S') return 1;
-                
-                // Genesis vs Future
-                if (a.status !== 'future' && b.status === 'future') return -1;
-                if (b.status !== 'future' && a.status === 'future') return 1;
-                
-                // Tier Order (A->B->C) within same group
-                const tierRank = { S:0, A:1, B:2, C:3 };
-                return tierRank[a.tier] - tierRank[b.tier];
+            const topNodes = [];
+            const otherNodes = [];
+
+            nodes.forEach(n => {
+                if (n.isCityNode) {
+                    topNodes.push(n);
+                } else {
+                    otherNodes.push(n);
+                }
             });
 
+            // Shuffle other nodes
+            otherNodes.sort(() => Math.random() - 0.5);
+
+            // Sort top nodes: Active Cities first, then Future
+            topNodes.sort((a, b) => {
+                if (a.status !== 'future' && b.status === 'future') return -1;
+                if (b.status !== 'future' && a.status === 'future') return 1;
+                return 0;
+            });
+
+            const sortedNodes = [...topNodes, ...otherNodes];
+
             sortedNodes.forEach(node => {
-                const conf = TIERS[node.tier] || TIERS['C']; // Fallback
+                const conf = TIERS[node.tier] || TIERS['C']; 
                 const el = document.createElement('div');
                 
                 let statusClasses = `node-${node.tier}`;
                 let statusText = `$${conf.price.toLocaleString()}`;
                 let clickAction = `wizard.open('${node.id}')`;
                 let statusIcon = '<i class="fa-solid fa-signal text-terminal animate-pulse"></i>';
-                // Tag Logic Change: Use City Name instead of HOT/LOCKED
-                let cityDisplayName = node.city.toUpperCase();
-                let tagLabel = cityDisplayName; 
-                let tagColor = 'bg-signal text-black';
+                
+                // City Tag Logic
+                const cityDisplayName = currentLang === 'zh' ? node.cityZh : node.city;
+                let tagLabel = cityDisplayName.toUpperCase(); 
+                let tagColor = node.color + " text-white"; // Use city specific color
 
                 // Status Handling
+                let overlayHTML = '';
                 if(node.status === 'sold') {
                     statusClasses += ' sold';
                     statusText = 'SOLD OUT';
                     clickAction = '';
                     statusIcon = '<i class="fa-solid fa-check text-dim"></i>';
-                    tagLabel = 'SOLD';
-                    tagColor = 'bg-dim text-black';
+                    tagColor = 'bg-dim text-black'; // Override for sold
                 } else if (node.status === 'reserved') {
                     statusClasses += ' reserved';
                     statusText = currentLang === 'en' ? 'INVITE ONLY' : '邀請開通';
                     clickAction = ''; 
                     statusIcon = '<i class="fa-solid fa-lock text-dim"></i>';
-                    // Even if reserved, show city name or locked status? 
-                    // User asked to replace HOT/LOCKED with City Name. 
-                    // But for S tier, maybe GENESIS is still good, or city name. Let's stick to City Name for consistency as requested.
-                    tagLabel = cityDisplayName;
-                    tagColor = 'bg-signal text-black';
+                    // Tier S Invite Overlay
+                    overlayHTML = `
+                        <div class="city-invite-overlay">
+                            <i class="fa-solid fa-envelope text-2xl md:text-3xl text-white mb-2"></i>
+                            <div class="text-xs md:text-sm font-bold text-white tracking-widest border border-white/30 px-3 py-1 bg-black/50 backdrop-blur-md">
+                                ${LANG[currentLang].invite_only}
+                            </div>
+                        </div>
+                    `;
                 } else if (node.status === 'future') {
                     statusClasses = 'node-future';
                     statusText = currentLang === 'en' ? 'COMING SOON' : '陸續開放';
                     clickAction = '';
                     statusIcon = '<i class="fa-solid fa-hourglass-start text-future"></i>';
-                    tagLabel = cityDisplayName; // Show City Name for future too
                     tagColor = 'bg-future text-black';
-                } else {
-                    // Available nodes
-                    tagLabel = cityDisplayName;
-                    // Vary tag color by tier for better visual? Or keep uniform. 
-                    // Let's use tier color for tag background
-                    if(node.tier === 'A') tagColor = 'bg-tierA text-white';
-                    else if(node.tier === 'B') tagColor = 'bg-tierB text-black';
-                    else if(node.tier === 'C') tagColor = 'bg-tierC text-white';
+                    // Future Overlay
+                    overlayHTML = `
+                        <div class="city-invite-overlay">
+                            <i class="fa-solid fa-globe text-2xl md:text-3xl text-future mb-2"></i>
+                            <div class="text-xs md:text-sm font-bold text-future tracking-widest border border-future/30 px-3 py-1 bg-black/50 backdrop-blur-md">
+                                ${LANG[currentLang].coming_soon}
+                            </div>
+                        </div>
+                    `;
                 }
 
-                el.className = `node-card ${statusClasses} bg-concrete/10 border h-44 flex flex-col justify-between cursor-pointer group p-4 border-concrete relative overflow-hidden`;
+                el.className = `node-card ${statusClasses} bg-concrete/10 border h-40 md:h-44 flex flex-col justify-between cursor-pointer group p-3 md:p-4 border-concrete relative overflow-hidden`;
                 if(clickAction) el.setAttribute('onclick', clickAction);
 
-                // Add Tag
-                if(tagLabel) {
-                    el.innerHTML += `<div class="node-tag ${tagColor}">${tagLabel}</div>`;
-                }
+                // Add Tag & Overlay
+                el.innerHTML += `<div class="node-tag ${tagColor}">${tagLabel}</div>`;
+                el.innerHTML += overlayHTML;
 
                 if(node.status === 'available') el.classList.add(conf.border);
 
-                const cityDisplay = currentLang === 'zh' ? node.cityZh : node.city;
-
                 el.innerHTML += `
                     <div class="flex justify-between items-start mt-4">
-                        <div>
-                            <div class="text-[10px] text-dim font-mono tracking-widest mb-1 flex items-center gap-2">
-                                <span class="bg-white/10 px-1 rounded text-white">${node.id}</span>
+                        <div class="w-full">
+                            <div class="text-[9px] md:text-[10px] text-dim font-mono tracking-widest mb-1 flex items-center gap-2">
+                                <span class="bg-white/10 px-1 rounded text-white truncate max-w-[90%]">${node.id}</span>
                             </div>
-                            <div class="text-sm font-bold text-white truncate max-w-[140px]">${node.location}</div>
-                            <div class="text-[10px] text-dim">${cityDisplay}</div>
-                        </div>
-                        <div class="flex flex-col items-end gap-1">
-                            <div class="w-2 h-2 rounded-full ${node.status==='future'?'bg-future':conf.color} shadow-[0_0_8px_currentColor]"></div>
-                            <div class="text-[9px] ${node.status==='future'?'text-future':conf.text} font-bold">${node.tier}</div>
+                            <div class="text-xs md:text-sm font-bold text-white truncate w-full" title="${node.location}">${node.location}</div>
+                            <div class="flex justify-between items-center mt-1">
+                                <div class="text-[9px] md:text-[10px] text-dim">${cityDisplayName}</div>
+                                <div class="flex items-center gap-1">
+                                    <div class="w-2 h-2 rounded-full ${node.status==='future'?'bg-future':conf.color} shadow-[0_0_8px_currentColor]"></div>
+                                    <div class="text-[8px] md:text-[9px] ${node.status==='future'?'text-future':conf.text} font-bold">${node.tier}</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
                     <div class="space-y-1 my-1">
                         <div class="w-full h-px bg-white/5"></div>
-                        <div class="flex justify-between items-center text-[10px] font-mono text-dim">
+                        <div class="flex justify-between items-center text-[9px] md:text-[10px] font-mono text-dim">
                             <span>IDX: ${node.h3}</span>
                             <span class="${node.heat > 80 ? 'text-signal' : 'text-yellow-500'}">HEAT: ${node.heat}</span>
                         </div>
                     </div>
 
                     <div class="flex justify-between items-end mt-1">
-                        <div class="text-lg font-bold font-mono ${node.status === 'available' ? 'text-white' : 'text-dim'}">${statusText}</div>
-                        <div class="bg-black/40 border border-white/10 rounded px-2 py-1 text-xs">
+                        <div class="text-base md:text-lg font-bold font-mono ${node.status === 'available' ? 'text-white' : 'text-dim'}">${statusText}</div>
+                        <div class="bg-black/40 border border-white/10 rounded px-2 py-1 text-[10px] md:text-xs">
                             ${statusIcon}
                         </div>
                     </div>
@@ -1113,6 +1176,7 @@
             },
             setCity(c) {
                 currentFilter.city = c;
+                renderFilters(); // Update UI active state
                 renderGrid(getCurrentFilteredNodes());
             }
         };
@@ -1121,19 +1185,31 @@
             const container = document.getElementById('city-filters');
             container.innerHTML = '';
 
-            // Combine Active and Future cities for filter list
+            const allBtn = document.createElement('button');
+            const isAllActive = currentFilter.city === 'all';
+            allBtn.className = `flex-shrink-0 px-3 py-1.5 text-[10px] md:text-xs font-mono rounded transition-opacity whitespace-nowrap border ${isAllActive ? 'bg-white text-black' : 'bg-concrete text-dim border-dim/30 hover:text-white hover:border-white'}`;
+            allBtn.innerText = currentLang === 'zh' ? "全部" : "ALL";
+            allBtn.onclick = () => filterManager.setCity('all');
+            container.appendChild(allBtn);
+
             const allCities = [...CITIES, ...FUTURE_CITIES];
             
             allCities.forEach(c => {
                 const btn = document.createElement('button');
                 const displayName = currentLang === 'zh' ? c.zh : c.name;
                 const isFuture = FUTURE_CITIES.some(fc => fc.name === c.name);
+                const isActive = currentFilter.city === c.name;
                 
-                // Style based on type
-                let baseClass = "px-3 py-1 text-xs font-mono rounded transition-opacity whitespace-nowrap border";
-                let colorClass = isFuture 
-                    ? "bg-future/10 text-future border-future/50 hover:bg-future/20" 
-                    : "bg-concrete text-dim border-dim/30 hover:text-white hover:border-white";
+                let baseClass = "flex-shrink-0 px-3 py-1.5 text-[10px] md:text-xs font-mono rounded transition-opacity whitespace-nowrap border";
+                let colorClass = "";
+
+                if (isActive) {
+                    colorClass = "bg-white text-black border-white"; 
+                } else if (isFuture) {
+                    colorClass = "bg-future/10 text-future border-future/50 hover:bg-future/20";
+                } else {
+                    colorClass = "bg-concrete text-dim border-dim/30 hover:text-white hover:border-white";
+                }
                 
                 btn.className = `${baseClass} ${colorClass}`;
                 btn.innerText = displayName;
@@ -1168,7 +1244,6 @@
                 document.getElementById('d-heat').innerText = `${this.currentNode.heat}/100`;
                 document.getElementById('d-traffic').innerText = conf.traffic;
                 
-                // Radius Logic
                 let radVal = "200m";
                 if(this.currentNode.tier === 'S') radVal = "ADMIN";
                 else if(this.currentNode.tier === 'A') radVal = "5 KM";
@@ -1187,11 +1262,10 @@
                 const ctx = cvs.getContext('2d');
                 cvs.width = cvs.offsetWidth; cvs.height = cvs.offsetHeight;
                 
-                // Draw fake heatmap
                 ctx.clearRect(0,0,cvs.width,cvs.height);
                 for(let i=0; i<30; i++) {
                     const x = Math.random() * cvs.width;
-                    const y = cvs.height - (Math.random() * cvs.height * 0.6); // Bottom focused
+                    const y = cvs.height - (Math.random() * cvs.height * 0.6); 
                     const r = Math.random() * 40 + 20;
                     const grd = ctx.createRadialGradient(x, y, 0, x, y, r);
                     grd.addColorStop(0, "rgba(255, 51, 0, 0.4)");
@@ -1200,7 +1274,6 @@
                     ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
                 }
                 
-                // Draw Signal Waves from center bottom
                 const cx = cvs.width/2;
                 const cy = cvs.height;
                 ctx.strokeStyle = "rgba(255,255,255,0.2)";
@@ -1215,11 +1288,13 @@
             show() {
                 this.el.classList.remove('hidden');
                 this.bd.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; 
                 setTimeout(() => this.bd.classList.remove('opacity-0'), 10);
             },
 
             close() {
                 this.bd.classList.add('opacity-0');
+                document.body.style.overflow = ''; 
                 setTimeout(() => {
                     this.el.classList.add('hidden');
                     this.bd.classList.add('hidden');
@@ -1233,7 +1308,19 @@
                 document.getElementById(`step-${step}`).classList.remove('hidden');
                 
                 for(let i=1; i<=4; i++) {
+                    const mStep = document.getElementById(`m-step-${i}`);
+                    if(i <= step) {
+                        mStep.classList.remove('bg-concrete');
+                        mStep.classList.add('bg-signal');
+                    } else {
+                        mStep.classList.remove('bg-signal');
+                        mStep.classList.add('bg-concrete');
+                    }
+                }
+
+                for(let i=1; i<=4; i++) {
                     const nav = document.getElementById(`step-nav-${i}`);
+                    if (!nav) continue;
                     if(i === step) {
                         nav.classList.remove('text-dim'); nav.classList.add('text-signal', 'font-bold');
                     } else if (i < step) {
@@ -1276,24 +1363,24 @@
                     
                     let html = `
                         <div class="text-center mb-6">
-                            <div class="text-sm font-bold text-white mb-2">${title}</div>
-                            <div class="text-4xl font-mono text-signal font-bold tracking-tight">${amount}</div>
-                            <div class="text-xs text-dim mt-1">${chain} NETWORK</div>
+                            <div class="text-xs md:text-sm font-bold text-white mb-2">${title}</div>
+                            <div class="text-3xl md:text-4xl font-mono text-signal font-bold tracking-tight">${amount}</div>
+                            <div class="text-[10px] md:text-xs text-dim mt-1">${chain} NETWORK</div>
                         </div>
                         <div class="space-y-4">
-                            <div class="bg-black p-4 rounded border border-dim/30 relative group cursor-pointer hover:border-signal/50 transition-colors" onclick="copyText('${WALLETS.solana}')">
-                                <div class="text-[10px] text-dim mb-1 flex justify-between"><span>SOLANA ADDRESS (USDT/USDC/AIF)</span> <span class="text-terminal">ACTIVE</span></div>
-                                <div class="font-mono text-xs md:text-sm text-white break-all">${WALLETS.solana}</div>
-                                <div class="absolute right-4 top-1/2 -translate-y-1/2 text-dim group-hover:text-white"><i class="fa-regular fa-copy"></i></div>
+                            <div class="bg-black p-3 md:p-4 rounded border border-dim/30 relative group cursor-pointer hover:border-signal/50 transition-colors" onclick="copyText('${WALLETS.solana}')">
+                                <div class="text-[9px] md:text-[10px] text-dim mb-1 flex justify-between"><span>SOLANA ADDRESS (USDT/USDC/AIF)</span> <span class="text-terminal">ACTIVE</span></div>
+                                <div class="font-mono text-[10px] md:text-xs text-white break-all pr-6">${WALLETS.solana}</div>
+                                <div class="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 text-dim group-hover:text-white"><i class="fa-regular fa-copy"></i></div>
                             </div>
                     `;
 
                     if(!isAif) {
                         html += `
-                            <div class="bg-black p-4 rounded border border-dim/30 relative group cursor-pointer hover:border-signal/50 transition-colors" onclick="copyText('${WALLETS.bsc}')">
-                                <div class="text-[10px] text-dim mb-1 flex justify-between"><span>BSC ADDRESS (USDT)</span> <span class="text-terminal">ACTIVE</span></div>
-                                <div class="font-mono text-xs md:text-sm text-white break-all">${WALLETS.bsc}</div>
-                                <div class="absolute right-4 top-1/2 -translate-y-1/2 text-dim group-hover:text-white"><i class="fa-regular fa-copy"></i></div>
+                            <div class="bg-black p-3 md:p-4 rounded border border-dim/30 relative group cursor-pointer hover:border-signal/50 transition-colors" onclick="copyText('${WALLETS.bsc}')">
+                                <div class="text-[9px] md:text-[10px] text-dim mb-1 flex justify-between"><span>BSC ADDRESS (USDT)</span> <span class="text-terminal">ACTIVE</span></div>
+                                <div class="font-mono text-[10px] md:text-xs text-white break-all pr-6">${WALLETS.bsc}</div>
+                                <div class="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 text-dim group-hover:text-white"><i class="fa-regular fa-copy"></i></div>
                             </div>
                         `;
                     }
@@ -1303,28 +1390,28 @@
                 } else {
                     container.innerHTML = `
                         <div class="text-center mb-6">
-                            <div class="text-sm font-bold text-white mb-2">SECURE FIAT GATEWAY (WISE)</div>
-                            <div class="text-4xl font-mono text-signal">$${conf.price.toLocaleString()} USD</div>
+                            <div class="text-xs md:text-sm font-bold text-white mb-2">SECURE FIAT GATEWAY (WISE)</div>
+                            <div class="text-3xl md:text-4xl font-mono text-signal">$${conf.price.toLocaleString()} USD</div>
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <a href="${conf.links.usd}" target="_blank" class="bg-zinc-800 hover:bg-white hover:text-black text-white p-4 rounded border border-dim/30 text-center transition-all group">
-                                <div class="font-bold text-lg mb-1">USD</div>
-                                <div class="text-[10px] text-dim group-hover:text-black">Wire / ACH</div>
+                        <div class="grid grid-cols-2 gap-3 md:gap-4">
+                            <a href="${conf.links.usd}" target="_blank" class="bg-zinc-800 hover:bg-white hover:text-black text-white p-3 md:p-4 rounded border border-dim/30 text-center transition-all group">
+                                <div class="font-bold text-base md:text-lg mb-1">USD</div>
+                                <div class="text-[9px] md:text-[10px] text-dim group-hover:text-black">Wire / ACH</div>
                             </a>
-                            <a href="${conf.links.hkd}" target="_blank" class="bg-zinc-800 hover:bg-white hover:text-black text-white p-4 rounded border border-dim/30 text-center transition-all group">
-                                <div class="font-bold text-lg mb-1">HKD</div>
-                                <div class="text-[10px] text-dim group-hover:text-black">FPS / Bank</div>
+                            <a href="${conf.links.hkd}" target="_blank" class="bg-zinc-800 hover:bg-white hover:text-black text-white p-3 md:p-4 rounded border border-dim/30 text-center transition-all group">
+                                <div class="font-bold text-base md:text-lg mb-1">HKD</div>
+                                <div class="text-[9px] md:text-[10px] text-dim group-hover:text-black">FPS / Bank</div>
                             </a>
-                            <a href="${conf.links.jpy}" target="_blank" class="bg-zinc-800 hover:bg-white hover:text-black text-white p-4 rounded border border-dim/30 text-center transition-all group">
-                                <div class="font-bold text-lg mb-1">JPY</div>
-                                <div class="text-[10px] text-dim group-hover:text-black">Bank Transfer</div>
+                            <a href="${conf.links.jpy}" target="_blank" class="bg-zinc-800 hover:bg-white hover:text-black text-white p-3 md:p-4 rounded border border-dim/30 text-center transition-all group">
+                                <div class="font-bold text-base md:text-lg mb-1">JPY</div>
+                                <div class="text-[9px] md:text-[10px] text-dim group-hover:text-black">Bank Transfer</div>
                             </a>
-                            <a href="${conf.links.eur}" target="_blank" class="bg-zinc-800 hover:bg-white hover:text-black text-white p-4 rounded border border-dim/30 text-center transition-all group">
-                                <div class="font-bold text-lg mb-1">EUR</div>
-                                <div class="text-[10px] text-dim group-hover:text-black">SEPA</div>
+                            <a href="${conf.links.eur}" target="_blank" class="bg-zinc-800 hover:bg-white hover:text-black text-white p-3 md:p-4 rounded border border-dim/30 text-center transition-all group">
+                                <div class="font-bold text-base md:text-lg mb-1">EUR</div>
+                                <div class="text-[9px] md:text-[10px] text-dim group-hover:text-black">SEPA</div>
                             </a>
                         </div>
-                        <p class="text-[10px] text-dim text-center mt-4">
+                        <p class="text-[9px] md:text-[10px] text-dim text-center mt-4">
                             *Important: Enter <strong>${this.nodeCode}</strong> in the transfer reference field.
                         </p>
                     `;
@@ -1386,7 +1473,7 @@ Amount: ${this.paymentType === 'aif' ? conf.aif + ' AIF' : '$'+conf.price}
             
             setInterval(() => {
                 const div = document.createElement('div');
-                div.className = "flex justify-between text-dim border-l-2 border-signal pl-2 animate-pulse";
+                div.className = "flex justify-between text-dim border-l-2 border-signal pl-2 animate-pulse text-[9px] md:text-[10px]";
                 const addr = "0x" + Math.random().toString(16).substr(2, 4);
                 const act = actions[Math.floor(Math.random() * actions.length)];
                 div.innerHTML = `<span>${addr}...</span> <span>${act}</span>`;
